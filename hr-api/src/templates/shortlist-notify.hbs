@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html style="width:100%; font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
+    <style type="text/css">
+        body,
+        table,
+        td,
+        p,
+        a,
+        li {
+            font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+            color: #000000;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: #be1d2c;
+            font-size: 22px;
+        }
+
+        ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .container {
+            max-width: 768px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+
+        .section {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <table align="center" width="100%" cellpadding="0" cellspacing="0">
+            <tbody>
+                {{> header }}
+
+                <tr>
+                    <td class="section">
+                        <p>Hi {{name}},</p>
+                        <p><span class="highlight">Congratulations!</span></p>
+
+                        <p>You've successfully cleared the previous round, and we're thrilled to invite you to the next stage of the interview process at <strong>{{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}</strong>.</p>
+
+                        <p><strong>Round 2 Details:</strong><br />
+                            • <strong>Exam URL:</strong> {{registrationUrl}}<br />
+                            • <strong>Exam Start Time:</strong> {{examStartTime}}<br />
+                            • <strong>Exam End Time:</strong> {{examEndTime}}<br />
+                            <em>Note: The exam will begin only at the scheduled start time. Please log in a few minutes early and be prepared.</em>
+                        </p>
+
+                        <p><strong>Important Instructions:</strong></p>
+                        <ul>
+                            <li>The exam must be taken on a mobile device.</li>
+                            <li>Do not switch tabs during the test – tab switches will be tracked and counted.</li>
+                            <li>Make sure you're in a quiet environment with a stable internet connection.</li>
+                        </ul>
+
+                        <p><strong>Video Round Requirement:</strong><br />
+                            During the exam, you’ll be asked to record a 1-minute video:<br />
+                            <em>“Why should you be hired for this position?”</em><br />
+                            Speak clearly and confidently – this is your moment to shine!
+                        </p>
+
+                        <p>Once this round is complete, our team will be in touch regarding the next steps.</p>
+
+                        <p>Wishing you the best of luck!<br />
+                            – Team {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}</p>
+                    </td>
+                </tr>
+
+                {{> footer }}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

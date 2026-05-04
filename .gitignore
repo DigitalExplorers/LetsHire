@@ -1,0 +1,46 @@
+.DS_Store
+
+# Root dependencies and package manager state
+node_modules/
+.pnp.*
+
+# Yarn Berry
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.yarn/install-state.gz
+.yarn/unplugged/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Coverage and temp files
+coverage/
+.tmp/
+.temp/
+
+# Environment files at monorepo root
+.env
+.env.local
+.env.*.local
+
+# Editor directories
+.idea/
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Monorepo: only the root yarn.lock is canonical
+# Ignore any sub-package lockfiles that might get accidentally generated
+hr-admin-dashboard/yarn.lock
+hr-api/yarn.lock
+hr-candidate-portal/yarn.lock
