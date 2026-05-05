@@ -1,0 +1,73 @@
+/* RegistrationForm.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('https://cdn.builder.io/api/v1/image/assets/TEMP/a2ff673c30b1ff111fd0456534c61e239c94e862852e0f815910351cc5eefa87?placeholderIfAbsent=true&apiKey=ced76d9a70a94867b04e7a2fbf575f6b');
+    background-size: cover;
+  }
+  
+  .registration-form {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .registration-form h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .registration-form p {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .registration-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .registration-form input,
+  .registration-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .registration-form input[type="file"] {
+    padding: 3px;
+  }
+  
+  .submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  
+  .submit-button:hover {
+    background-color: #333;
+  }
+  

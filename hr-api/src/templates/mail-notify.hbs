@@ -1,0 +1,100 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+    style="width:100%;font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, 'sans-serif';">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <link
+        href="https://fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800"
+        rel="stylesheet">
+<style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        
+        body, table, td, p, a, li {
+            font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+        }
+    p {
+        font-size: 16px;
+    }
+</style>
+</head>
+
+<body>
+    <div style="max-width: 768px; margin-top: 0; margin-bottom: 0; margin-right: auto; margin-left: auto">
+        <table align="center"
+            style="border-spacing: 0; color: #333333; font-family: 'Montserrat'; margin: 0 auto; max-width: 768px; width: 100%">
+            <tbody>
+                {{> header }}
+                <tr>
+                    <td style="
+                     padding-left: 20px;
+                     padding-right: 20px;
+                     padding-top: 20px;
+                     text-align: left;
+                     width: 100%;
+                     ">
+                        <p style="
+                        font-family: 'Montserrat', sans-serif;
+                        color: #000000;
+                        text-align: left;
+                        width: 88%;
+                        margin-left: auto;
+                        margin-right: auto;
+                        ">
+                            Hello {{name}},
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding-left: 20px; padding-right: 20px; width: 100%;">
+                        <p class="otp-container"
+                            style="font-size: 16px;font-family: 'Montserrat', sans-serif;color: #000000;text-align: left;width: 88%;margin-left: auto;margin-right: auto; margin-bottom: 0px;margin-top: 0px;">
+                            <strong style="color: #F79520; font-size: 24px; letter-spacing: 2px;">{{result}}</strong>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="
+                     padding-left: 20px;
+                     padding-right: 20px;
+                     padding-bottom: 20px;
+                     text-align: center;
+                     width: 100%;
+                     ">
+                        <p style="
+                        font-family: 'Montserrat', sans-serif;
+                        color: #000000;
+                        text-align: left;
+                        width: 88%;
+                        margin-left: auto;
+                        margin-right: auto;
+                         margin-bottom: 0px;
+                        ">
+                            Thanks,
+                        </p>
+                        <p style="
+                        font-family: 'Montserrat', sans-serif;
+                        color: #000000;
+                        text-align: left;
+                        width: 88%;
+                        margin-left: auto;
+                        margin-right: auto;
+                        margin-top: 0px;
+                        ">
+                            The HR Team
+                        </p>
+                    </td>
+                </tr>
+                {{> footer }}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

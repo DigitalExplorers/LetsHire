@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Letshire - Smart AI-powered recruitment platform for fast, fair, and efficient talent screening. Streamline hiring with automated assessments, video screening, and team collaboration.">
+    <meta name="keywords" content="recruitment platform, hiring software, AI screening, talent assessment, applicant tracking system, interview platform">
+    <meta name="author" content="Letshire">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="rgb(190, 30, 45)">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='rgb(190,30,45)' width='100' height='100'/%3E%3Ctext x='50' y='55' font-family='Arial, sans-serif' font-size='60' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EL%3C/text%3E%3C/svg%3E">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Letshire - AI-Powered Recruitment Platform">
+    <meta property="og:description" content="Smart hiring platform for fast, fair, and efficient talent screening at scale.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://letshire.com">
+    <meta property="og:site_name" content="Letshire">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect fill='rgb(190,30,45)' width='1200' height='630'/%3E%3Crect fill='%23F7941C' x='0' y='0' width='1200' height='4'/%3E%3Ctext x='600' y='250' font-family='Arial, sans-serif' font-size='80' font-weight='bold' fill='white' text-anchor='middle'%3ELetshire%3C/text%3E%3Ctext x='600' y='380' font-family='Arial, sans-serif' font-size='42' fill='rgba(255,255,255,0.9)' text-anchor='middle'%3ESmart Hiring, Fast Decisions%3C/text%3E%3C/svg%3E">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Letshire - AI-Powered Recruitment Platform">
+    <meta name="twitter:description" content="Smart hiring platform for fast, fair, and efficient talent screening at scale.">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect fill='rgb(190,30,45)' width='1200' height='630'/%3E%3Crect fill='%23F7941C' x='0' y='0' width='1200' height='4'/%3E%3Ctext x='600' y='250' font-family='Arial, sans-serif' font-size='80' font-weight='bold' fill='white' text-anchor='middle'%3ELetshire%3C/text%3E%3Ctext x='600' y='380' font-family='Arial, sans-serif' font-size='42' fill='rgba(255,255,255,0.9)' text-anchor='middle'%3ESmart Hiring, Fast Decisions%3C/text%3E%3C/svg%3E">
+    
+    <!-- Preconnect for better performance -->
+    <link rel="preconnect" href="https://github.com">
+    <link rel="dns-prefetch" href="https://github.com">
+    
+    <title>Letshire - AI-Powered Recruitment Platform | Smart Hiring Software</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: #fff;
+        }
+
+        :root {
+            --primary-red: rgb(190, 30, 45);
+            --primary-orange: #F7941C;
+            --white: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-light: #e5e7eb;
+            --bg-light: #f9f9f9;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: var(--white);
+            padding: 1.2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: var(--primary-orange);
+        }
+
+        .cta-button {
+            background: var(--primary-red);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(190, 30, 45, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--primary-red);
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            animation: slideDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            color: #cbd5e1;
+            animation: slideUp 0.8s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease 0.4s both;
+        }
+
+        .hero-buttons .primary-btn {
+            border: none;
+        }
+
+        .primary-btn {
+            background: var(--primary-red);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(190, 30, 45, 0.4);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border: 2px solid var(--white);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .secondary-btn:hover {
+            background: var(--white);
+            color: var(--primary-red);
+            transform: translateY(-3px);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Problem Section */
+        .problems {
+            padding: 5rem 2rem;
+            background: var(--bg-light);
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+        }
+
+        .section-subtitle code,
+        .feature-card code,
+        .step-item code,
+        .faq-answer code,
+        .solution-card code,
+        .footer-text code {
+            background: transparent;
+            border-radius: 0.35rem;
+            padding: 0 0.2rem;
+            font-size: 0.9em;
+            color: inherit;
+            font-family: 'Courier New', monospace;
+        }
+
+        .problems-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .problem-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 5rem 2rem;
+            background: var(--bg-light);
+        }
+
+        .solution-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .solution-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .solution-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            border: 2px solid var(--bg-light);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .solution-card:hover {
+            border-color: var(--primary-orange);
+            box-shadow: 0 8px 24px rgba(247, 148, 28, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .solution-card h3 {
+            font-size: 1.3rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+            line-height: 1.4;
+        }
+
+        .solution-card h3 svg {
+            width: 1.8rem;
+            height: 1.8rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+            color: var(--primary-orange);
+        }
+
+        .solution-card .for {
+            color: var(--primary-orange);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-card ul {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .solution-card li {
+            padding: 0.5rem 0;
+            color: var(--text-dark);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .solution-card li:before {
+            content: "✓";
+            color: var(--primary-orange);
+            font-weight: bold;
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 5rem 2rem;
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .benefits-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .benefits .section-title {
+            color: var(--white);
+        }
+
+        .benefits .section-subtitle {
+            color: #cbd5e1;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .benefit-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-orange);
+            transform: translateY(-5px);
+        }
+
+        .benefit-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-orange);
+        }
+
+        .benefit-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .benefit-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--white);
+        }
+
+        .benefit-item p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        /* Journey Section */
+        .journey {
+            padding: 5rem 2rem;
+            background: var(--light-bg);
+        }
+
+        .journey-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .journey-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .timeline-step {
+            background: var(--white);
+            padding: 1.5rem 1rem;
+            border-radius: 0.8rem;
+            text-align: center;
+            border-left: 4px solid var(--primary-orange);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .timeline-step:hover {
+            box-shadow: 0 6px 16px rgba(247, 148, 28, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .step-number {
+            background: var(--primary-red);
+            color: var(--white);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            margin: 0 auto 1rem;
+        }
+
+        .timeline-step p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+
+        .features-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid var(--bg-light);
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary-orange);
+            box-shadow: 0 10px 25px rgba(247, 148, 28, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-orange);
+        }
+
+        .feature-icon svg {
+            width: 3rem;
+            height: 3rem;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .feature-card h4 {
+            font-size: 1.1rem;
+            color: var(--primary-red);
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Why Choose Section */
+        .why-choose {
+            padding: 5rem 2rem;
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .why-choose-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .why-choose .section-title {
+            color: var(--white);
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .compare-item {
+            padding: 0;
+        }
+
+        .compare-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary-orange);
+            display: flex;
+            align-items: center;
+        }
+
+        .compare-title svg {
+            width: 1.3rem;
+            height: 1.3rem;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .compare-list {
+            list-style: none;
+        }
+
+        .compare-list li {
+            padding: 0.8rem 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .compare-list li:before {
+            content: "→";
+            color: var(--primary-orange);
+            font-weight: bold;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+
+
+        /* Get Started Section */
+        .get-started {
+            padding: 5rem 2rem;
+            background: var(--bg-light);
+        }
+
+        .get-started-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-item {
+            background: var(--white);
+            padding: 2.5rem 2rem;
+            border-radius: 1rem;
+            border: 2px solid var(--bg-light);
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            border-color: var(--primary-orange);
+            box-shadow: 0 8px 20px rgba(247, 148, 28, 0.15);
+        }
+
+        .step-number-large {
+            background: var(--primary-red);
+            color: var(--white);
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step-item h4 {
+            font-size: 1.2rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+        }
+
+        .step-item p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Open Source Section */
+        .open-source {
+            padding: 5rem 2rem;
+            background: var(--light-bg);
+        }
+
+        .open-source-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 5rem 2rem;
+            background: var(--bg-light);
+        }
+
+        .faq-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq .section-title {
+            color: var(--primary-red);
+            text-align: center;
+        }
+
+        .faq-list {
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 1.5rem;
+            border-radius: 0.8rem;
+            overflow: hidden;
+            border: 2px solid var(--bg-light);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary-orange);
+            box-shadow: 0 4px 12px rgba(247, 148, 28, 0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-red);
+            font-weight: 600;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-dark);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        /* Final CTA Section */
+        .final-cta {
+            padding: 5rem 2rem;
+            background: #be1e2d;
+            text-align: center;
+        }
+
+        .final-cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-red);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-section h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-orange);
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-desc {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 1.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            opacity: 0.95;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .primary-btn, .secondary-btn {
+                width: 100%;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .solution-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .final-cta h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+    
+    <!-- Structured Data (JSON-LD Schema) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Letshire",
+        "description": "Smart AI-powered recruitment platform for fast, fair, and efficient talent screening at scale",
+        "applicationCategory": "BusinessApplication",
+        "url": "https://letshire.com",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "features": [
+            "AI-powered candidate screening",
+            "Video assessment tools",
+            "MCQ-based assessments",
+            "Multi-team collaboration",
+            "Role-based access control",
+            "Real-time pipeline tracking"
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Letshire",
+        "url": "https://letshire.com",
+        "description": "Smart recruitment platform for hiring teams",
+        "logo": "https://letshire.com/logo.png",
+        "sameAs": [
+            "https://github.com/TheAlpineCode/hr-monorepo"
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip to Main Content Link -->
+    <a href="#main-content" style="position: absolute; top: -40px; left: 0; background: var(--primary-red); color: var(--white); padding: 8px; text-decoration: none; z-index: 100;">Skip to main content</a>
+    
+    <!-- Header & Navigation -->
+    <header>
+        <nav>
+            <div class="logo">Letshire</div>
+            <ul>
+                <li><a href="#platform">Platform</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">GitHub</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <button class="cta-button" onclick="document.getElementById('get-started').scrollIntoView({behavior: 'smooth'})">View Setup</button>
+        </nav>
+    </header>
+
+    <main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Smart Hiring, Fast Decisions</h1>
+            <p>Letshire is a full-stack recruitment platform that digitizes the hiring pipeline from candidate registration and assessments to interview workflows and final decisions.</p>
+            <div class="hero-buttons">
+                <a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank" rel="noopener noreferrer" class="primary-btn" style="background: var(--white); color: var(--primary-red); border: none; font-weight: bold;">View on GitHub</a>
+                <button class="secondary-btn" onclick="document.getElementById('platform').scrollIntoView({behavior: 'smooth'})">Explore Architecture</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="problems">
+        <h2 class="section-title">The Hiring Challenge</h2>
+        <p class="section-subtitle">Modern recruitment teams face speed, consistency, and visibility gaps that traditional tools don't solve.</p>
+        
+        <div class="problems-grid">
+            <div class="problem-card">
+                <h3>Manual Screening Bottlenecks</h3>
+                <p>Traditional resume review and early-stage filtering slow the hiring pipeline and make it harder to move quickly on strong candidates.</p>
+            </div>
+            <div class="problem-card">
+                <h3>Inconsistent Evaluation</h3>
+                <p>Candidate quality is hard to compare when assessments, interview feedback, and decision criteria vary across teams.</p>
+            </div>
+            <div class="problem-card">
+                <h3>Limited Operational Visibility</h3>
+                <p>Without shared dashboards and stage-level tracking, recruiters and interviewers struggle to see where candidates stand.</p>
+            </div>
+            <div class="problem-card">
+                <h3>Poor Candidate Experience</h3>
+                <p>Disconnected forms, manual follow-ups, and non-mobile flows create friction for candidates during registration and screening.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="platform">
+        <div class="solution-content">
+            <h2 class="section-title">The Letshire Platform</h2>
+            <p class="section-subtitle" style="text-align: center; color: var(--text-light); margin-bottom: 3rem;">Three independently deployable applications sharing one platform workflow.</p>
+            
+            <div class="solution-cards">
+                <div class="solution-card">
+                    <h3><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> HR Admin Dashboard</h3>
+                    <div class="for">For: Super admins, admins, HR teams, and interviewers</div>
+                    <ul>
+                        <li>Next.js dashboard for superadmin, admin, hr, and interviewer roles</li>
+                        <li>Track candidates across assessment and interview stages</li>
+                        <li>Manage organizations, roles, and registration links</li>
+                        <li>Capture structured interview outcomes and feedback</li>
+                        <li>Works as the internal control surface for the platform</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <h3><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M12 22h0"/></svg> Candidate Screening Portal</h3>
+                    <div class="for">For: Job candidates (mobile-friendly)</div>
+                    <ul>
+                        <li>Vite + React portal optimized for candidate-side flows</li>
+                        <li>Token-based exam entry, onboarding, registration, and OTP verification</li>
+                        <li>Job-specific MCQ, video screening, recording, and completion flows</li>
+                        <li>Built-in anti-cheating protections for test integrity</li>
+                        <li>Designed primarily for mobile and PWA usage</li>
+                    </ul>
+                </div>
+                <div class="solution-card">
+                    <h3><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24"/></svg> Backend Management System</h3>
+                    <div class="for">For: Enterprise deployment and scaling</div>
+                    <ul>
+                        <li>NestJS API serving both frontends from a shared backend</li>
+                        <li>PostgreSQL-backed data model for candidates and hiring stages</li>
+                        <li>AWS S3 and Bedrock integration for storage and AI features</li>
+                        <li>Email notifications for key pipeline events</li>
+                        <li>Role-based access and multi-tenant organization support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="benefits-content">
+            <h2 class="section-title">What You Gain</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z"/></svg>
+                    </div>
+                    <h4>Faster First-Round Screening</h4>
+                    <p>Assessment and video steps reduce repetitive manual screening work and give teams structured information earlier.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg>
+                    </div>
+                    <h4>Better Candidate Signal</h4>
+                    <p>MCQ assessments and video responses create more context than resumes alone, especially in early-stage filtering.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v18M3 9h18M9 21h6M8 9l-2-6h12l-2 6"/></svg>
+                    </div>
+                    <h4>More Consistent Evaluation</h4>
+                    <p>Shared workflows, role-based access, and structured scoring help teams compare candidates on the same footing.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <h4>Improved Candidate Experience</h4>
+                    <p>A mobile-friendly portal makes registration, assessments, and screening steps clearer for candidates.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="12" width="3" height="9"/><rect x="10.5" y="3" width="3" height="18"/><rect x="18" y="6" width="3" height="15"/></svg>
+                    </div>
+                    <h4>Operational Visibility</h4>
+                    <p>Dashboards and stage-level tracking make it easier to understand pipeline progress across teams and roles.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4M12 15v4"/></svg>
+                    </div>
+                    <h4>Security-Conscious Defaults</h4>
+                    <p>The repository includes security guidance, vulnerability reporting instructions, and documented production considerations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Candidate Journey Section -->
+    <section class="journey">
+        <div class="journey-content">
+            <h2 class="section-title">Candidate Screening Workflow</h2>
+            <p class="section-subtitle">This sequence mirrors the actual portal routes, API flow, and downstream review stages in the current codebase.</p>
+            
+            <div class="journey-timeline">
+                <div class="timeline-step">
+                    <div class="step-number">1</div>
+                    <p>Tokenized Link & Exam Window</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">2</div>
+                    <p>Onboarding & Registration</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">3</div>
+                    <p>OTP / Verification</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">4</div>
+                    <p>Instructions & Timed MCQ</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">5</div>
+                    <p>Video Consent & Recording</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">6</div>
+                    <p>Scoring & Analysis</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">7</div>
+                    <p>Thank You / Result View</p>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-number">8</div>
+                    <p>Shortlist, Interview, Hire / Reject</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-content">
+            <h2 class="section-title">Powerful Features Built In</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 10h8M8 14h8M8 18h4M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z"/></svg>
+                    </div>
+                    <h4>AI-Generated Assessments</h4>
+                    <p>Job-role MCQ generation backed by AWS Bedrock and Amazon Nova.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                    </div>
+                    <h4>Video Screening</h4>
+                    <p>Candidate video flows with analysis support for tone, fluency, and engagement.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <h4>Timed Assessments</h4>
+                    <p>Controlled test sessions designed to standardize screening conditions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M12 22h0"/></svg>
+                    </div>
+                    <h4>Candidate PWA</h4>
+                    <p>Mobile-oriented experience for registration, assessments, and screening tasks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <h4>Automated Scoring</h4>
+                    <p>Generated scores and candidate test attempt records flow back into the platform.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg>
+                    </div>
+                    <h4>Role-Based Workflows</h4>
+                    <p>Separate experiences for superadmin, admin, hr, and interviewer users.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4h-6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
+                    </div>
+                    <h4>Hiring Collaboration</h4>
+                    <p>Shared review flows for candidate shortlisting, interviews, and feedback capture.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+                    </div>
+                    <h4>Anti-Cheating Controls</h4>
+                    <p>Candidate-side protections support more reliable remote screening sessions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coverage Section -->
+    <section class="why-choose">
+        <div class="why-choose-content">
+            <h2 class="section-title">Operational Coverage</h2>
+            <p class="section-subtitle" style="text-align: center; color: rgba(255, 255, 255, 0.95); margin-bottom: 3rem;">The repository covers both the candidate-facing screening flow and the internal hiring operations around it.</p>
+            
+            <div class="compare-grid">
+                <div class="compare-item">
+                    <div class="compare-title"><svg viewBox="0 0 24 24" style="width: 1.3rem; height: 1.3rem; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; display: inline; vertical-align: middle; margin-right: 0.5rem;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Internal Hiring Operations</div>
+                    <ul class="compare-list">
+                        <li>Organization and admin management</li>
+                        <li>Role and position configuration</li>
+                        <li>Registration link generation</li>
+                        <li>Candidate shortlisting and review</li>
+                        <li>Interviewer assignment and feedback</li>
+                        <li>Hired and rejected candidate tracking</li>
+                    </ul>
+                </div>
+                <div class="compare-item">
+                    <div class="compare-title"><svg viewBox="0 0 24 24" style="width: 1.3rem; height: 1.3rem; stroke: currentColor; fill: currentColor; stroke-width: 0; display: inline; vertical-align: middle; margin-right: 0.5rem;"><polygon points="12 2 15.09 10.26 23.36 11.35 17.54 17.28 18.91 25.59 12 21.77 5.09 25.59 6.46 17.28 0.64 11.35 8.91 10.26"/></svg> Candidate Screening Experience</div>
+                    <ul class="compare-list">
+                        <li>Exam window and token resolution</li>
+                        <li>Brand-aware onboarding and registration</li>
+                        <li>OTP validation before assessments</li>
+                        <li>Timed MCQ screening</li>
+                        <li>Video capture and analysis</li>
+                        <li>Thank-you and result routes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Get Started Section -->
+    <section class="get-started" id="get-started">
+        <div class="get-started-content">
+            <h2 class="section-title">Get Started from the Repository</h2>
+            <p class="section-subtitle">These steps match the current monorepo setup and contribution flow.</p>
+            
+            <div class="steps-grid">
+                <div class="step-item">
+                    <div class="step-number-large">1</div>
+                    <h4>Clone the Repository</h4>
+                    <p>Use the GitHub repository as the single source of truth for code, documentation, contribution guidance, and issues.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number-large">2</div>
+                    <h4>Run the Monorepo</h4>
+                    <p>Install dependencies once, configure service environments, start PostgreSQL, and launch the workspace with <code>yarn dev</code>.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number-large">3</div>
+                    <h4>Contribute Back</h4>
+                    <p>Open issues, propose enhancements, and submit focused pull requests that follow the documented branch and commit conventions.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank" rel="noopener noreferrer" class="primary-btn">Open the GitHub Repository</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="final-cta-content">
+            <h2>Explore, Run, and Contribute</h2>
+            <p>Use the repository documentation as the source of truth for setup, contribution workflow, and security reporting.</p>
+            <a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank" rel="noopener noreferrer" class="primary-btn" style="background: var(--white); color: var(--primary-orange); border: none; font-weight: bold; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);">Visit GitHub</a>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="faq-content">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What exactly is Letshire in this repository?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>It is an open-source monorepo containing three applications: a Next.js admin dashboard, a React candidate portal, and a NestJS backend API backed by PostgreSQL.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How do I run the platform locally?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Install dependencies from the root with <code>yarn install</code>, copy each service <code>.env.example</code>, start PostgreSQL via <code>docker compose up -d</code>, and launch the apps with <code>yarn dev</code>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is the recommended contribution process?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Fork or branch from <code>main</code>, keep changes focused, run linting and tests, use conventional commits, and open a pull request with a clear description of what changed.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How should security issues be reported?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Do not open a public GitHub issue for vulnerabilities. Follow the repository security policy and report the issue privately or through a GitHub Security Advisory.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Which technologies are used across the platform?</span>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The current stack includes Next.js, React, NestJS, PostgreSQL, AWS S3, AWS Bedrock, Yarn workspaces, and Docker for local database setup.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">Letshire</div>
+                <p class="footer-desc">Smart hiring platform designed for fast, fair, and efficient talent screening at scale.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#platform">HR Dashboard</a></li>
+                    <li><a href="#platform">Candidate Portal</a></li>
+                    <li><a href="#platform">Screening Tools</a></li>
+                    <li><a href="#benefits">Features</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">GitHub Repository</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">Documentation</a></li>
+                    <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">Contribute</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">Code of Conduct</a></li>
+                    <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">Security</a></li>
+                    <li><a href="https://github.com/TheAlpineCode/hr-monorepo" target="_blank">License</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Letshire. All rights reserved. | Smart Hiring Platform</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            element.parentElement.classList.toggle('active');
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

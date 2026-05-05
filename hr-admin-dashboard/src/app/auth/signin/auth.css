@@ -1,0 +1,40 @@
+.sign-in-page-text {
+    color: #464D67 !important;
+  }
+  .anchor-text{
+    color: #be1d2c !important;
+    
+  }
+  .sign-in-button {
+    background-color: #f7941c;
+    color: white;
+    width: 100%;
+    max-width: 569px;
+    padding: 12px 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: none;
+    border-radius: 0;
+    border: none;
+    outline: none;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .sign-in-button:hover {
+    background-color: #be1d2c;
+    color: white;
+    border-color: #be1d2c;
+  }
+  
+  .sign-in-button:focus {
+    border-color: #be1d2c;
+    border: none;
+    outline: none;
+  }
+  
+  .sign-in-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }

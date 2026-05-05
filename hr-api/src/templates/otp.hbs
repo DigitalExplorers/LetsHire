@@ -1,0 +1,82 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html style="width:100%;font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, 'sans-serif';">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="x-apple-disable-message-reformatting">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    body,
+    table,
+    td,
+    p,
+    a,
+    li {
+      font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    }
+
+    p {
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="max-width: 768px; margin: 0 auto;">
+    <table align="center"
+      style="border-spacing: 0; color: #333333; font-family: 'Montserrat'; max-width: 768px; width: 100%;">
+      <tbody>
+        {{> header }}
+
+        <!-- Content -->
+        <tr>
+          <td style="padding: 20px; text-align: left; width: 100%;">
+            <p style="width: 88%; margin: 0 auto; color: #000;">
+              Welcome to {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}, {{name}}!
+            </p>
+            <p style="width: 88%; margin: 0 auto; color: #000;">
+              To complete your registration, enter the verification code below:
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding: 0 20px; width: 100%;">
+            <p class="otp-container"
+              style="font-size: 24px; font-weight: bold; color: #F79520; letter-spacing: 2px; width: 88%; margin: 0 auto;">
+              {{otp}}
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding: 20px; text-align: left; width: 100%;">
+            <p style="width: 88%; margin: 0 auto; color: #000;">
+              This code will expire in <strong>5 minutes</strong>. If you didn't request this, you can safely ignore
+              this email.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding: 20px; text-align: left; width: 100%;">
+            <p style="width: 88%; margin: 0 auto 0; color: #000;">Thanks,</p>
+            <p style="width: 88%; margin: 0 auto 0; color: #000;">
+              Team {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}
+            </p>
+          </td>
+        </tr>
+
+        {{> footer }}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

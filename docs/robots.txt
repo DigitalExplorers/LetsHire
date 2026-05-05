@@ -1,0 +1,29 @@
+# Letshire Robots Configuration
+# Allow all search engines to crawl and index the site
+
+User-agent: *
+Allow: /
+Disallow: 
+
+# Sitemap location
+Sitemap: https://letshire.com/sitemap.xml
+
+# Crawl delay (optional - limits requests per second)
+Crawl-delay: 1
+
+# Specific rules for common search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block bad bots (optional)
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /

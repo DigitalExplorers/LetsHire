@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html style="width:100%;font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, 'sans-serif';">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:thin,extra-light,light,100,200,300,400,500,600,700,800" rel="stylesheet">
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        body, table, td, p, a, li {
+            font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+        }
+        p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div style="max-width: 768px; margin: auto;">
+        <table align="center" style="border-spacing: 0; color: #333333; font-family: 'Montserrat'; margin: 0 auto; max-width: 768px; width: 100%">
+            <tbody>
+                {{> header }}
+                <tr>
+                    <td style="padding: 20px; text-align: left; width: 100%;">
+                        <p style="color: #000000; text-align: left; width: 88%; margin-left: auto; margin-right: auto;">
+                            Hello {{name}},
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 20px; text-align: left; width: 100%;">
+                        <p style="font-size: 18px; font-weight: bold; color: #F79520; text-align: left; width: 88%; margin-left: auto; margin-right: auto;">
+                            Your interview has been scheduled!
+                        </p>
+                        <p style="color: #000000; text-align: left; width: 88%; margin-left: auto; margin-right: auto;">
+                            We are pleased to inform you that your interview has been scheduled.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 20px; width: 100%;">
+                        <table style="width: 88%; margin: auto; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><strong>Interview Date:</strong></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;">{{interviewDate}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 20px; text-align: center; width: 100%;">
+                        <p style="color: #000000; text-align: left; width: 88%; margin-left: auto; margin-right: auto;">
+                            If you have any questions or need to reschedule, please contact HR at <a href="mailto:{{#if organization.contactEmail}}{{organization.contactEmail}}{{else}}hr@the8800.com{{/if}}" style="color: #F79520;">{{#if organization.contactEmail}}{{organization.contactEmail}}{{else}}hr@the8800.com{{/if}}</a>.
+                        </p>
+                        <p style="color: #000000; text-align: left; width: 88%; margin-left: auto; margin-right: auto;">
+                            Best regards,<br />
+                            <strong>Team {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}</strong>
+                        </p>
+                    </td>
+                </tr>
+                {{> footer }}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html style="width:100%;font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, 'sans-serif';">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="x-apple-disable-message-reformatting">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800" rel="stylesheet">
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    body,
+    table,
+    td,
+    p,
+    a,
+    li {
+      font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    }
+
+    p {
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="max-width: 768px; margin: 0 auto;">
+    <table align="center"
+      style="border-spacing: 0; color: #333333; font-family: 'Montserrat'; max-width: 768px; width: 100%;">
+      <tbody>
+        {{> header }}
+
+        <!-- Content -->
+        <tr>
+          <td style="padding: 20px; text-align: left; width: 100%;">
+            <p style="width: 88%; margin: 0 auto; color: #000;">
+              Hi {{name}},
+            </p>
+            <p style="width: 88%; margin: 10px auto; color: #000;">
+              Thank you for registering with {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}. We've received your application and our team will review it shortly.
+            </p>
+            <p style="width: 88%; margin: 10px auto; color: #000;">
+              You’ll hear from us soon regarding the next steps.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding: 10px 20px; text-align: left;">
+            <h3 style="width: 88%; margin: 0 auto; color: #000;">Your Submission:</h3>
+            <ul style="width: 88%; margin: 10px auto 20px; color: #000; padding-left: 20px;">
+              <li><strong>Name:</strong> {{name}}</li>
+              <li><strong>Email:</strong> {{email}}</li>
+              <li><strong>Applied Position:</strong> {{role}}</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding: 0 20px 20px; text-align: left; width: 100%;">
+            <p style="width: 88%; margin: 0 auto; color: #000;">
+              If you have any questions, feel free to contact us at <a href="mailto:{{organization.contactEmail}}" style="color: #be1d2c;">{{organization.contactEmail}}</a>.
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding: 20px; text-align: left; width: 100%;">
+            <p style="width: 88%; margin: 0 auto 0; color: #000;">Best regards,</p>
+            <p style="width: 88%; margin: 0 auto 0; color: #000;">The {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}} Team</p>
+          </td>
+        </tr>
+
+        {{> footer }}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "hr-monorepo",
+  "private": true,
+  "packageManager": "yarn@4.6.0",
+  "workspaces": [
+    "hr-admin-dashboard",
+    "hr-api",
+    "hr-candidate-portal"
+  ],
+  "scripts": {
+    "dev": "yarn workspaces foreach --all --parallel --interlaced run dev",
+    "dev:admin": "yarn workspace hr-admin-dashboard dev",
+    "dev:api": "yarn workspace hr-api dev",
+    "dev:portal": "yarn workspace hr-candidate-portal dev",
+    "build": "yarn workspaces foreach --all run build",
+    "build:admin": "yarn workspace hr-admin-dashboard build",
+    "build:api": "yarn workspace hr-api build",
+    "build:portal": "yarn workspace hr-candidate-portal build",
+    "start": "yarn workspaces foreach --all --parallel --interlaced run start",
+    "start:admin": "yarn workspace hr-admin-dashboard start",
+    "start:api": "yarn workspace hr-api start",
+    "start:portal": "yarn workspace hr-candidate-portal start",
+    "compose:up": "docker compose -p letshire  -f docker-compose.yml  up -d",
+    "compose:down": "docker compose -p letshire  -f docker-compose.yml  down",
+    "lint": "yarn workspaces foreach --all run lint",
+    "test": "yarn workspaces foreach --all run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,hbs,yml,yaml}\" --ignore-path .gitignore"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}

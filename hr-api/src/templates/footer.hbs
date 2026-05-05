@@ -1,0 +1,29 @@
+<tr style='border-bottom: 1px solid #69565627; background-color: #f8f8f8'>
+  <td style='
+      padding-top: 20px;
+      padding-bottom: 20px;
+      padding-left: 30px;
+      padding-right: 30px;
+      font-family: Montserrat;
+    '>
+    <p style='line-height: 24px; letter-spacing: 0.2px; font-size: 16px; margin: 0px;'>
+      Questions or FAQs? Contact us at
+      <a href='mailto:{{#if organization.contactEmail}}{{organization.contactEmail}}{{else}}help@the8800.com{{/if}}'
+        style='color: #2969FF; cursor: pointer; text-decoration: underline; font-size: 16px; line-height: 24px; letter-spacing: 0.2px;'>
+        {{#if organization.contactEmail}}{{organization.contactEmail}}{{else}}help@the8800.com{{/if}}
+      </a>.
+      If you'd rather not receive this kind of email, don’t want any more emails from
+      {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}?
+      <a href='#'
+        style='color: #2969FF; cursor: pointer; text-decoration: underline; font-size: 16px; line-height: 24px; letter-spacing: 0.2px;'>Unsubscribe</a>.
+    </p>
+
+    <p style='margin-bottom: 4px; padding: 0; font-size: 16px; line-height: 24px; letter-spacing: 0.2px;'>
+      {{#if organization.address}}{{organization.address}}{{else}}8517 Pine Valley Dr, McKinney, TX, 75070{{/if}}
+    </p>
+
+    <p style='margin: 0; padding: 0; font-size: 16px; line-height: 24px; letter-spacing: 0.2px;'>
+      ©2026 {{#if organization.name}}{{organization.name}}{{else}}Letshire{{/if}}
+    </p>
+  </td>
+</tr>
