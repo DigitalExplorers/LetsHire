@@ -60,14 +60,16 @@ The system is composed of **three independently deployable applications** sharin
 
 ## Quick Start
 
-### 1. Clone the repository
+Steps marked with `*` are part of the recommended setup flow. Commands marked optional are alternatives you can use when you only need part of the stack.
+
+### 1. Clone the repository *
 
 ```bash
 git clone https://github.com/DigitalExplorers/LetsHire.git
 cd LetsHire
 ```
 
-### 2. Install all dependencies
+### 2. Install all dependencies *
 
 A single install from the root covers all three services — no need to `cd` into each one:
 
@@ -75,7 +77,7 @@ A single install from the root covers all three services — no need to `cd` int
 yarn install
 ```
 
-### 3. Configure environment variables
+### 3. Configure environment variables *
 
 Each service has its own `.env.example`:
 
@@ -87,7 +89,7 @@ cp hr-candidate-portal/.env.example hr-candidate-portal/.env
 
 Edit each `.env` with your configuration. At minimum set `JWT_SECRET` in both `hr-api` and `hr-admin-dashboard` (must be the same value).
 
-### 4. Start PostgreSQL
+### 4. Start PostgreSQL *
 
 ```bash
 yarn compose:up
@@ -95,7 +97,7 @@ yarn compose:up
 
 This starts a PostgreSQL 15 instance on port `5432` with default dev credentials.
 
-### 5. Run Database Migrations
+### 5. Run Database Migrations *
 
 The migration files are **committed to the repository** — you never need to generate them from scratch.
 Just apply them against your freshly started PostgreSQL instance:
@@ -109,32 +111,7 @@ On startup, the API server also automatically seeds the database with:
 - **System roles** — `superadmin`, `admin`, `hr`, `interviewer`
 - **Super Admin user** — credentials from `SUPER_ADMIN_EMAIL` / `SUPER_ADMIN_PASSWORD` in `hr-api/.env`
 
-> **Why `migration:run` only?**
-> Migrations are source code — they represent the agreed-upon schema history for the project.
-> Running `migration:generate` creates a new migration file by diffing your entities against the
-> current DB state. This is only done by developers **when they change an entity**, and the
-> generated file is committed for everyone else to apply with `migration:run`.
-
-#### Migration reference (for developers making schema changes)
-
-```bash
-# Start the local database first
-yarn compose:up
-
-# Apply all pending migrations
-yarn workspace hr-api migration:run
-
-# See which migrations have already run
-yarn workspace hr-api migration:show
-
-# Undo the last applied migration
-yarn workspace hr-api migration:revert
-
-# After modifying an entity, generate a new migration file in src/migrations/
-yarn workspace hr-api migration:generate src/migrations/DescribeYourChange
-```
-
-### 6. Start the services
+### 6. Start the services *
 
 Run all three services in parallel from the root:
 
@@ -142,7 +119,7 @@ Run all three services in parallel from the root:
 yarn dev
 ```
 
-Or start them individually:
+Otherwise start services individually if you only need one app:
 
 ```bash
 yarn dev:api      # Backend API     → http://localhost:4000
@@ -150,7 +127,7 @@ yarn dev:admin    # Admin Dashboard → http://localhost:3000
 yarn dev:portal   # Candidate Portal → http://localhost:5173
 ```
 
-## Workspace Commands
+## Workspace Commands (optional)
 
 This is a **Yarn 4 monorepo** with three workspaces. All commands run from the root:
 
