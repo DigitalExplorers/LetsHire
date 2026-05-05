@@ -3,7 +3,7 @@
     <!-- Main Landing Page -->
     <url>
         <loc>https://letshire.com</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>
@@ -11,7 +11,7 @@
     <!-- Home/Hero Section -->
     <url>
         <loc>https://letshire.com/#hero</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -19,7 +19,7 @@
     <!-- The Hiring Challenge Section -->
     <url>
         <loc>https://letshire.com/#problems</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -27,7 +27,7 @@
     <!-- Platform Section -->
     <url>
         <loc>https://letshire.com/#platform</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -35,7 +35,7 @@
     <!-- Benefits Section -->
     <url>
         <loc>https://letshire.com/#benefits</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -43,7 +43,7 @@
     <!-- Candidate Screening Workflow Section -->
     <url>
         <loc>https://letshire.com/#workflow</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -51,7 +51,7 @@
     <!-- Features Section -->
     <url>
         <loc>https://letshire.com/#features</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -59,7 +59,7 @@
     <!-- Operational Coverage Section -->
     <url>
         <loc>https://letshire.com/#coverage</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -67,7 +67,7 @@
     <!-- Final CTA Section -->
     <url>
         <loc>https://letshire.com/#cta</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -75,7 +75,7 @@
     <!-- Get Started Section -->
     <url>
         <loc>https://letshire.com/#get-started</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
@@ -83,15 +83,15 @@
     <!-- FAQ Section -->
     <url>
         <loc>https://letshire.com/#faq</loc>
-        <lastmod>2026-04-15</lastmod>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <!-- GitHub Repository Link -->
     <url>
-        <loc>https://github.com/TheAlpineCode/hr-monorepo</loc>
-        <lastmod>2026-04-15</lastmod>
+        <loc>https://github.com/DigitalExplorers/LetsHire</loc>
+        <lastmod>2026-05-05</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
