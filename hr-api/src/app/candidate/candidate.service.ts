@@ -417,7 +417,7 @@ export class CandidateService {
   }
 
   /**
-   * Update User Status
+   * Update User Status (admin-scoped — legacy, kept for backward compat)
    */
   async updateUserStatus(userId: number, status: string, adminId: number): Promise<Candidate> {
     const user = await this.candidateRepository.findOne({
@@ -430,7 +430,7 @@ export class CandidateService {
       );
     }
 
-    user.status = status; // Update status
+    user.status = status;
 
     // Send mail confirmation (non-blocking)
     try {
@@ -441,7 +441,29 @@ export class CandidateService {
       );
     } catch (error) {
       console.error(`Failed to send ${status} status email to ${user.email}:`, error);
-      // Email failure should not block status update
+    }
+
+    return await this.candidateRepository.save(user);
+  }
+
+  /**
+   * Update User Status — org-scoped (works for admin, hr, interviewer)
+   */
+  async updateUserStatusByActor(userId: number, status: string, actor: StaffActor): Promise<Candidate> {
+    // Reuses getAccessibleCandidate which scopes by org (or no scope for superadmin)
+    const user = await this.getAccessibleCandidate(userId, actor);
+
+    user.status = status;
+
+    // Send mail confirmation (non-blocking)
+    try {
+      await this.candidateNotificationService.sendStatusUpdateNotification(
+        user,
+        status,
+        actor.organizationId ?? 0,
+      );
+    } catch (error) {
+      console.error(`Failed to send ${status} status email to ${user.email}:`, error);
     }
 
     return await this.candidateRepository.save(user);

@@ -221,10 +221,14 @@ export class CandidateController {
    * Get user by ID
    */
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin', 'admin', 'hr', 'interviewer')
   @Throttle({ default: { limit: 60, ttl: 60000 } })
-  async getUserById(@Param('id') id: number, @CurrentUser() adminUser: { userId: number }) {
-    const user = await this.userService.getUserById(id, adminUser.userId);
+  async getUserById(
+    @Param('id') id: number,
+    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+  ) {
+    const user = await this.userService.getCandidateDetails(id, currentUser);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -267,13 +271,14 @@ export class CandidateController {
    * Update user status
    */
   @Patch(':id/status')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin', 'admin', 'hr', 'interviewer')
   async updateUserStatus(
     @Param('id') id: number,
     @Body('status') status: string,
-    @CurrentUser() adminUser: { userId: number }
+    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
   ) {
-    return await this.userService.updateUserStatus(id, status, adminUser.userId);
+    return await this.userService.updateUserStatusByActor(id, status, currentUser);
   }
 
   /**
