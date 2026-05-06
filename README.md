@@ -79,15 +79,22 @@ yarn install
 
 ### 3. Configure environment variables *
 
-Each service has its own `.env.example`:
+All three services share a **single `.env` file at the monorepo root**. Copy the example and fill in your values:
 
 ```bash
-cp hr-api/.env.example hr-api/.env
-cp hr-admin-dashboard/.env.example hr-admin-dashboard/.env
-cp hr-candidate-portal/.env.example hr-candidate-portal/.env
+cp .env.example .env
 ```
 
-Edit each `.env` with your configuration. At minimum set `JWT_SECRET` in both `hr-api` and `hr-admin-dashboard` (must be the same value).
+Open `.env` and update the values. At a minimum you must set:
+
+| Variable | Why it matters |
+| --- | --- |
+| `JWT_SECRET` | Signs all auth tokens — **must be the same secret across all services** |
+| `DB_PASS` | Password for the local PostgreSQL instance |
+| `SUPER_ADMIN_EMAIL` | Email address for the first super admin login |
+| `SUPER_ADMIN_PASSWORD` | Password for the first super admin login |
+
+> **Super Admin first login:** The API automatically creates a super admin account on first startup using `SUPER_ADMIN_EMAIL` and `SUPER_ADMIN_PASSWORD` from your `.env`. Set these before starting the API, then use those same credentials to log in to the Super Admin dashboard. If these variables are missing, the seed is skipped and no super admin account will exist.
 
 ### 4. Start PostgreSQL *
 
@@ -109,7 +116,7 @@ yarn workspace hr-api migration:run
 This creates all tables and relationships defined by the current schema. It also applies later schema changes.
 On startup, the API server also automatically seeds the database with:
 - **System roles** — `superadmin`, `admin`, `hr`, `interviewer`
-- **Super Admin user** — credentials from `SUPER_ADMIN_EMAIL` / `SUPER_ADMIN_PASSWORD` in `hr-api/.env`
+- **Super Admin user** — credentials from `SUPER_ADMIN_EMAIL` / `SUPER_ADMIN_PASSWORD` in the root `.env`
 
 ### 6. Start the services *
 
@@ -126,6 +133,7 @@ yarn dev:api      # Backend API     → http://localhost:4000
 yarn dev:admin    # Admin Dashboard → http://localhost:3000
 yarn dev:portal   # Candidate Portal → http://localhost:5173
 ```
+For platform understanding, refer this [Usage Guide](USAGE_GUIDE.md)
 
 ## Workspace Commands (optional)
 
@@ -162,6 +170,7 @@ yarn workspace hr-admin-dashboard lint
 
 ```
 LetsHire/
+├── .env.example                 # ← Root env template (copy to .env and fill in values)
 ├── docker-compose.yml           # PostgreSQL for local development
 ├── package.json                 # Root — workspace scripts and devDependencies
 ├── tsconfig.base.json           # Shared TypeScript compiler options

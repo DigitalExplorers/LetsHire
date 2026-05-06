@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import * as dotenv from "dotenv";
+import * as path from "path";
+
+// Load environment variables from the monorepo root .env.
+dotenv.config({ path: path.resolve(process.cwd(), "../.env") });
 
 const region = process.env.AWS_REGION;
 const bucket_name = process.env.NEXT_PUBLIC_S3_BUCKET_NAME;

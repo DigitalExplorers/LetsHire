@@ -98,7 +98,8 @@ yarn dev:api
 
 ## Environment Variables
 
-Copy the example environment file and configure it:
+This service reads its configuration from the **monorepo root `.env`** — there is no per-service `.env` file.
+From the repo root, copy the example and fill in your values:
 
 ```bash
 cp .env.example .env
@@ -147,7 +148,7 @@ On every startup, `main.ts` automatically runs two idempotent seeders:
 
 Both seeders are **idempotent** — they skip silently if the data already exists. The `SuperAdminSeeder` is skipped entirely if `SUPER_ADMIN_PASSWORD` is not set in the environment.
 
-> **First deployment checklist:** set `SUPER_ADMIN_EMAIL` and `SUPER_ADMIN_PASSWORD` in your `.env` before the first server start so the super admin account is created automatically.
+> **First deployment checklist:** set `SUPER_ADMIN_EMAIL` and `SUPER_ADMIN_PASSWORD` in the **root `.env`** before the first server start so the super admin account is created automatically. Use those same credentials to log in to the Super Admin Dashboard.
 
 ## Usage
 
@@ -247,4 +248,3 @@ Application Dockerfiles are not currently included in this repository.
 
 - [HR Admin Dashboard](../hr-admin-dashboard/README.md)
 - [Candidate Portal](../hr-candidate-portal/README.md)
-- [Technical Documentation](../TECHNICAL_DOCUMENTATION.md)

@@ -16,7 +16,7 @@ import { getDatabaseOptions } from './config/database.config';
 
 // Load .env manually — the NestJS ConfigModule handles this at app runtime,
 // but the CLI runs as a standalone script outside of NestJS.
-dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
+dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
 
 export const AppDataSource = new DataSource({
   // Reuses the same DB connection settings as app.module.ts.

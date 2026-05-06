@@ -32,6 +32,7 @@ import { getDatabaseOptions } from './config/database.config';
     ConfigModule.forRoot({
       isGlobal: true,
       // envFilePath: ['.env', '.env.development'],
+      envFilePath: ['../.env'],
     }),
     ThrottlerModule.forRoot({
       throttlers: [
