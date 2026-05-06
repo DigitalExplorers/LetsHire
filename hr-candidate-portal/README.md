@@ -42,7 +42,8 @@ yarn install
 
 ## Environment Variables
 
-Copy the example environment file and configure it:
+This service reads its configuration from the **monorepo root `.env`** — there is no per-service `.env` file.
+From the repo root, copy the example and fill in your values:
 
 ```bash
 cp .env.example .env
@@ -130,4 +131,3 @@ Application Dockerfiles are not currently included in this repository.
 
 - [Backend API](../hr-api/README.md)
 - [HR Admin Dashboard](../hr-admin-dashboard/README.md)
-- [Technical Documentation](../TECHNICAL_DOCUMENTATION.md)
