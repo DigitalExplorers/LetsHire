@@ -3,7 +3,9 @@ import { Throttle } from '@nestjs/throttler';
 import { InterviewService } from './interview.service';
 import { FeedbackDto } from './dto/feedback.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../../common/decorators/current-user.decorator'; // Adjust path based on your structure
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @Controller('interviews')
 @UseGuards(JwtAuthGuard) // Apply globally if all routes require auth
@@ -60,14 +62,16 @@ export class InterviewController {
     return this.interviewService.submitFeedback(interviewId, body.feedback, body.score, adminUser.userId);
   }
 
-  // Get all interviews for a candidate or Get interview history for a candidate
+  // Get all interviews for a candidate / interview history
   @Get('candidate/:candidateId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin', 'admin', 'hr', 'interviewer')
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   async getCandidateInterviews(
     @Param('candidateId') candidateId: number,
-    @CurrentUser() adminUser: { userId: number }
+    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
   ) {
-    return this.interviewService.getCandidateInterviews(candidateId, adminUser.userId);
+    return this.interviewService.getCandidateInterviews(candidateId, currentUser);
   }
 
   // Move candidate to next round (manager action)

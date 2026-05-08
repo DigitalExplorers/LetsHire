@@ -14,7 +14,7 @@ const roleAccessMap: Record<string, string[]> = {
     "/settings",
   ],
   hr: ["/hr", "/positions", "/candidates", "/candidate", "/interview"],
-  interviewer: ["/interviewer"],
+  interviewer: ["/interviewer", "/candidate", "/interview"],
 };
 
 // Define globally unprotected or open-access paths

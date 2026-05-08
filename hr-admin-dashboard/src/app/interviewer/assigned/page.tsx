@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useAuth } from "@/hooks/AuthContext";
@@ -42,10 +43,15 @@ const statusColors: Record<string, string> = {
 
 const AssignedInterviews = () => {
   const { user } = useAuth();
+  const router = useRouter();
   const [candidates, setCandidates] = useState<AssignedCandidate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+
+  const viewCandidate = (candidateId: number) => {
+    router.push(`/candidate?id=${candidateId}`);
+  };
 
   useEffect(() => {
     if (!user?.id) return;
@@ -115,8 +121,13 @@ const AssignedInterviews = () => {
               </thead>
               <tbody>
                 {filtered.map((candidate) => (
-                  <tr key={candidate.id} className="border-t hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-800">
+                  <tr
+                    key={candidate.id}
+                    className="border-t cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => viewCandidate(candidate.id)}
+                    title="Click to view candidate details"
+                  >
+                    <td className="px-4 py-3 font-medium text-gray-800 hover:text-blue-600 hover:underline">
                       {candidate.firstName} {candidate.lastName}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{candidate.email}</td>

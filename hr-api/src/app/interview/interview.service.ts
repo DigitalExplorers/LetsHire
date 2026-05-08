@@ -209,11 +209,18 @@ export class InterviewService {
     return await this.interviewRepo.save(interview);
   }
 
-  // Get All Interview Rounds for a Candidate
-  async getCandidateInterviews(candidateId: number, adminId: number) {
+  // Get All Interview Rounds for a Candidate (org-scoped)
+  async getCandidateInterviews(
+    candidateId: number,
+    actor: { role?: string; organizationId?: number | null },
+  ) {
+    const isSuperAdmin = actor.role === 'superadmin';
     return this.interviewRepo.find({
-      where: { candidate: { id: candidateId }, createdBy: { id: adminId } },
-      order: { round: "ASC" },
+      where: isSuperAdmin
+        ? { candidate: { id: candidateId } }
+        : { candidate: { id: candidateId }, organization: { id: actor.organizationId! } },
+      relations: ['interviewer'],
+      order: { round: 'ASC' },
     });
   }
 
