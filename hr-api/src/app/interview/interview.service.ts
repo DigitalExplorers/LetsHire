@@ -74,13 +74,6 @@ export class InterviewService {
     return interview;
 }
 
-
-  // async getAllInterviews(adminId: number) {
-  //   return await this.interviewRepo.find({
-  //     relations: ["candidate", "interviewer"], // Include candidate and interviewer details
-  //   });
-  // }
-
   async getAllInterviews(
     adminId: number,
     page?: number,
@@ -112,19 +105,6 @@ export class InterviewService {
       relations: ['interviews', 'interviews.candidate'], // Fetch interviews & candidates
     });
   }
-
-  // async getCandidatesByInterviewer(interviewerId: number, adminId: number): Promise<User[]> {
-  //   const interviews = await this.interviewRepo.find({
-  //     where: { interviewer: { id: interviewerId } },
-  //     relations: ['candidate'], // Ensure candidate details are fetched
-  //   });
-  
-  //   if (!interviews.length) {
-  //     throw new NotFoundException(`No candidates assigned to interviewer ID ${interviewerId}`);
-  //   }
-  
-  //   return interviews.map((interview) => interview.candidate);
-  // }
 
   private async resolveInterviewerIdForCurrentUser(
     requestedInterviewerId: number,

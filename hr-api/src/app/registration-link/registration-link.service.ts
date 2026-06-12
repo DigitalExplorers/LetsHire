@@ -6,7 +6,7 @@ import { RegistrationLink } from './entities/registration-link.entity';
 import { randomUUID } from 'crypto';
 import { UserRole } from '../user-role/entities/user.role.entity';
 import { ConfigService } from '@nestjs/config';
-
+import { NotFoundException} from '@nestjs/common';
 @Injectable()
 export class RegistrationLinkService {
   private readonly frontendUrl: string;
@@ -76,7 +76,7 @@ export class RegistrationLinkService {
 
   async resolveToken(token: string) {
     const entry = await this.linkRepo.findOne({ where: { token } });
-    if (!entry) throw new Error('Invalid or expired registration token');
+      if (!entry) { throw new NotFoundException('Invalid or expired registration token');}
     const role = await this.roleRepo.findOne({ where: { id: entry.roleId } });
 
     return {

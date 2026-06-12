@@ -27,6 +27,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,md,hbs,yml,yaml}\" --ignore-path .gitignore"
   },
   "devDependencies": {
+    "@types/node": "^25.9.3",
     "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1"
   }
 }

@@ -109,9 +109,9 @@ cp .env.example .env
 | ----------------------- | -------------------------------------------------------------------------- | ---------------------------- |
 | `DB_HOST`               | PostgreSQL host                                                            | `localhost`                  |
 | `DB_PORT`               | PostgreSQL port                                                            | `5432`                       |
-| `DB_USER`               | Database username                                                          | `hrSolutionUser`             |
-| `DB_PASS`               | Database password                                                          | `hrSolutionPWD`              |
-| `DB_NAME`               | Database name                                                              | `hrSolution`                 |
+| `POSTGRES_USER`               | Database username                                                          | `hrSolutionUser`             |
+| `POSTGRES_PASSWORD`               | Database password                                                          | `hrSolutionPWD`              |
+| `POSTGRES_DB`               | Database name                                                              | `hrSolution`                 |
 | `JWT_SECRET`            | JWT signing secret                                                         | `your_jwt_secret_key`        |
 | `MAIL_HOST`             | SMTP host                                                                  | `smtp.sendgrid.net`          |
 | `MAIL_PORT`             | SMTP port                                                                  | `465`                        |

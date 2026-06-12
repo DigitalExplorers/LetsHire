@@ -21,7 +21,7 @@ const VideoRecorder = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const navigate = useNavigate();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null); //FOR THE NODEJS :cannot find namespace 
   const streamRef = useRef<MediaStream | null>(null);
   const { token } = useParams<{ token: string }>();
 
