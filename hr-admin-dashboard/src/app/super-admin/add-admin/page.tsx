@@ -11,7 +11,7 @@ const AddAdminForm = () => {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
   const router = useRouter();
 
-  const [organizations, setOrganizations] = useState<{ id: number; name: string }[]>([]);
+  const [organizations, setOrganizations] = useState<{ id: string; name: string }[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",

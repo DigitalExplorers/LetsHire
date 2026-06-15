@@ -24,25 +24,25 @@ export class UserRoleController {
 
   @Get()
   async getAllRoles(
-    @CurrentUser() adminUser: { userId: number },
+    @CurrentUser() adminUser: { userId: string },
   ) {
     return this.roleService.getAllRoles(adminUser.userId);
   }
 
   @Get(':id')
   async getRoleById(
-    @Param('id') id: number,
-    @CurrentUser() adminUser: { userId: number }
+    @Param('id') id: string,
+    @CurrentUser() adminUser: { userId: string }
   ) {
     return this.roleService.getRoleById(id, adminUser.userId);
   }
 
   @Get(':id/questions')
   getRoleWithQuestions(
-    @Param('id') id: number,
-    @CurrentUser() adminUser: { userId: number },
+    @Param('id') id: string,
+    @CurrentUser() adminUser: { userId: string },
   ) {
-    return this.roleService.getRoleWithQuestions(+id, adminUser.userId);
+    return this.roleService.getRoleWithQuestions(id, adminUser.userId);
   }
 
   @Post()
@@ -50,7 +50,7 @@ export class UserRoleController {
     @Body()
     body: { name: string; description: string; experienceRequired: number },
     @CurrentUser()
-    adminUser: { userId: number; organizationId: number },
+    adminUser: { userId: string; organizationId: string },
   ) {
     return this.roleService.createRole(
       body.name,
@@ -63,7 +63,7 @@ export class UserRoleController {
 
   @Put(':id')
   async updateRole(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body()
     body: Partial<{
       name: string;
@@ -71,16 +71,16 @@ export class UserRoleController {
       experienceRequired: number;
     }>,
     @CurrentUser()
-    adminUser: { userId: number },
+    adminUser: { userId: string },
   ) {
     return this.roleService.updateRole(id, adminUser.userId, body);
   }
 
   @Delete(':id')
   async deleteRole(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @CurrentUser()
-    adminUser: { userId: number },
+    adminUser: { userId: string },
   ) {
     return this.roleService.deleteRole(id, adminUser.userId);
   }

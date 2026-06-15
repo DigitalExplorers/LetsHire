@@ -80,7 +80,7 @@ export class UsersService {
     return !!user;
   }
 
-  async getUserById(userId: number) {
+  async getUserById(userId: string) {
     const user = await this.userRepo.findOne({ where: { id: userId } });
 
     if (!user) {
@@ -90,7 +90,7 @@ export class UsersService {
     return user;
   }
 
-  async createSubUser(dto: CreateSubUserDto, organizationId: number) {
+  async createSubUser(dto: CreateSubUserDto, organizationId: string) {
     const role = await this.roleRepo.findOne({ where: { name: dto.role } });
     if (!role) throw new Error('Role not found');
 
@@ -126,7 +126,7 @@ export class UsersService {
   }
 
   async getSubUsersByOrganization(
-    organizationId: number,
+    organizationId: string,
     page?: number,
     limit?: number,
   ): Promise<AdminUser[] | PaginatedResponse<AdminUser>> {
@@ -157,12 +157,12 @@ export class UsersService {
     return buildPaginatedResponse(users, total, pagination.page, pagination.limit);
   }
 
-  async getSubUser(userId: number) {
+  async getSubUser(userId: string) {
     return this.userRepo.findOne({ where: { id: userId } });
   }
 
 
-  async updateSubUser(id: number, dto: Partial<CreateSubUserDto>) {
+  async updateSubUser(id: string, dto: Partial<CreateSubUserDto>) {
     const user = await this.getUserById(id);
 
     if (!user) throw new Error('User not found');
@@ -208,13 +208,13 @@ export class UsersService {
     return { id: user.id, message: 'User updated successfully' };
   }
   
-  async deleteSubUser(id: number) {
+  async deleteSubUser(id: string) {
     const result = await this.userRepo.delete(id);
     if (result.affected === 0) throw new NotFoundException('User not found');
     return { message: 'User deleted successfully' };
   }
 
-  async updateUserPassword(userId: number, newPassword: string) {
+  async updateUserPassword(userId: string, newPassword: string) {
     const user = await this.getUserById(userId);
     if (!user) throw new NotFoundException('User not found');
   

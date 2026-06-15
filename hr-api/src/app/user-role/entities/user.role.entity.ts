@@ -2,11 +2,12 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'ty
 import { Quiz } from '../../quiz/entities/quiz.entity';
 import { AdminUser } from '../../users/entities/users.entity';
 import { Organization } from '../../organization/entities/organization.entity';
-
+import {IsUUID} from 'class-validator';
 @Entity('positions')
 export class UserRole {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  @IsUUID()
+  id: string;
 
   @Column()
   name: string;

@@ -30,7 +30,7 @@ export const getCandidates = async () => {
 };
 
 // Fetch Candidate with id
-export const getCandidate = async (id: string) => {
+export const getCandidate = async (id: string | number) => {
   try {
     const response = await apiClient.get(`/candidates/${id}`);
     return response.data;
@@ -52,7 +52,7 @@ export const createCandidate = async (candidateData: string) => {
 };
 
 // Update Candidate
-export const updateCandidate = async (id: string, updatedData: string) => {
+export const updateCandidate = async (id: string | number, updatedData: string) => {
   try {
     const response = await apiClient.put(`/candidates/${id}`, updatedData);
     return response.data;
@@ -63,7 +63,7 @@ export const updateCandidate = async (id: string, updatedData: string) => {
 };
 
 // Delete Candidate
-export const deleteCandidate = async (id: number) => {
+export const deleteCandidate = async (id: string | number) => {
   try {
     const response = await apiClient.delete(`/candidates/${id}`);
     return response.data;
@@ -74,7 +74,7 @@ export const deleteCandidate = async (id: number) => {
 };
 
 // Update Candidate Status
-export const updateCandidateStatus = async (id: string, status: string) => {
+export const updateCandidateStatus = async (id: string | number, status: string) => {
   try {
     const response = await apiClient.patch(`/candidates/${id}/status`, { status });
     return response.data;
@@ -101,7 +101,7 @@ export const getInterviewers = async () => {
 };
 
 // Fetch Single Candidate Details
-export const getCandidateDetails = async (id: number) => {
+export const getCandidateDetails = async (id: string | number) => {
   try {
     const response = await apiClient.get(`/candidates/${id}`);
     return response.data;
@@ -112,7 +112,10 @@ export const getCandidateDetails = async (id: number) => {
 };
 
 // Assign an interviewer
-export const assignInterviewer = async (candidateId: number, interviewerId: number) => {
+export const assignInterviewer = async (
+  candidateId: string | number,
+  interviewerId: string | number,
+) => {
   try {
     const response = await apiClient.patch(`/candidates/${candidateId}/assign-interviewer`, { interviewerId });
     return response.data;
@@ -123,10 +126,14 @@ export const assignInterviewer = async (candidateId: number, interviewerId: numb
 };
 
 // Schedule an interview
-export const scheduleInterview = async (candidateId: number, interviewerId: number, date: string) => {
+export const scheduleInterview = async (
+  candidateId: string | number,
+  interviewerId: string | number,
+  date: string,
+) => {
   try {
     const response = await apiClient.patch(`/candidates/${candidateId}/schedule-interview`, {
-      interviewerId: Number(interviewerId),
+      interviewerId: String(interviewerId),
       date: new Date(date).toISOString(),
     });
     return response.data;
@@ -146,7 +153,7 @@ export const addFeedbackRoundWise = async ({
 }: RoundFeedbackPayload) => {
   try {
     const response = await apiClient.post("/interviews/feedback", {
-      candidateId: Number(candidateId),
+      candidateId,
       round: Number(round),
       score: Number(score),
       strengths,

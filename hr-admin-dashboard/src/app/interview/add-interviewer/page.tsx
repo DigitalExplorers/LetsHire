@@ -12,7 +12,7 @@ interface Interviewer {
   skills: string[];
   department: string;
   availability: string;
-  createdBy : number
+  createdBy: string;
 }
 const AddInterviewerForm = () => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const AddInterviewerForm = () => {
       skills: skills.split(", ").map((skill) => skill.trim()),
       department,
       availability,
-      createdBy : parseInt(userId)
+      createdBy: userId,
     };
 
     try {

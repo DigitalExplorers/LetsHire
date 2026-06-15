@@ -18,7 +18,7 @@ import { CandidateNotificationService } from './candidate-notification.service';
 import { CandidateDocumentService } from './candidate-document.service';
 
 export interface IUserSafe {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -26,7 +26,7 @@ export interface IUserSafe {
 
 type StaffActor = {
   role?: string;
-  organizationId?: number | null;
+  organizationId?: string | null;
 };
 
 @Injectable()
@@ -61,7 +61,7 @@ export class CandidateService {
   }
 
   private async getAccessibleCandidate(
-    candidateId: number,
+    candidateId: string,
     actor: StaffActor,
     relations: string[] = [],
   ) {
@@ -114,7 +114,7 @@ export class CandidateService {
     }
   }
 
-  async resetCandidateRound(candidateId: number, round: number) {
+  async resetCandidateRound(candidateId: string, round: number) {
     await this.attemptRepo.delete({ candidate: { id: candidateId }, round });
     const user = await this.candidateRepository.findOne({
       where: { id: candidateId },
@@ -264,7 +264,7 @@ export class CandidateService {
    * Upload Documents (Resume & ID Proof) and update DB with file URLs
    */
   async uploadUserDocuments(
-    userId: number,
+    userId: string,
     resumeFile: Express.Multer.File,
     idProofFile?: Express.Multer.File | null, // Make it optional
   ) {
@@ -278,21 +278,21 @@ export class CandidateService {
   /**
    * Upload Video and update DB with file URL
    */
-  async uploadUserVideo(userId: number, videoFile: Express.Multer.File) {
+  async uploadUserVideo(userId: string, videoFile: Express.Multer.File) {
     return this.candidateDocumentService.uploadUserVideo(userId, videoFile);
   }
 
   /**
    * Retrieve User Documents from S3
    */
-  async getUserDocuments(userId: number, actor: StaffActor) {
+  async getUserDocuments(userId: string, actor: StaffActor) {
     return this.candidateDocumentService.getUserDocuments(userId, actor);
   }
 
   /**
    * Retrieve User Video from S3
    */
-  async getUserVideos(userId: number, actor: StaffActor) {
+  async getUserVideos(userId: string, actor: StaffActor) {
     return this.candidateDocumentService.getUserVideos(userId, actor);
   }
 
@@ -300,12 +300,12 @@ export class CandidateService {
    * Retrieve all users
    */
   async getUsers(
-    adminId: number,
+    adminId: string,
     page?: number,
     limit?: number,
   ): Promise<Candidate[] | PaginatedResponse<Candidate>> {
     const pagination = resolvePagination(page, limit);
-
+    console.log("THIS FUNTION OF GET USERS IS CALLED")
     if (!pagination) {
       return this.candidateRepository.find({
         where: { adminUser: { id: adminId } },
@@ -328,7 +328,7 @@ export class CandidateService {
   /**
    * Get User by ID
    */
-  async getUserByIdToAPP(id: number): Promise<Candidate> {
+  async getUserByIdToAPP(id: string): Promise<Candidate> {
     const user = await this.candidateRepository.findOne({
       where: { id: id },
       relations: ['feedbacks'], //Include CandidateRound data
@@ -340,7 +340,7 @@ export class CandidateService {
   /**
    * Get User by ID
    */
-  async getUserById(id: number, adminId: number): Promise<Candidate> {
+  async getUserById(id: string, adminId: string): Promise<Candidate> {
     const user = await this.candidateRepository.findOne({
       where: {
         id: id,
@@ -357,7 +357,7 @@ export class CandidateService {
   /**
    * Get User by ID
    */
-  async getUserByIdToConsole(id: number): Promise<Candidate> {
+  async getUserByIdToConsole(id: string): Promise<Candidate> {
     const user = await this.candidateRepository.findOne({
       where: { id: id },
       relations: ['feedbacks'],
@@ -369,7 +369,7 @@ export class CandidateService {
   /**
    * Update User Details
    */
-  async updateUser(id: number, data: UpdateCandidateDto, adminId: number): Promise<Candidate> {
+  async updateUser(id: string, data: UpdateCandidateDto, adminId: string): Promise<Candidate> {
     await this.getUserById(id, adminId);
     await this.candidateRepository.update(id, data);
     return this.getUserById(id, adminId);
@@ -378,7 +378,7 @@ export class CandidateService {
   /**
    * Delete User
    */
-  async deleteUser(id: number, adminId: number): Promise<void> {
+  async deleteUser(id: string, adminId: string): Promise<void> {
     const user = await this.candidateRepository.findOne({
       where: { id, adminUser: { id: adminId } },
     });
@@ -393,7 +393,7 @@ export class CandidateService {
    */
   async verifyOtp(id: string, otp: string) {
     const user = await this.candidateRepository.findOne({
-      where: { id: parseInt(id) },
+      where: { id: id },
     });
     if (!user) {
       throw new BadRequestException('User not found');
@@ -419,7 +419,7 @@ export class CandidateService {
   /**
    * Update User Status (admin-scoped — legacy, kept for backward compat)
    */
-  async updateUserStatus(userId: number, status: string, adminId: number): Promise<Candidate> {
+  async updateUserStatus(userId: string, status: string, adminId: string): Promise<Candidate> {
     const user = await this.candidateRepository.findOne({
       where: { id: userId, adminUser: { id: adminId } },
     });
@@ -449,9 +449,9 @@ export class CandidateService {
   /**
    * Update User Status — org-scoped (works for admin, hr, interviewer)
    */
-  async updateUserStatusByActor(userId: number, status: string, actor: StaffActor): Promise<Candidate> {
+  async updateUserStatusByActor(userId: string, status: string, currentUser: { userId :string; role?: string; organizationId?: string | null }): Promise<Candidate> {
     // Reuses getAccessibleCandidate which scopes by org (or no scope for superadmin)
-    const user = await this.getAccessibleCandidate(userId, actor);
+    const user = await this.getAccessibleCandidate(userId, currentUser);
 
     user.status = status;
 
@@ -460,7 +460,7 @@ export class CandidateService {
       await this.candidateNotificationService.sendStatusUpdateNotification(
         user,
         status,
-        actor.organizationId ?? 0,
+        currentUser.userId!, // Pass the actual user ID for accurate email content
       );
     } catch (error) {
       console.error(`Failed to send ${status} status email to ${user.email}:`, error);
@@ -473,7 +473,7 @@ export class CandidateService {
     await this.candidateNotificationService.sendInterviewNotifications(interview);
   }
 
-  async assignInterviewer(candidateId: number, interviewerId: number, adminId: number) {
+  async assignInterviewer(candidateId: string, interviewerId: string, adminId: string) {
     // Fetch candidate with admin check
     const candidate = await this.candidateRepository.findOne({
       where: { id: candidateId, adminUser: { id: adminId } },
@@ -527,7 +527,7 @@ export class CandidateService {
   /**
    * Schedule an Interview
    */
-  async scheduleInterview(candidateId: number, date: Date) {
+  async scheduleInterview(candidateId: string, date: Date) {
     const candidate = await this.candidateRepository.findOne({
       where: { id: candidateId },
     });
@@ -571,7 +571,7 @@ export class CandidateService {
   /**
    * Fetch a specific candidate along with assigned interviewer
    */
-  async getCandidateDetails(candidateId: number, actor: StaffActor) {
+  async getCandidateDetails(candidateId: string, actor: StaffActor) {
     return this.getAccessibleCandidate(candidateId, actor, ['assignedInterviewer']);
   }
 
@@ -590,7 +590,7 @@ export class CandidateService {
   /**
    * Find user by email
    */
-  async findUserByEmail(email: string, adminId: number): Promise<Candidate | null> {
+  async findUserByEmail(email: string, adminId: string): Promise<Candidate | null> {
     return this.candidateRepository.findOne({
       where: { email: email.toLowerCase(), adminUser: { id: adminId } },
     });

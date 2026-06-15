@@ -1,11 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class FeedbackDto {
-  @Type(() => Number) // Converts string to number automatically
-  @IsNumber()
   @IsNotEmpty()
-  candidateId: number;
+  @IsUUID()
+  candidateId: string;
 
   @Type(() => Number)
   @IsNumber()

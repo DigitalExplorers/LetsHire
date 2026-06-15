@@ -8,7 +8,7 @@ import { ArrowDownUp, ArrowUpDown } from "lucide-react";
 
 // Define Candidate Type
 interface Candidate {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -26,7 +26,7 @@ const AssignedCandidates = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const showCandidateDetails = (candidateId: number) => {
+  const showCandidateDetails = (candidateId: string) => {
     router.push(`/candidate?id=${candidateId}`);
   };
 
@@ -34,7 +34,7 @@ const AssignedCandidates = () => {
     if (!interviewerId) return;
 
     setIsLoading(true);
-    getCandidatesByInterviewer(parseInt(interviewerId))
+    getCandidatesByInterviewer(interviewerId)
       .then((data: Candidate[]) => setCandidates(data))
       .catch((err) => console.error("Error fetching candidates:", err))
       .finally(() => setIsLoading(false));

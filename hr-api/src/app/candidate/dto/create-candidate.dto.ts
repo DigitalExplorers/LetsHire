@@ -66,10 +66,10 @@ export class CreateCandidateDto {
 
   @IsOptional()
   @Type(() => Object)
-  adminUser?: { id: number };
+  adminUser?: { id: string };
 
   @IsOptional()
   @Type(() => Object)
-  organization?: { id: number };
+  organization?: { id: string };
 
 }

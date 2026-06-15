@@ -11,7 +11,7 @@ import ConfirmAction from "@/components/ConfirmAction";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 interface AdminUser {
-  id: number;
+  id: string;
   name: string;
   email: string;
   createdAt: string;
@@ -75,7 +75,7 @@ const AdminsTableView = () => {
     }
   };
 
-  const handleDelete = async (id: number, close: () => void) => {
+  const handleDelete = async (id: string, close: () => void) => {
     try {
       close();
       await ConfirmAction({

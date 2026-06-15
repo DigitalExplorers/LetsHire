@@ -45,7 +45,7 @@ export class InterviewerService {
   //   return await this.interviewerRepository.find();
   // }
 
-  async getInterviewers(organizationId: number, skills?: string[]): Promise<Interviewer[]> {
+  async getInterviewers(organizationId: string, skills?: string[]): Promise<Interviewer[]> {
     const query = this.interviewerRepository.createQueryBuilder('interviewer')
       .leftJoinAndSelect('interviewer.organization', 'organization')
       .where('organization.id = :organizationId', { organizationId });
@@ -57,12 +57,12 @@ export class InterviewerService {
     return await query.getMany();
   }
 
-  async getInterviewersByAdmin(adminId: number): Promise<Interviewer[]> {
+  async getInterviewersByAdmin(adminId: string): Promise<Interviewer[]> {
     return this.interviewerRepository.find({ where: { createdBy: { id: adminId } } });
   }
 
   // Get an interviewer by ID
-  async getInterviewerById(id: number): Promise<Interviewer> {
+  async getInterviewerById(id: string): Promise<Interviewer> {
     const interviewer = await this.interviewerRepository.findOne({
       where: { id },
     });
@@ -77,14 +77,14 @@ export class InterviewerService {
   //   return this.getInterviewerById(id);
   // }
 
-  async updateInterviewer(id: number, updateDto: UpdateInterviewerDto, adminId: number): Promise<Interviewer> {
+  async updateInterviewer(id: string, updateDto: UpdateInterviewerDto, adminId: string): Promise<Interviewer> {
     const interviewer = await this.getInterviewerById(id);
     if (interviewer.createdBy.id !== adminId) {
       throw new UnauthorizedException('You are not authorized to update this interviewer.');
     }
   
     // Convert createdBy ID to entity if present
-    if ('createdBy' in updateDto && typeof updateDto.createdBy === 'number') {
+    if ('createdBy' in updateDto && typeof updateDto.createdBy === 'string') {
       updateDto.createdBy = { id: updateDto.createdBy } as any;
     }
   
@@ -94,7 +94,7 @@ export class InterviewerService {
   
 
   // Delete an interviewer
-  async deleteInterviewer(id: number, adminId: number): Promise<void> {
+  async deleteInterviewer(id: string, adminId: string): Promise<void> {
     const interviewer = await this.interviewerRepository.findOne({
       where: {
         id,
@@ -123,7 +123,7 @@ export class InterviewerService {
     }
   }
 
-  async assignCandidate(interviewerId: number, candidateId: number) {
+  async assignCandidate(interviewerId: string, candidateId: string) {
     const interviewer = await this.interviewerRepository.findOne({
       where: { id: interviewerId },
       relations: ['candidates'], // Ensure we fetch existing candidates

@@ -6,7 +6,7 @@ export class ResetToken {
   id: number;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column()
   token: string;

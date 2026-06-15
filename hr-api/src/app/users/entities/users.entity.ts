@@ -4,12 +4,14 @@ import { Exclude } from 'class-transformer';
 import { Feedback } from '../../candidate-feedback/entities/feedback.entity';
 import { Organization } from '../../organization/entities/organization.entity';
 import { Role } from '../../role/entities/role.entity';
+import {IsUUID} from 'class-validator';
 
 @Entity('users')
 @Unique(['email', 'organization'])
 export class AdminUser {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @IsUUID()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
