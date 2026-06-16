@@ -234,8 +234,9 @@ const VideoRecorder = () => {
       setIsUploading(true); // Show loader
       const formData = new FormData();
       formData.append("video", videoBlob, "recorded-video.mp4"); // Append video with correct field name  
+      formData.append("userId",userId)
       const response = await axios.post(
-        `${API_URL}/candidates/${userId}/upload/video`,
+        `${API_URL}/candidates/upload/video`,
         formData,
         {
           headers: {

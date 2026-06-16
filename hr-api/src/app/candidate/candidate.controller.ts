@@ -1,7 +1,6 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, UsePipes, ValidationPipe, NotFoundException, ForbiddenException ,BadRequestException, UseInterceptors, UploadedFiles, Patch, Query, UploadedFile, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { CandidateService } from './candidate.service';
-import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { UpdateCandidateDto } from './dto/update-candidate.dto';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { InterviewService } from '../interview/interview.service';
@@ -11,6 +10,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RegistrationLinkService } from '../registration-link/registration-link.service';
+import { CreateCandidateRequestDto } from './dto/Create-candidate-request.dto';
 
 
 @Controller('candidates')
@@ -30,9 +30,7 @@ export class CandidateController {
     ]),
   )
   async createUser(
-    @Body() data: CreateCandidateDto,
-    @Query('adminId') adminId: string,
-    @Query('organizationId') organizationId: string,
+    @Body() data: CreateCandidateRequestDto,
     @UploadedFiles() files: { resume?: Express.Multer.File[], idProof?: Express.Multer.File[] }
   ) {
     console.log('Received Form Data:', data);
@@ -45,13 +43,11 @@ export class CandidateController {
     if (!files.resume || files.resume.length === 0) {
       throw new BadRequestException('Resume file is required!');
     }
-
-    // Attach admin ownership from query to user data
-    if (adminId) data.adminUser = { id: adminId };
-
-    // Attach organizationId and role from query to user data
-    if (organizationId) data.organization = { id: organizationId };
-
+     // Attach admin ownership from body to user data
+    if (data.adminId) {  data.adminUser = { id: data.adminId }; }
+    // Attach organizationId from body to user data
+    if (data.organizationId) { data.organization = { id: data.organizationId, };}
+   
     // Step 1: Create User First
     const createdUser = await this.userService.createUser(data);
 
@@ -79,30 +75,26 @@ export class CandidateController {
 
 
   @UseGuards(JwtAuthGuard)
-  @Post(':userId/upload/video')
-  @UseInterceptors(FileInterceptor('video')) // Expect a SINGLE file named "video"
+  @Post('upload/video')
+  @UseInterceptors(FileInterceptor('video'))
   async uploadVideo(
-    @UploadedFile() file: Express.Multer.File, // Change to @UploadedFile()
-    @Param('userId') userId: string,
-    @CurrentUser() currentUser: { userId: string  },
+    @UploadedFile() file: Express.Multer.File,
+    @Body('userId') userId: string,
+    @CurrentUser() currentUser: { userId: string },
   ) {
     if (!file) {
       throw new BadRequestException('No video file uploaded!');
     }
-    if ( currentUser.userId !== userId ) {
-    throw new ForbiddenException(
-      'You can only upload your own video'
-    );
-  }
+
+    if (currentUser.userId !== userId) {
+      throw new ForbiddenException('You can only upload your own video');
+    }
 
     console.log(
       `Received video file: ${file.originalname}, Size: ${file.size} bytes`,
     );
 
-    return this.userService.uploadUserVideo(
-      userId,
-      file,
-    );
+    return this.userService.uploadUserVideo(userId, file);
   }
 
   /**

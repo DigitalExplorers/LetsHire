@@ -354,9 +354,15 @@ function RegistrationForm() {
       if (formData.idProof) {
         data.append('idProof', formData.idProof);
       }
+      if (adminId) {
+        data.append('adminId', adminId);
+      }
+      if (organizationId) {
+        data.append('organizationId', organizationId);
+      }
 
       const response = await axios.post(
-        `${API_URL}/candidates?adminId=${adminId}&organizationId=${organizationId}`,
+        `${API_URL}/candidates`,
         data,
         {
           headers: {
