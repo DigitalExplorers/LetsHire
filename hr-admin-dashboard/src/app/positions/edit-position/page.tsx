@@ -5,10 +5,11 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie"
 
 const EditPositionForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const router = useRouter();
   const searchParams = useSearchParams();
 

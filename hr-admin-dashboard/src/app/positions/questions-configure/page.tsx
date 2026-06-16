@@ -5,11 +5,11 @@ import { useState, useEffect } from "react";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import ConfirmAction from "@/components/ConfirmAction";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 const UploadQuestions = () => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);

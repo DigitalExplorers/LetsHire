@@ -1,5 +1,6 @@
 "use client";
 
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -8,7 +9,7 @@ interface AddPositionPanelProps {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+const token = typeof window !== "undefined" ? Cookies.get("token") : null;
 
 const AddPositionPanel = ({ onSuccess }: AddPositionPanelProps) => {
   const [jobRole, setJobRole] = useState("");

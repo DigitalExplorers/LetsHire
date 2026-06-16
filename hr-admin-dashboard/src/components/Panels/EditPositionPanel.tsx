@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 interface EditPositionPanelProps {
   roleId: number;
@@ -9,7 +10,7 @@ interface EditPositionPanelProps {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+const token = typeof window !== "undefined" ? Cookies.get("token") : null;
 
 const EditPositionPanel = ({ roleId, onSuccess }: EditPositionPanelProps) => {
   const [jobRole, setJobRole] = useState("");

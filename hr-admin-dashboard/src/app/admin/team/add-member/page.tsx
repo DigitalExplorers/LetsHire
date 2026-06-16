@@ -5,7 +5,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
-
+import Cookies from "js-cookie";
 const AddMemberForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +29,7 @@ const AddMemberForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
         body: JSON.stringify({ name, email, password, role }),
       });

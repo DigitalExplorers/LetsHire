@@ -1,7 +1,6 @@
 "use client";
 import axios from "axios";
 import Cookies from "js-cookie";
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 // Sign Up API Call
@@ -34,7 +33,12 @@ export const signUp = async (
 export const loginUser = async (email: string, password: string) => {
   email = email.toLowerCase()
   const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-  localStorage.setItem("token", response.data.access_token); // Store JWT token
+  Cookies.set("token", response.data.access_token, {
+    expires: 1, 
+    secure: true,
+    sameSite: "strict",     //i feel this is even not best way , An XSS attack can still steal it. 
+    // what if we can ask backend to set cookie and give it to front end.
+  });
   return response.data;
 };
 
@@ -49,12 +53,13 @@ export const logoutUser = () => {
   Cookies.remove("role");
   Cookies.remove("organizationId");
   Cookies.remove("id");
+  Cookies.remove("selectedRoleId");
   window.location.href = "/auth/signin";
 };
 
 // Fetch Current User (Optional)
 export const getUser = async () => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   if (!token) return null;
 
   try {
@@ -66,7 +71,7 @@ export const getUser = async () => {
   } catch (error: any) {
     if (error.response?.status === 401) {
       // Token expired or unauthorized, clear localStorage and reload
-      localStorage.removeItem("token");
+      Cookies.remove("token");
       window.location.href = "/auth/signin"; // Redirect to login page
     }
     return null;

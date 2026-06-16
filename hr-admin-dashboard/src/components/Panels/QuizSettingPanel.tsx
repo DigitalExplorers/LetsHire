@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 interface QuizSettingPanelProps {
   roleId: number;
@@ -16,7 +17,7 @@ const QuizSettingPanel = ({ roleId, roleName }: QuizSettingPanelProps) => {
   const [loadingConfig, setLoadingConfig] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
 
   useEffect(() => {
     const fetchConfig = async () => {

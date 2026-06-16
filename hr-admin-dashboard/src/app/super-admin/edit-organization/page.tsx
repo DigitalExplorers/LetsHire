@@ -5,10 +5,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 const EditOrganizationForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
+  const token = typeof window !== "undefined" ? Cookies.get("token") : "";
   const router = useRouter();
   const searchParams = useSearchParams();
 

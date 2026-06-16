@@ -3,10 +3,10 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useEffect, useState } from "react";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import Cookies from "js-cookie";
 const QuestionsForm = () => {
 
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
   const router = useRouter();

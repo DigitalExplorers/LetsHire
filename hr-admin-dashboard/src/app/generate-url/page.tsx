@@ -8,10 +8,9 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import html2canvas from "html2canvas";
 import { useRouter, useSearchParams } from "next/navigation";
-
+import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-const adminId = typeof window !== "undefined" ? localStorage.getItem("adminId") : null;
 
 const RegistrationLinkComponent = () => {
     const [selectedRole, setSelectedRole] = useState<string>("");
@@ -44,7 +43,7 @@ const RegistrationLinkComponent = () => {
             const response = await axios.get(`${API_URL}/registration-link`, {
                 params: { roleId: selectedRole },
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${Cookies.get("token")}`
                 }
             });
             setGeneratedLink(response.data.registrationUrl);

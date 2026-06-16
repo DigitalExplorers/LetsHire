@@ -145,6 +145,6 @@ async function bootstrap() {
   }
 
   await app.listen(process.env.PORT || 4000);
-  logger.log(`🚀 Application running on port ${process.env.PORT || 4000}`);
+  logger.log(` Application running on port ${process.env.PORT || 4000}`);
 }
 bootstrap();

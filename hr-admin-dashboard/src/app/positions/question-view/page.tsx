@@ -7,14 +7,14 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { FiMoreVertical } from "react-icons/fi"; // Three-dot menu icon
 import { Menu } from "@headlessui/react"; // Dropdown menu
 import React from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import ConfirmAction from "@/components/ConfirmAction";
 import * as XLSX from 'xlsx';
-import SelectGroupOne from "@/components/SelectGroup/SelectGroupOne";
+import Cookies from "js-cookie";
 import { useSearchParams, useRouter } from "next/navigation";
 
-const token = localStorage.getItem("token");
-const adminId = localStorage.getItem("adminId");
+const token = Cookies.get("token");
+const adminId = Cookies.get("adminId");  //again we are not using it.
 const ITEMS_PER_PAGE = 5; // Pagination limit
 
 // Define the structure for question options

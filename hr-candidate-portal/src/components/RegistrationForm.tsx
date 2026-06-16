@@ -18,7 +18,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useBranding } from '../contexts/BrandingContext'; // Adjust this path based on your structure
-
 const generateYears = () => {
   const currentYear = new Date().getFullYear();
   return Array.from({ length: currentYear - 1949 }, (_, i) => (currentYear - i).toString()); // Convert to string
@@ -200,9 +199,9 @@ function RegistrationForm() {
           const resolvedData = data as ResolvedRegistrationLink;
 
           // Save to localStorage or state
-          localStorage.setItem('urlAdminId', String(resolvedData.adminId));
-          localStorage.setItem('urlRoleId', String(resolvedData.roleId));
-          localStorage.setItem('urlOrgId', String(resolvedData.organizationId));
+          Cookies.set('urlAdminId', String(resolvedData.adminId));
+          Cookies.set('urlRoleId', String(resolvedData.roleId));
+          Cookies.set('urlOrgId', String(resolvedData.organizationId));
 
           setAdminId(resolvedData.adminId);
           setRoleId(resolvedData.roleId);
@@ -229,7 +228,7 @@ function RegistrationForm() {
     };
 
     if (token) {
-      localStorage.setItem('urlToken', token);
+      Cookies.set('urlToken', token);
       resolveToken();
     }
   }, [token]);

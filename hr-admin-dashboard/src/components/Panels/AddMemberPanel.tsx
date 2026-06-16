@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 const AddMemberPanel = () => {
   const [name, setName] = useState("");
@@ -12,7 +13,7 @@ const AddMemberPanel = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

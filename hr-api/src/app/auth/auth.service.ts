@@ -104,7 +104,7 @@ export class AuthService {
 
   async sendResetPasswordEmail(email: string) {
     const user = await this.usersService.findByEmail(email);
-    if (!user) return; // Don't reveal if user exists
+    if (!user) {console.log("user doesnt exist"); return} // Don't reveal if user exists
     console.log('Found user for password reset:', user.id);
     const foundOrg = await this.organizationRepo.findOne({
       where: { id: user.organization.id },

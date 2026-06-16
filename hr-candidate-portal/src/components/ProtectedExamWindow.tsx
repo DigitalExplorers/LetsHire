@@ -6,6 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, CircularProgress, Button } from '@mui/material';
 import { useBranding } from '../contexts/BrandingContext';
+import Cookies from 'js-cookie';
 
 // Enable dayjs plugins
 dayjs.extend(utc);
@@ -20,8 +21,8 @@ const ProtectedExamWindow = ({ children }: { children: React.ReactNode }) => {
   const istTimeZone = 'Asia/Kolkata';
 
   useEffect(() => {
-    const startTime = parseInt(localStorage.getItem('userExamStartTime') || '0', 10);
-    const allowedDuration = parseInt(localStorage.getItem('userExamAllowedDuration') || '0', 10);
+    const startTime = parseInt(Cookies.get('userExamStartTime') || '0', 10);
+    const allowedDuration = parseInt(Cookies.get('userExamAllowedDuration') || '0', 10);
     const now = Date.now();
 
     if (startTime && allowedDuration) {
@@ -31,8 +32,9 @@ const ProtectedExamWindow = ({ children }: { children: React.ReactNode }) => {
         return;
       } else {
         // Time expired, clear flags
-        localStorage.removeItem('userExamStartTime');
-        localStorage.removeItem('userExamAllowedDuration');
+        Cookies.remove('userExamStartTime');
+        Cookies.remove('userExamAllowedDuration');
+        Cookies.remove('userExamAllowedDuration');
         setStatus('blocked');
         return;
       }
@@ -48,8 +50,8 @@ const ProtectedExamWindow = ({ children }: { children: React.ReactNode }) => {
         const start = dayjs.utc(examStartTime).tz(istTimeZone);
         const end = dayjs.utc(examEndTime).tz(istTimeZone);
 
-        const localStartTime = parseInt(localStorage.getItem('userExamStartTime') || '0', 10);
-        const allowedDuration = parseInt(localStorage.getItem('userExamAllowedDuration') || '0', 10);
+        const localStartTime = parseInt(Cookies.get('userExamStartTime') || '0', 10);
+        const allowedDuration = parseInt(Cookies.get('userExamAllowedDuration') || '0', 10);
         const nowTime = Date.now();
 
         console.log('Backend window:', start.format(), 'to', end.format());
@@ -64,8 +66,8 @@ const ProtectedExamWindow = ({ children }: { children: React.ReactNode }) => {
             return;
           } else {
             console.log('Personal session time expired, clearing');
-            localStorage.removeItem('userExamStartTime');
-            localStorage.removeItem('userExamAllowedDuration');
+            Cookies.remove('userExamStartTime');
+            Cookies.remove('userExamAllowedDuration');
           }
         }
 
@@ -79,8 +81,8 @@ const ProtectedExamWindow = ({ children }: { children: React.ReactNode }) => {
         } else {
           console.log('Inside global window, starting local session');
           // Store personal session (new start)
-          localStorage.setItem('userExamStartTime', Date.now().toString());
-          localStorage.setItem('userExamAllowedDuration', '3600'); // 1 hour in seconds
+          Cookies.set('userExamStartTime', Date.now().toString());
+          Cookies.set('userExamAllowedDuration', '3600'); // 1 hour in seconds
           setStatus('allowed');
         }
       } catch (err) {
@@ -173,41 +175,6 @@ const ProtectedExamWindow = ({ children }: { children: React.ReactNode }) => {
             </Typography>
           </Box>
 
-          {/* Fixed footer button
-          <Box
-            sx={{
-              position: 'fixed',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: '#fff',
-              zIndex: 1000,
-              padding: '0px 20px 20px',
-              '@media (min-width: 1024px)': {
-                width: '460px',
-                margin: '0 auto',
-              },
-            }}
-          >
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => navigate(`/${token}`)}
-              sx={{
-                backgroundColor: primaryColor,
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '16px',
-                textTransform: 'none',
-                borderRadius: '4px',
-                height: '56px',
-                padding: '12px 24px',
-                '&:hover': { backgroundColor: primaryColor },
-              }}
-            >
-              Go Back
-            </Button>
-          </Box> */}
         </Box>
       </Box>
     );

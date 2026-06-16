@@ -51,6 +51,7 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<AdminUser | null> {
+    console.log('Looking for user with email:', email);
     return await this.userRepo.findOne({ where: { email } });
   }
 
