@@ -7,6 +7,7 @@ import { ArrowDownUp, ArrowUpDown, MoreVertical } from "lucide-react";
 import DropdownActions from "@/components/DropdownActions";
 import ConfirmAction from "@/components/ConfirmAction";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
@@ -271,10 +272,11 @@ const OrganizationsTableView = () => {
             {/* Logo */}
             {selectedOrg.logoUrl && (
               <div className="mb-4 text-center">
-                <img
+                <Image
                   src={selectedOrg.logoUrl}
                   alt="Organization Logo"
                   className="mx-auto h-16 object-contain"
+                   width={200} height={64}
                 />
               </div>
             )}
@@ -300,9 +302,10 @@ const OrganizationsTableView = () => {
               {selectedOrg.bgImageUrl && (
                 <div>
                   <p className="mt-2"><strong>Background Image:</strong></p>
-                  <img
+                  <Image
                     src={selectedOrg.bgImageUrl}
                     alt="Background"
+                    fill
                     className="w-full h-32 object-cover rounded-md mt-1"
                   />
                 </div>

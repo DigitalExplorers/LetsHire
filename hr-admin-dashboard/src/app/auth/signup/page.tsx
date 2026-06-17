@@ -3,6 +3,7 @@ import { useState } from "react";
 import { signUp } from "../../services/authService";
 import { useRouter } from "next/navigation";
 import { useBranding } from "@/contexts/BrandingContext";
+import Image from "next/image";
 
 const SignUp = () => {
   const router = useRouter();
@@ -110,9 +111,11 @@ const validateForm = (
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               {/* Logo */}
               <div className="mb-6 flex justify-center">
-                <img
+                <Image
                   src={'/images/logo/THE8800-logo-final.png'}
                   alt="Logo"
+                  width={240}
+                  height={48}
                   className="h-12 object-contain"
                 />
               </div>
