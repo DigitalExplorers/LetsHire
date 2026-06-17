@@ -22,7 +22,7 @@ const RegistrationLinkPanel = dynamic(() => import("@/components/Panels/Registra
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 interface Position {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   experienceRequired?: number;
@@ -81,7 +81,7 @@ const PositionsTableView = () => {
     }
   };
 
-  const handleDelete = async (id: number, close: () => void) => {
+  const handleDelete = async (id: string, close: () => void) => {
     close();
     try {
       await ConfirmAction({
@@ -154,7 +154,7 @@ const PositionsTableView = () => {
     currentPage * itemsPerPage
   );
 
-  const handleGenerateMore = async (roleId: number, close: () => void) => {
+  const handleGenerateMore = async (roleId: string, close: () => void) => {
     close();
     setIsLoading(true);
     setloadingMessage("Generating questions");
@@ -181,7 +181,7 @@ const PositionsTableView = () => {
     }
   };
 
-  const handleRegenerate = async (roleId: number, close: () => void) => {
+  const handleRegenerate = async (roleId: string, close: () => void) => {
     close();
     setIsLoading(true);
     setloadingMessage("Re-generating questions");

@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import axios from 'axios';
+import { useRef } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -22,6 +23,7 @@ const generateYears = () => {
   const currentYear = new Date().getFullYear();
   return Array.from({ length: currentYear - 1949 }, (_, i) => (currentYear - i).toString()); // Convert to string
 };
+
 
 const passedOutYears = generateYears();
 
@@ -123,6 +125,8 @@ function RegistrationForm() {
   const [adminId, setAdminId] = useState<string | null>(null);
   const [roleId, setRoleId] = useState<string | null>(null);
   const [organizationId, setOrgId] = useState<string | null>(null);
+  const resumeInputRef = useRef<HTMLInputElement>(null);
+  const idProofInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -244,21 +248,27 @@ function RegistrationForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (event: any) => {
-    const { name } = event.target; // Get the name of the input field (resume or idProof)
-    const file = event.target.files[0]; // Get the uploaded file
+const handleFileChange = ( event: React.ChangeEvent<HTMLInputElement> ) => {
+  const { name, files } = event.target;
+  const file = files?.[0];
+  if (!file) return;
 
-    if (file) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: file, // Dynamically update the correct field
-      }));
-    }
-  };
+  setFormData((prev) => ({ ...prev, [name]: file })) };
 
   const handleFileRemove = (field: string) => {
-    setFormData({ ...formData, [field]: '' });
-  };
+  setFormData((prev) => ({
+    ...prev,
+    [field]: null,
+  }));
+
+  if (field === 'resume' && resumeInputRef.current) {
+    resumeInputRef.current.value = '';
+  }
+
+  if (field === 'idProof' && idProofInputRef.current) {
+    idProofInputRef.current.value = '';
+  }
+};
 
   const checkUserExists = async (email: string) => {
     try {
@@ -835,8 +845,9 @@ function RegistrationForm() {
                               src="/assets/close.svg"
                               alt="Remove file"
                               onClick={() => {
-                                setFormData({ ...formData, resume: null });
+                                 handleFileRemove('resume')
                               }}
+                              
                               style={{
                                 cursor: 'pointer',
                                 height: '13px',
@@ -880,7 +891,7 @@ function RegistrationForm() {
                             filter: 'brightness(0) saturate(0%)',
                           }}
                         />
-                        <input hidden type="file" name="resume" onChange={handleFileChange} />
+                        <input ref={resumeInputRef} hidden type="file" name="resume" onChange={handleFileChange} />
                       </Button>
                     </Box>
 
@@ -926,7 +937,7 @@ function RegistrationForm() {
                             src="/assets/close.svg"
                             alt="Remove file"
                             onClick={() => {
-                              setFormData({ ...formData, idProof: null });
+                              handleFileRemove('idProof')
                             }}
                             style={{
                               cursor: 'pointer',
@@ -970,7 +981,7 @@ function RegistrationForm() {
                           filter: 'brightness(0) saturate(0%)',
                         }}
                       />
-                      <input hidden type="file" name="idProof" onChange={handleFileChange} />
+                      <input ref={idProofInputRef} hidden type="file" name="idProof" onChange={handleFileChange} />
                     </Button>
                   </Box>
                 </Box>

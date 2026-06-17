@@ -58,7 +58,7 @@ const QuestionTableView = () => {
   const [isLoading, setLoading] = useState<boolean>(true);
 
   const [roles, setRoles] = useState<Role[]>([]);
-  const [selectedRoleId, setSelectedRoleId] = useState<number|"">("");
+  const [selectedRoleId, setSelectedRoleId] = useState<string|"">("");
   const [selectedRoleName, setSelectedRoleName] = useState<string | "">("");
 
   const searchParams = useSearchParams();
@@ -69,7 +69,7 @@ const QuestionTableView = () => {
 
   useEffect(() => {
     if (roleIdFromQuery) {
-      setSelectedRoleId(parseInt(roleIdFromQuery));
+      setSelectedRoleId(roleIdFromQuery);
     }
     if (roleNameFromQuery) {
       setSelectedRoleName(roleNameFromQuery);
@@ -83,7 +83,7 @@ const QuestionTableView = () => {
     };
   }, [selectedRoleId]);
 
-  const fetchQuestions = async (roleId: number | "") => {
+  const fetchQuestions = async (roleId: string | "") => {
     setLoading(true);
     const url = `${API_URL}/roles/${roleId}/questions`
 

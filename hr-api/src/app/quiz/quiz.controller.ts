@@ -8,8 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Request } from 'express';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-
-
+import { AddQuestionDto } from './dto/add-question.dto';
 export interface RequestWithUser extends Request {
   user: {
     userId: string;
@@ -82,13 +81,12 @@ export class QuizController {
   @Post('add-question')
   @UseGuards(JwtAuthGuard)
   async addQuestion(
-    @Body() body: { question: string; options: { text: string; isCorrect: boolean }[] }, @Req() req: RequestWithUser, @Query('roleId') roleId?: string
+    @Body() body: AddQuestionDto,@Req() req: RequestWithUser,
   ) {
-    if (roleId === undefined) {
+    if (body.roleId === undefined) {
       throw new BadRequestException('roleId is required');
     }
-
-    return await this.quizService.addQuestion(body.question, body.options, req.user.userId, roleId);
+    return await this.quizService.addQuestion(body.question, body.options, req.user.userId, body.roleId);
   }
 
   /** Update an Existing Question */

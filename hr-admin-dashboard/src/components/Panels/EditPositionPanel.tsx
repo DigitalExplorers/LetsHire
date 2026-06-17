@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
 interface EditPositionPanelProps {
-  roleId: number;
+  roleId: string;
   onSuccess?: () => void;
 }
 
