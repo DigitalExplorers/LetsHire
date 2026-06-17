@@ -19,7 +19,7 @@ interface Document {
 
 // Define the Candidate interface
 interface Candidate {
-  id: number;
+  id: string;
   name: string;
   firstName: string;
   lastName: string;
@@ -202,7 +202,7 @@ const HRDashboard = () => {
   const itemsPerPage = 10;
 
   const router = useRouter();
-  const candidateView = (candidateId: number) => {
+  const candidateView = (candidateId: string) => {
     router.push(`/candidate?id=${candidateId}`);
   };
 
@@ -248,7 +248,7 @@ const HRDashboard = () => {
     }
   };
 
-  const handleDeleteCandidate = async (id: number) => {
+  const handleDeleteCandidate = async (id: string) => {
     await ConfirmAction({
       action: async () => {
         setIsLoading(true);

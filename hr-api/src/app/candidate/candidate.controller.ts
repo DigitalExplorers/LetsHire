@@ -24,10 +24,38 @@ export class CandidateController {
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'resume', maxCount: 1 },
-      { name: 'idProof', maxCount: 1 },
-    ]),
+    FileFieldsInterceptor(
+      [
+        { name: 'resume', maxCount: 1 },
+        { name: 'idProof', maxCount: 1 },
+      ],
+      {
+        limits: {
+          fileSize: 5 * 1024 * 1024, // 5MB
+        },
+        fileFilter: (req, file, cb) => {
+        if (file.fieldname === 'resume') {
+          const allowedMimeTypes = [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/octet-stream',
+          ];
+
+          const validMime = allowedMimeTypes.includes(file.mimetype);
+          const validExt = /\.(pdf|docx)$/i.test(file.originalname);
+
+          if (!validMime && !validExt) {
+            return cb(
+              new BadRequestException('Resume must be PDF or DOCX only'),
+              false,
+            );
+          }
+        }
+
+        cb(null, true);
+      }
+      },
+    ),
   )
   async createUser(
     @Body() data: CreateCandidateRequestDto,
@@ -54,8 +82,16 @@ export class CandidateController {
     // Step 2: Upload Resume (Mandatory) & ID Proof (Optional)
     console.log('Uploading Files...');
 
-    const resumeFile = files.resume[0];
-    const idProofFile = files.idProof?.[0] || null; // Allow `idProof` to be optional
+   const resumeFile = files.resume?.[0];
+    const idProofFile = files.idProof?.[0] || null;
+
+    if (!resumeFile) {
+      throw new BadRequestException('Resume file is required!');
+    }
+
+    if (resumeFile.size > 5 * 1024 * 1024) {
+      throw new BadRequestException('Resume must be less than 5MB');
+    }
 
     await this.userService.uploadUserDocuments(
       createdUser.id,
@@ -76,7 +112,35 @@ export class CandidateController {
 
   @UseGuards(JwtAuthGuard)
   @Post('upload/video')
-  @UseInterceptors(FileInterceptor('video'))
+ @UseInterceptors(
+    FileInterceptor('video', {
+      limits: {
+        fileSize: 150 * 1024 * 1024, // 150MB
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = [
+          'video/mp4',
+          'video/webm',
+          'video/quicktime',
+          'application/octet-stream',
+        ];
+
+        const validMime = allowedMimeTypes.includes(file.mimetype);
+        const validExt = /\.(mp4|webm|mov)$/i.test(file.originalname);
+
+        if (!validMime && !validExt) {
+          return cb(
+            new BadRequestException(
+              'Only MP4, WEBM, or MOV videos are allowed',
+            ),
+            false,
+          );
+        }
+
+        cb(null, true);
+      }
+    }),
+  )
   async uploadVideo(
     @UploadedFile() file: Express.Multer.File,
     @Body('userId') userId: string,
