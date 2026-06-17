@@ -76,13 +76,21 @@ const validateForm = (
     }
 
     try {
-      const check = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/check-email?email=${email.toLowerCase()}&organizationName=${organization.trim()}`);
-      const { exists } = await check.json();
-      if (exists) {
-        setError("Email already exists. Please use a different email.");
-        setLoading(false);
-        return;
-      }
+        try {
+          const check = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/users/check-email?email=${email.toLowerCase()}&organizationName=${organization.trim()}`);
+          if (!check.ok) { throw new Error("Unable to verify email availability.");}
+          const { exists } = await check.json();
+          if (exists) { setError("Email already exists. Please try Signin."); 
+            setLoading(false); 
+            return;
+            }
+          } 
+          catch (error) {
+          console.error("Check email API error:", error);
+          setError("Unable to verify email. Please try again.");
+          setLoading(false);
+          return;
+        }
 
       await signUp(name, email.toLowerCase(), password, organization);
       router.push("/auth/signin");

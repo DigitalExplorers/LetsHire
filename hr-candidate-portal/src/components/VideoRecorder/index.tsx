@@ -230,6 +230,26 @@ const VideoRecorder = () => {
       return;
     }
 
+    // Validate video file size (50MB limit)
+    const maxVideoSize = 200 * 1024 * 1024; // 200MB
+    if (videoBlob.size > maxVideoSize) {
+      alert("Video file size exceeds 500MB limit. Please record a shorter video.");
+      return;
+    }
+
+    // Validate video MIME type
+    const allowedVideoTypes = [
+      'video/mp4',
+      'video/quicktime',
+      'video/x-msvideo',
+      'video/x-matroska',
+      'video/webm',
+    ];
+    if (!allowedVideoTypes.includes(videoBlob.type)) {
+      alert(`Invalid video format. Allowed formats: MP4, MOV, AVI, MKV, WebM. Detected: ${videoBlob.type}`);
+      return;
+    }
+
     try {
       setIsUploading(true); // Show loader
       const formData = new FormData();

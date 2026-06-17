@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Cookies from "js-cookie";
 
 interface QuizSettingPanelProps {
-  roleId: number;
+  roleId: string;
   roleName: string;
 }
 

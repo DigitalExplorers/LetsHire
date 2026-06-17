@@ -13,7 +13,7 @@ const QuestionsForm = () => {
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("");
-  const [selectedRoleId, setSelectedRoleId] = useState<number|"">("");
+  const [selectedRoleId, setSelectedRoleId] = useState<string>("");
   const [selectedRoleName, setSelectedRoleName] = useState<string | "">("");
 
   const searchParams = useSearchParams();
@@ -23,7 +23,7 @@ const QuestionsForm = () => {
 
   useEffect(() => {
     if (roleIdFromQuery) {
-      setSelectedRoleId(parseInt(roleIdFromQuery));
+      setSelectedRoleId(roleIdFromQuery);
     }
     if (roleNameFromQuery) {
       setSelectedRoleName(roleNameFromQuery);
@@ -49,10 +49,10 @@ const QuestionsForm = () => {
       isCorrect: opt === correctAnswer, // Mark correct answer
     }));
 
-    const questionData = { question, options: formattedOptions };
+    const questionData = { question, roleId: selectedRoleId, options: formattedOptions};
 
     try {
-      const response = await fetch(`${API_URL}/quiz/add-question?roleId=${selectedRoleId}`, {
+      const response = await fetch(`${API_URL}/quiz/add-question`, {
         method: "POST",
         headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${token}`},
         body: JSON.stringify(questionData),
