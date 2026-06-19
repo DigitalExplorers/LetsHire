@@ -6,7 +6,7 @@ import ChartThree from "../Charts/ChartThree";
 import HiringStagesChart from "../Charts/HiringStagesChart";
 import { getCandidates } from "@/app/services/candidateService";
 import { usePathname, useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import { useAuth } from "@/hooks/AuthContext";
 
 
 const ECommerce: React.FC = () => {
@@ -27,6 +27,8 @@ const ECommerce: React.FC = () => {
     rejected: 0,
     applied: 0,
   });
+
+  const { user, loading } = useAuth();
 
   const fetchCandidates = async () => {
     try {
@@ -52,19 +54,10 @@ const ECommerce: React.FC = () => {
   };
 
   useEffect(() => {
-    const token = Cookies.get("token");
-
-    const checkTokenAndFetch = () => {
-      if (token) {
-        fetchCandidates();
-      } else {
-        // Retry in 100ms
-        setTimeout(checkTokenAndFetch, 100);
-      }
-    };
-
-    checkTokenAndFetch();
-  }, []);
+    if (!loading && user) {
+      fetchCandidates();
+    }
+  }, [user, loading]);
 
 
 

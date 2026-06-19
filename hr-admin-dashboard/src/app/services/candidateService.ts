@@ -11,14 +11,27 @@ interface RoundFeedbackPayload {
   comments: string;
 }
 
+let cache: { data: any[]; timestamp: number } | null = null;
+const CACHE_TTL_MS = 30_000; // 30 seconds
+
+export const invalidateCandidatesCache = () => {
+  cache = null;
+};
+
 // Fetch Candidates List
 export const getCandidates = async () => {
+  const now = Date.now();
+  if (cache && now - cache.timestamp < CACHE_TTL_MS) {
+    return cache.data;
+  }
+
   try {
     const response = await apiClient.get("/candidates");
 
     // Exclude incomplete users
     if (response.data) {
       const filteredData = response.data.filter((candidate: any) => candidate.finalized === true);
+      cache = { data: filteredData, timestamp: now };
       return filteredData;
     }
 
@@ -44,6 +57,7 @@ export const getCandidate = async (id: string | number) => {
 export const createCandidate = async (candidateData: string) => {
   try {
     const response = await apiClient.post("/candidates", candidateData);
+    invalidateCandidatesCache();
     return response.data;
   } catch (error) {
     console.error("Error creating candidate:", error);
@@ -55,6 +69,7 @@ export const createCandidate = async (candidateData: string) => {
 export const updateCandidate = async (id: string | number, updatedData: string) => {
   try {
     const response = await apiClient.put(`/candidates/${id}`, updatedData);
+    invalidateCandidatesCache();
     return response.data;
   } catch (error) {
     console.error("Error updating candidate:", error);
@@ -66,6 +81,7 @@ export const updateCandidate = async (id: string | number, updatedData: string) 
 export const deleteCandidate = async (id: string | number) => {
   try {
     const response = await apiClient.delete(`/candidates/${id}`);
+    invalidateCandidatesCache();
     return response.data;
   } catch (error) {
     console.error("Error deleting candidate:", error);
@@ -77,6 +93,7 @@ export const deleteCandidate = async (id: string | number) => {
 export const updateCandidateStatus = async (id: string | number, status: string) => {
   try {
     const response = await apiClient.patch(`/candidates/${id}/status`, { status });
+    invalidateCandidatesCache();
     return response.data;
   } catch (error) {
     console.error("Error updating candidate status:", error);
@@ -118,6 +135,7 @@ export const assignInterviewer = async (
 ) => {
   try {
     const response = await apiClient.patch(`/candidates/${candidateId}/assign-interviewer`, { interviewerId });
+    invalidateCandidatesCache();
     return response.data;
   } catch (error) {
     console.error("Error assigning interviewer:", error);
@@ -136,6 +154,7 @@ export const scheduleInterview = async (
       interviewerId: String(interviewerId),
       date: new Date(date).toISOString(),
     });
+    invalidateCandidatesCache();
     return response.data;
   } catch (error) {
     console.error("Error scheduling interview:", error);
