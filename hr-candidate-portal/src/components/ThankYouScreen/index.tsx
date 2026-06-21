@@ -16,8 +16,8 @@ const ThankYouScreen = () => {
     Cookies.remove("selectedRoleId");
     Cookies.remove("access_token");
     setTimeout(() => {
-      localStorage.removeItem('userExamStartTime');
-      localStorage.removeItem('userExamAllowedDuration');
+      Cookies.remove('userExamStartTime');
+      Cookies.remove('userExamAllowedDuration');
     }, 500);
   }, []);
 

@@ -5,11 +5,11 @@ import { useState, useEffect } from "react";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import ConfirmAction from "@/components/ConfirmAction";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 const UploadQuestions = () => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
@@ -18,7 +18,7 @@ const UploadQuestions = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [selectedRoleId, setSelectedRoleId] = useState<number|"">("");
+  const [selectedRoleId, setSelectedRoleId] = useState<string>("");
   const [selectedRoleName, setSelectedRoleName] = useState<string | "">("");
   const searchParams = useSearchParams();
   const roleIdFromQuery = searchParams.get("roleId");
@@ -26,7 +26,7 @@ const UploadQuestions = () => {
     
     useEffect(() => {
       if (roleIdFromQuery) {
-        setSelectedRoleId(parseInt(roleIdFromQuery));
+        setSelectedRoleId(roleIdFromQuery);
       }
       if (roleNameFromQuery) {
         setSelectedRoleName(roleNameFromQuery);
@@ -35,7 +35,7 @@ const UploadQuestions = () => {
 
   // Fetch quiz configuration on mount
   useEffect(() => {
-    const fetchConfig = async (selectedRoleId:number) => {
+    const fetchConfig = async (selectedRoleId:string) => {
       try {
         const response = await fetch(`${API_URL}/quiz/config?roleId=${selectedRoleId}`, {
           headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${token}`},

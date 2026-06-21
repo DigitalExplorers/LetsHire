@@ -6,9 +6,10 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { toast, ToastContainer } from "react-toastify";
 import * as XLSX from "xlsx";
 import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
 
-const adminId = localStorage.getItem("adminId");
-const token = localStorage.getItem("token");
+const adminId = Cookies.get("adminId");
+const token = Cookies.get("token");
 
 const UploadRoleQuestions = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;

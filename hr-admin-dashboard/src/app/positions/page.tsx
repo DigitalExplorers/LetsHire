@@ -15,13 +15,14 @@ import UploadRoleQuestionsPanel from "@/components/Panels/UploadRoleQuestionsPan
 import QuizSettingPanel from "@/components/Panels/QuizSettingPanel";
 import AddPositionPanel from "@/components/Panels/AddPositionPanel";
 import EditPositionPanel from "@/components/Panels/EditPositionPanel";
+import Cookies from "js-cookie";
 
 const RegistrationLinkPanel = dynamic(() => import("@/components/Panels/RegistrationLinkPanel"));
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 interface Position {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   experienceRequired?: number;
@@ -52,7 +53,7 @@ const PositionsTableView = () => {
   const fetchPositions = async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const res = await fetch(`${API_URL}/roles`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +81,7 @@ const PositionsTableView = () => {
     }
   };
 
-  const handleDelete = async (id: number, close: () => void) => {
+  const handleDelete = async (id: string, close: () => void) => {
     close();
     try {
       await ConfirmAction({
@@ -88,7 +89,7 @@ const PositionsTableView = () => {
           const res = await fetch(`${API_URL}/roles/${id}`, {
             method: "DELETE",
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${Cookies.get("token")}`,
             },
           });
 
@@ -153,7 +154,7 @@ const PositionsTableView = () => {
     currentPage * itemsPerPage
   );
 
-  const handleGenerateMore = async (roleId: number, close: () => void) => {
+  const handleGenerateMore = async (roleId: string, close: () => void) => {
     close();
     setIsLoading(true);
     setloadingMessage("Generating questions");
@@ -162,7 +163,7 @@ const PositionsTableView = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       });
 
@@ -180,7 +181,7 @@ const PositionsTableView = () => {
     }
   };
 
-  const handleRegenerate = async (roleId: number, close: () => void) => {
+  const handleRegenerate = async (roleId: string, close: () => void) => {
     close();
     setIsLoading(true);
     setloadingMessage("Re-generating questions");
@@ -191,7 +192,7 @@ const PositionsTableView = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${Cookies.get("token")}`,
             },
             body: JSON.stringify({ numQuestions: 50 }),
           });

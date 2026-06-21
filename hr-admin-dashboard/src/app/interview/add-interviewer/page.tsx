@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createInterviewer } from "../../services/interviewerService";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import Cookies from "js-cookie";
 
 interface Interviewer {
   id?: string;
@@ -23,7 +24,7 @@ const AddInterviewerForm = () => {
   const [department, setDepartment] = useState("");
   const [availability, setAvailability] = useState("Available");
   const [message, setMessage] = useState({ type: "", text: "" });
-  const userId = localStorage.getItem("adminId");
+  const userId = Cookies.get("adminId");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

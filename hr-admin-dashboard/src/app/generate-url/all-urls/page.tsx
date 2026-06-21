@@ -8,9 +8,9 @@ import { toast, ToastContainer } from "react-toastify";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const adminId = typeof window !== "undefined" ? localStorage.getItem("adminId") : null;
 
 type LinkData = {
   id: string;
@@ -49,7 +49,7 @@ const AllRegistrationLinks = () => {
         if (selectedRoleId) {
           const res = await axios.get(`${API_URL}/registration-link/by-role?roleId=${selectedRoleId}`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${Cookies.get("token")}`,
             },
           });
 

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowDownUp, ArrowUpDown, MoreVertical } from "lucide-react";
 import DropdownActions from "@/components/DropdownActions";
 import ConfirmAction from "@/components/ConfirmAction";
+import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
@@ -45,7 +46,7 @@ const AdminsTableView = () => {
       setIsLoading(true);
       const res = await fetch(`${API_URL}/super-admin/admins?page=${currentPage}&limit=${itemsPerPage}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       });
       const payload = await res.json();
@@ -83,7 +84,7 @@ const AdminsTableView = () => {
           const res = await fetch(`${API_URL}/super-admin/admin/${id}`, {
             method: "DELETE",
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${Cookies.get("token")}`,
             },
           });
 

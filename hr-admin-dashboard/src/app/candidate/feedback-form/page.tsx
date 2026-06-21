@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { addFeedback } from "../../services/candidateService";
+import Cookies from "js-cookie";
 
 const AddFeedback = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const AddFeedback = () => {
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const adminId = localStorage.getItem("adminId"); // Assuming admin login stores ID
+  const adminId = Cookies.get("adminId"); // Assuming admin login stores ID
 
   const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

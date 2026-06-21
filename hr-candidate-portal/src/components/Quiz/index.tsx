@@ -32,8 +32,8 @@ const QuizPage = () => {
   const navigate = useNavigate();
   const API_URL =
     import.meta.env.VITE_API_URL;
-  const adminId = localStorage.getItem('urlAdminId');
-  const urlRoleId = localStorage.getItem('urlRoleId');
+  const adminId = Cookies.get('urlAdminId');
+  const urlRoleId = Cookies.get('urlRoleId');
 
   // Anti-cheat setup
   useEffect(() => {
@@ -195,7 +195,7 @@ const QuizPage = () => {
 
   const submitQuiz = async () => {
     const userId = Cookies.get('userId');
-    const urlOrgId = localStorage.getItem("urlOrgId");
+    const urlOrgId = Cookies.get("urlOrgId");
     const access_token = Cookies.get('access_token');
     if (!userId || !access_token) return;
 

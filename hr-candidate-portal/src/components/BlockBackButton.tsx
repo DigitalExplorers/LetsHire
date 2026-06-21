@@ -29,8 +29,8 @@ const BlockBackButton = () => {
         Cookies.remove("userId");
         Cookies.remove("selectedRoleId");
         Cookies.remove("access_token");
-        localStorage.removeItem('userExamStartTime');
-        localStorage.removeItem('userExamAllowedDuration');
+        Cookies.remove('userExamStartTime');
+        Cookies.remove('userExamAllowedDuration');
       }
     };
 

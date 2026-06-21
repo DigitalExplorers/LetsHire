@@ -54,10 +54,6 @@ const SignIn = () => {
         if (role) Cookies.set('role', role, cookieOptions);
         if (organizationId) Cookies.set('organizationId', String(organizationId), cookieOptions);
 
-        localStorage.setItem('token', access_token);      //why are we saving it in local , why not in cookie? 
-        localStorage.setItem('adminId', id);
-        localStorage.setItem('organizationId', organizationId ?? '');
-        localStorage.setItem('role', role ?? '');
 
         await refetchProfile();
         refreshBranding();

@@ -1,7 +1,6 @@
 import { Controller, Post, Get, Put, Delete, Param, Body, UsePipes, ValidationPipe, NotFoundException, ForbiddenException ,BadRequestException, UseInterceptors, UploadedFiles, Patch, Query, UploadedFile, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { CandidateService } from './candidate.service';
-import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { UpdateCandidateDto } from './dto/update-candidate.dto';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { InterviewService } from '../interview/interview.service';
@@ -11,6 +10,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RegistrationLinkService } from '../registration-link/registration-link.service';
+import { CreateCandidateRequestDto } from './dto/Create-candidate-request.dto';
 
 
 @Controller('candidates')
@@ -24,15 +24,41 @@ export class CandidateController {
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'resume', maxCount: 1 },
-      { name: 'idProof', maxCount: 1 },
-    ]),
+    FileFieldsInterceptor(
+      [
+        { name: 'resume', maxCount: 1 },
+        { name: 'idProof', maxCount: 1 },
+      ],
+      {
+        limits: {
+          fileSize: 5 * 1024 * 1024, // 5MB
+        },
+        fileFilter: (req, file, cb) => {
+        if (file.fieldname === 'resume') {
+          const allowedMimeTypes = [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/octet-stream',
+          ];
+
+          const validMime = allowedMimeTypes.includes(file.mimetype);
+          const validExt = /\.(pdf|docx)$/i.test(file.originalname);
+
+          if (!validMime && !validExt) {
+            return cb(
+              new BadRequestException('Resume must be PDF or DOCX only'),
+              false,
+            );
+          }
+        }
+
+        cb(null, true);
+      }
+      },
+    ),
   )
   async createUser(
-    @Body() data: CreateCandidateDto,
-    @Query('adminId') adminId: string,
-    @Query('organizationId') organizationId: string,
+    @Body() data: CreateCandidateRequestDto,
     @UploadedFiles() files: { resume?: Express.Multer.File[], idProof?: Express.Multer.File[] }
   ) {
     console.log('Received Form Data:', data);
@@ -45,21 +71,27 @@ export class CandidateController {
     if (!files.resume || files.resume.length === 0) {
       throw new BadRequestException('Resume file is required!');
     }
-
-    // Attach admin ownership from query to user data
-    if (adminId) data.adminUser = { id: adminId };
-
-    // Attach organizationId and role from query to user data
-    if (organizationId) data.organization = { id: organizationId };
-
+     // Attach admin ownership from body to user data
+    if (data.adminId) {  data.adminUser = { id: data.adminId }; }
+    // Attach organizationId from body to user data
+    if (data.organizationId) { data.organization = { id: data.organizationId, };}
+   
     // Step 1: Create User First
     const createdUser = await this.userService.createUser(data);
 
     // Step 2: Upload Resume (Mandatory) & ID Proof (Optional)
     console.log('Uploading Files...');
 
-    const resumeFile = files.resume[0];
-    const idProofFile = files.idProof?.[0] || null; // Allow `idProof` to be optional
+   const resumeFile = files.resume?.[0];
+    const idProofFile = files.idProof?.[0] || null;
+
+    if (!resumeFile) {
+      throw new BadRequestException('Resume file is required!');
+    }
+
+    if (resumeFile.size > 5 * 1024 * 1024) {
+      throw new BadRequestException('Resume must be less than 5MB');
+    }
 
     await this.userService.uploadUserDocuments(
       createdUser.id,
@@ -79,30 +111,54 @@ export class CandidateController {
 
 
   @UseGuards(JwtAuthGuard)
-  @Post(':userId/upload/video')
-  @UseInterceptors(FileInterceptor('video')) // Expect a SINGLE file named "video"
+  @Post('upload/video')
+ @UseInterceptors(
+    FileInterceptor('video', {
+      limits: {
+        fileSize: 150 * 1024 * 1024, // 150MB
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = [
+          'video/mp4',
+          'video/webm',
+          'video/quicktime',
+          'application/octet-stream',
+        ];
+
+        const validMime = allowedMimeTypes.includes(file.mimetype);
+        const validExt = /\.(mp4|webm|mov)$/i.test(file.originalname);
+
+        if (!validMime && !validExt) {
+          return cb(
+            new BadRequestException(
+              'Only MP4, WEBM, or MOV videos are allowed',
+            ),
+            false,
+          );
+        }
+
+        cb(null, true);
+      }
+    }),
+  )
   async uploadVideo(
-    @UploadedFile() file: Express.Multer.File, // Change to @UploadedFile()
-    @Param('userId') userId: string,
-    @CurrentUser() currentUser: { userId: string  },
+    @UploadedFile() file: Express.Multer.File,
+    @Body('userId') userId: string,
+    @CurrentUser() currentUser: { userId: string },
   ) {
     if (!file) {
       throw new BadRequestException('No video file uploaded!');
     }
-    if ( currentUser.userId !== userId ) {
-    throw new ForbiddenException(
-      'You can only upload your own video'
-    );
-  }
+
+    if (currentUser.userId !== userId) {
+      throw new ForbiddenException('You can only upload your own video');
+    }
 
     console.log(
       `Received video file: ${file.originalname}, Size: ${file.size} bytes`,
     );
 
-    return this.userService.uploadUserVideo(
-      userId,
-      file,
-    );
+    return this.userService.uploadUserVideo(userId, file);
   }
 
   /**

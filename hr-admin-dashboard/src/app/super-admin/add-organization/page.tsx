@@ -5,11 +5,11 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
-import { Contact2 } from "lucide-react";
+import Cookies from "js-cookie";
 
 const AddOrganizationForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
+  const token = typeof window !== "undefined" ? Cookies.get("token") : "";
   const router = useRouter();
 
   const [name, setName] = useState("");
