@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword } from "../../services/authService";
 import { useBranding } from "@/contexts/BrandingContext";
+import Image from "next/image";
 
 const ResetPassword = () => {
     const router = useRouter();
@@ -62,9 +63,11 @@ const ResetPassword = () => {
               <div className="w-full p-4 sm:p-10 xl:p-14">
                 {/* Logo */}
                 <div className="mb-6 flex justify-center">
-                  <img
+                  <Image
                     src={'/images/logo/THE8800-logo-final.png'}
                     alt="Logo"
+                    width={240}
+                    height={48}
                     className="h-12 object-contain"
                   />
                 </div>

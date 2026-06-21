@@ -118,7 +118,7 @@ export class BedrockService {
     }
 
 
-    async generateQuestions(userRole: UserRole, numQuestions: number, adminId: number, organizationId: number) {
+    async generateQuestions(userRole: UserRole, numQuestions: number, adminId: string, organizationId: string) {
         const admin = await this.adminUserRepo.findOne({ where: { id: adminId } });
         if (!admin) {
             return { success: false, message: 'Invalid adminId' };
@@ -236,7 +236,7 @@ export class BedrockService {
     }
 
 
-    async generateMoreQuestionsForRole(roleId: number, numQuestions: number, adminId: number, organizationId: number) {
+    async generateMoreQuestionsForRole(roleId: string, numQuestions: number, adminId: string, organizationId: string) {
         const role = await this.roleRepository.findOne({
             where: { id: roleId, createdBy: { id: adminId } },
         });
@@ -264,7 +264,7 @@ export class BedrockService {
         }
     }
 
-    async regenerateQuestionsForRole(roleId: number, numQuestions: number, adminId: number, organizationId: number) {
+    async regenerateQuestionsForRole(roleId: string, numQuestions: number, adminId: string, organizationId: string) {
         const role = await this.roleRepository.findOne({
             where: { id: roleId, createdBy: { id: adminId } },
             relations: ['organization', 'quizzes'],

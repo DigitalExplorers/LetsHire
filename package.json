@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "@types/node": "^25.9.3",
-    "prettier": "^3.5.3"
+    "depcheck": "^1.4.7",
+    "prettier": "^3.8.4"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

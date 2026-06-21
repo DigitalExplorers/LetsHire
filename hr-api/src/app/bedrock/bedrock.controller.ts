@@ -17,9 +17,9 @@ export class BedrockController {
 
     @Post()
     async generate(
-        @Query('roleId') roleId: number,
+        @Query('roleId') roleId: string,
         @Body('numQuestions') numQuestions = 50,
-        @CurrentUser() adminUser: { userId: number, organizationId: number }
+        @CurrentUser() adminUser: { userId: string, organizationId: string }
     ) {
         const role = await this.userRoleRepo.findOne({ where: { id: roleId } });
 
@@ -33,9 +33,9 @@ export class BedrockController {
     @UseGuards(JwtAuthGuard)
     @Post('generate-more-questions/:roleId')
     async generateMoreQuestions(
-        @Param('roleId') roleId: number,
+        @Param('roleId') roleId: string,
         @Body('numQuestions') numQuestions: number = 50,
-        @CurrentUser() adminUser: { userId: number, organizationId: number }
+        @CurrentUser() adminUser: { userId: string, organizationId: string }
     ) {
         return this.bedrockService.generateMoreQuestionsForRole(roleId, numQuestions, adminUser.userId, adminUser.organizationId);
     }
@@ -43,9 +43,9 @@ export class BedrockController {
     @UseGuards(JwtAuthGuard)
     @Post('regenerate-questions/:roleId')
     async regenerateQuestions(
-        @Param('roleId') roleId: number,
+        @Param('roleId') roleId: string,
         @Body('numQuestions') numQuestions: number = 50,
-        @CurrentUser() adminUser: { userId: number, organizationId: number }
+        @CurrentUser() adminUser: { userId: string, organizationId: string }
     ) {
         return this.bedrockService.regenerateQuestionsForRole(roleId, numQuestions, adminUser.userId, adminUser.organizationId);
     }

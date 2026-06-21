@@ -4,7 +4,8 @@ import { diskStorage } from 'multer';
 import { VideoService } from './video.service';
 import { Response } from 'express';
 import { extname } from 'path';
-//THIS IS FOR LOCAL VIDEO UPLOADS, BUT CURRENTLY NO USE OF THIS CODE BASE.
+
+//THIS IS  REGARDING FUTURE VIDEO ANALYSIS IMPLEMENTATION 
 @Controller('videos')
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}
@@ -31,7 +32,7 @@ export class VideoController {
       videoPath: filePath,
     });
 
-    // Start video analysis asynchronously
+    // Start video analysis asynchronously 
     this.videoService.analyzeAndSaveVideo(userId, filePath);
   }
 

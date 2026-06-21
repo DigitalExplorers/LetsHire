@@ -6,6 +6,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { toast, ToastContainer } from "react-toastify";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 const EditOrganizationForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
@@ -234,7 +235,7 @@ const EditOrganizationForm = () => {
     Upload Logo
   </label>
   {logoUrl && (
-    <img
+    <Image
       src={logoUrl}
       alt="Current Logo"
       className="mb-2 h-16 object-contain rounded"
@@ -253,9 +254,9 @@ const EditOrganizationForm = () => {
     Upload Background Image
   </label>
   {bgImageUrl && (
-    <img
+    <Image
       src={bgImageUrl}
-      alt="Current Background"
+      alt="Current Background" fill
       className="mb-2 h-24 w-full object-cover rounded"
     />
   )}
