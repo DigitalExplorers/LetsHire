@@ -159,9 +159,10 @@ export class AuthService {
     const user = await this.usersService.getUserById(reset.userId);
     if (!user) {
       throw new BadRequestException('User not found');
-    }
+    }   // i feel we are doing validation twice once here and ince in the updateUserPassword 
 
     await this.usersService.updateUserPassword(reset.userId, newPassword);
-    await this.resetTokenRepo.delete({ token });
+    await this.resetTokenRepo.delete({ userId: user.id });
+    //previously this only deleted single token ({token}) but multiple tokens were as is hence({userId: user.id}) fixed the concern.
   }
 }

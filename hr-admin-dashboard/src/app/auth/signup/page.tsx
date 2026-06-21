@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { signUp } from "../../services/authService";
 import { useRouter } from "next/navigation";
-import '../signin/auth.css';
 import { useBranding } from "@/contexts/BrandingContext";
 
 const SignUp = () => {
@@ -17,24 +16,52 @@ const SignUp = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const validateForm = (
-    name: string,
-    email: string,
-    pwd: string,
-    confirmPwd: string,
-    organization: string
-  ) => {
-    if (!name.trim()) return "Name is required *";
-    if (!email.trim()) return "Email is required *";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Invalid email";
-    if (!organization.trim()) return "Organization name is required *";
-    if (!pwd) return "Password is required *";
-    if (pwd.length < 8) return "Password must be at least 8 characters";
-    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return "Include a special character";
-    if (/\s/.test(pwd)) return "Password must not contain spaces";
-    if (pwd !== confirmPwd) return "Passwords do not match *";
-    return "";
-  };
+const validateForm = (
+  name: string,
+  email: string,
+  pwd: string,
+  confirmPwd: string,
+  organization: string
+) => {
+  if (!name.trim()) return "Name is required *";
+
+  if (!/^[a-zA-Z\s]+$/.test(name))
+    return "Name can only contain letters and spaces";
+
+  if (name.trim().length < 2)
+    return "Name must be at least 2 characters";
+
+  if (name.trim().length > 100)
+    return "Name cannot exceed 100 characters";
+
+  if (!email.trim()) return "Email is required *";
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return "Invalid email";
+
+  if (!organization.trim())
+    return "Organization name is required *";
+
+  if (!pwd)
+    return "Password is required *";
+
+  if (pwd.length < 8)
+    return "Password must be at least 8 characters";
+
+  if (
+    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(pwd)
+  ) {
+    return "Password must contain uppercase, lowercase, number and special character";
+  }
+
+  if (/\s/.test(pwd))
+    return "Password must not contain spaces";
+
+  if (pwd !== confirmPwd)
+    return "Passwords do not match *";
+
+  return "";
+};
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

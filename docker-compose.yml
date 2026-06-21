@@ -5,9 +5,9 @@ services:
     environment:
       # Values below are development defaults.
       # Override in production by setting these variables in your environment or a .env file.
-      POSTGRES_DB: ${POSTGRES_DB:-hrSolution}
-      POSTGRES_USER: ${POSTGRES_USER:-hrSolutionUser}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hrSolutionPWD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - '5432:5432'
     volumes:

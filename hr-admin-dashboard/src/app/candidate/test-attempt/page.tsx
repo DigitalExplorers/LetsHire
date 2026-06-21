@@ -18,7 +18,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const CandidateAttemptsPage = () => {
   const searchParams = useSearchParams();
-  const candidateId = searchParams.get("id");
+  const candidateId = searchParams.get("id");    //my concern can we change this to body? instead of query ? 
   const round = searchParams.get("round");
   const [attempts, setAttempts] = useState<Attempt[]>([]);
   const [isLoading, setIsLoading] = useState(true);

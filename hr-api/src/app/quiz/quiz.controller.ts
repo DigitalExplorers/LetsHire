@@ -196,18 +196,9 @@ export class QuizController {
       return this.quizService.processUploadedFileByRole(file, roleId, adminUser.userId);
   }
 
-  /**
-   * Get questions by role ID
-   */
-  @Get('questions-by-role/:roleId')
-  async getQuestionsByRole(@Param('roleId') roleId: number, @CurrentUser() adminUser: { userId: number }) {
-    const questions = await this.quizService.getQuestionsByRole(roleId, adminUser.userId);
-    if (!questions.length) {
-      throw new NotFoundException('No questions found for this role.');
-    }
-    return questions;
-  }
 
+
+  @UseGuards(JwtAuthGuard)
   @Get('candidates/:id/:round/attempts')
   async getCandidateQuizAttempts(@Param('id') id: number, @Param('round') round: number) {
     console.log("id,round",id,round);

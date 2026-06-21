@@ -8,9 +8,8 @@ import Link from "next/link";
 import { getCandidates, deleteCandidate, updateCandidateStatus } from "../../app/services/candidateService";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "sweetalert2/dist/sweetalert2.min.css";
+// import "react-toastify/dist/ReactToastify.css";
+// import "sweetalert2/dist/sweetalert2.min.css";
 import ConfirmAction from "../ConfirmAction";
 import DropdownActions from "../DropdownActions";
 
