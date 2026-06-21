@@ -18,8 +18,8 @@ import { CreateOrganizationDto } from '../organization/dto/create-organization.d
 import { CreateAdminUserDto } from '../users/dto/create-user.dto';
 
 @Controller('super-admin')
-@UseGuards(JwtAuthGuard, RolesGuard) // 🔒 Global guard applied to controller
-@Roles('superadmin') // 🔐 Require superadmin role by default
+@UseGuards(JwtAuthGuard, RolesGuard) // Global guard applied to controller
+@Roles('superadmin') //  Require superadmin role by default
 export class SuperAdminController {
   constructor(
     private readonly superAdminService: SuperAdminService,
@@ -52,7 +52,7 @@ export class SuperAdminController {
   }
 
   @Get('admin/:id')
-  async getAdminById(@Param('id') id: number) {
+  async getAdminById(@Param('id') id: string) {
     const user = await this.superAdminService.getAdminById(id);
     if (!user) throw new NotFoundException('Admin not found');
     return user;
@@ -60,14 +60,16 @@ export class SuperAdminController {
 
   @Put('admin/:id')
   updateAdmin(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() dto: Partial<CreateAdminUserDto>,
   ) {
     return this.superAdminService.updateAdmin(id, dto);
   }
 
   @Delete('admin/:id')
-  deleteAdmin(@Param('id') id: number) {
+  deleteAdmin(@Param('id') id: string) {
     return this.superAdminService.deleteAdmin(id);
   }
 }
+
+//this conroller and the service points are working fine.

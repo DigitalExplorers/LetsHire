@@ -13,9 +13,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const adminId = typeof window !== "undefined" ? localStorage.getItem("adminId") : null;
 
 type LinkData = {
-  id: number;
+  id: string;
   roleName: string;
-  roleId: number;
+  roleId: string;
   token: string;
   registrationUrl: string;
   createdAt: string;
@@ -24,8 +24,8 @@ type LinkData = {
 const AllRegistrationLinks = () => {
   const [linkList, setLinkList] = useState<LinkData[]>([]);
   const [copyStatus, setCopyStatus] = useState<{ [token: string]: string }>({});
-  const [roles, setRoles] = useState<{ id: number; name: string }[]>([]);
-  const [selectedRoleId, setSelectedRoleId] = useState<number | "">("");
+  const [roles, setRoles] = useState<{ id: string; name: string }[]>([]);
+  const [selectedRoleId, setSelectedRoleId] = useState<string | "">("");
   const [selectedRoleName, setSelectedRoleName] = useState<string | "">("");
   const searchParams = useSearchParams();
   const roleIdFromQuery = searchParams.get("roleId");
@@ -35,7 +35,7 @@ const AllRegistrationLinks = () => {
 
   useEffect(() => {
     if (roleIdFromQuery) {
-      setSelectedRoleId(parseInt(roleIdFromQuery));
+      setSelectedRoleId(roleIdFromQuery);
     }
     if (roleNameFromQuery) {
       setSelectedRoleName(roleNameFromQuery);

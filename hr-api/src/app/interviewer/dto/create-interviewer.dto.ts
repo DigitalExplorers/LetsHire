@@ -1,5 +1,4 @@
-import { IsString, IsArray, IsEmail, IsOptional, IsInt } from "class-validator";
-
+import { IsString, IsArray, IsEmail, IsOptional, IsUUID } from "class-validator";
 export class CreateInterviewerDto {
   @IsString()
   name: string;
@@ -17,10 +16,10 @@ export class CreateInterviewerDto {
   @IsString()
   availability?: string; // Default: Available
 
-  @IsInt()
-  createdBy: number; // AdminUser ID (required for user-specific data isolation)
+  @IsUUID()
+  createdBy: string; // AdminUser ID (required for user-specific data isolation)
 
   @IsOptional()
-  @IsInt()
-  organizationId?: number; // Optional — derived from admin's org if not provided
+  @IsUUID()
+  organizationId?: string; // Optional — derived from admin's org if not provided
 }

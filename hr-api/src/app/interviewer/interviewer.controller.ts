@@ -19,7 +19,7 @@ export class InterviewerController {
   // Get all interviewers in the same organization (with optional skill filter)
   @Get()
   async getInterviewers(
-    @CurrentUser() adminUser: { userId: number; organizationId: number },
+    @CurrentUser() adminUser: { userId: string; organizationId: string },
     @Query('skills') skills?: string
   ) {
     const skillsArray = skills ? skills.split(',') : undefined;
@@ -28,16 +28,16 @@ export class InterviewerController {
 
   // Get a single interviewer by ID
   @Get(':id')
-  async getInterviewerById(@Param('id') id: number) {
+  async getInterviewerById(@Param('id') id: string) {
     return this.interviewerService.getInterviewerById(id);
   }
 
   // Update interviewer details with adminId check
   @Put(':id')
   async updateInterviewer(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() updateDto: UpdateInterviewerDto,
-    @CurrentUser() adminUser: { userId: number }
+    @CurrentUser() adminUser: { userId: string }
   ) {
     return this.interviewerService.updateInterviewer(id, updateDto, adminUser.userId);
   }
@@ -45,23 +45,16 @@ export class InterviewerController {
   // Delete an interviewer
   @Delete(':id')
   async deleteInterviewer(
-    @Param('id') id: number,
-    @CurrentUser() adminUser: { userId: number }
+    @Param('id') id: string,
+    @CurrentUser() adminUser: { userId: string }
   ) {
     return this.interviewerService.deleteInterviewer(id, adminUser.userId);
   }
 
-
-  @Get()
-  async getInterviewersWithCandidates(@Query('includeCandidates') includeCandidates?: string) {
-    const include = includeCandidates === 'true';
-    return this.interviewerService.getInterviewersWithCandidates(include);
-  }
-
   @Patch(':id/add-candidate')
   async addCandidateToInterviewer(
-    @Param('id') interviewerId: number,
-    @Body('candidateId') candidateId: number
+    @Param('id') interviewerId: string,
+    @Body('candidateId') candidateId: string
   ) {
     return this.interviewerService.assignCandidate(interviewerId, candidateId);
   }

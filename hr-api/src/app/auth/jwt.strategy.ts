@@ -24,7 +24,12 @@ async validate(payload: any) {
       throw new Error('Invalid JWT payload');
     }
 
-    return { userId: Number(payload.sub), email: payload.email, role: payload.role, organizationId: payload.organizationId };
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      role: payload.role,
+      organizationId: payload.organizationId ?? null,
+    };
   }
 
 }

@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, Unique, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne, Unique, JoinColumn} from 'typeorm';
+import {IsUUID} from 'class-validator';
 import { Feedback } from '../../candidate-feedback/entities/feedback.entity';
 import { Interviewer } from '../../interviewer/entities/interviewer.entity';
 import { Exclude, Transform, Type } from 'class-transformer';
@@ -10,8 +11,9 @@ import { AdminUser } from '../../users/entities/users.entity';
 @Unique(['email', 'adminUser'])
 @Entity()
 export class Candidate {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  @IsUUID()
+  id: string;
 
   @Column()
   firstName: string;

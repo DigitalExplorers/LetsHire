@@ -22,7 +22,7 @@ export class RegistrationLinkService {
       this.configService.getOrThrow<string>('FRONTEND_MOBILE_URL');
   }
   
-  async generate(adminId: number, roleId: number, organizationId: number, examStartTime?: Date, examEndTime?: Date) {
+  async generate(adminId: string, roleId: string, organizationId: string, examStartTime?: Date, examEndTime?: Date) {
     if (!examStartTime || !examEndTime) {
       throw new Error('examStartTime and examEndTime are required');
     }
@@ -89,7 +89,7 @@ export class RegistrationLinkService {
     };
   }
 
-  async getAllLinksForAdmin(adminId: number, organizationId: number) {
+  async getAllLinksForAdmin(adminId: string, organizationId: string) {
     const links = await this.linkRepo.find({ where: { adminId, organizationId } });
   
     // Append full URL and QR code for each
@@ -112,9 +112,9 @@ export class RegistrationLinkService {
   }
 
   async getLinksByAdminAndRole(
-    adminId: number,
-    roleId: number,
-    organizationId: number
+    adminId: string,
+    roleId: string,
+    organizationId: string
   ) {
     const links = await this.linkRepo.find({
       where: {

@@ -10,10 +10,10 @@ export class RegistrationLinkController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async generateLink(
-    @Query('roleId') roleId: number,
+    @Query('roleId') roleId: string,
     @Query('examStartTime') examStartTime: string,
     @Query('examEndTime') examEndTime: string,
-    @CurrentUser() user: { userId: number, organizationId: number },
+    @CurrentUser() user: { userId: string, organizationId: string },
   ) {
     const startTime = new Date(examStartTime);
     const endTime = new Date(examEndTime);
@@ -28,15 +28,15 @@ export class RegistrationLinkController {
 
   @UseGuards(JwtAuthGuard)
   @Get('getAllGeneratedURLs')
-  async getAllLinks(@CurrentUser() user: { userId: number, organizationId: number }) {
+  async getAllLinks(@CurrentUser() user: { userId: string, organizationId: string }) {
     return this.linkService.getAllLinksForAdmin(user.userId, user.organizationId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('by-role')
   async getLinksByRoleAndAdmin(
-    @Query('roleId') roleId: number,
-    @CurrentUser() user: { userId: number, organizationId: number }
+    @Query('roleId') roleId: string,
+    @CurrentUser() user: { userId: string, organizationId: string }
   ) {
     return this.linkService.getLinksByAdminAndRole(user.userId, roleId, user.organizationId);
   }

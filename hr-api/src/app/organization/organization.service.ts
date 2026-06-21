@@ -68,11 +68,11 @@ export class OrganizationService {
     return buildPaginatedResponse(organizations, total, pagination.page, pagination.limit);
   }
 
-  async findById(id: number): Promise<Organization | null> {
+  async findById(id: string): Promise<Organization | null> {
     return this.orgRepo.findOne({ where: { id } });
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const org = await this.orgRepo.findOne({ where: { id } });
     if (!org) {
       return false;
@@ -122,7 +122,7 @@ export class OrganizationService {
   }
   
 
-  async update(id: number, dto: CreateOrganizationDto): Promise<Organization> {
+  async update(id: string, dto: CreateOrganizationDto): Promise<Organization> {
     const org = await this.orgRepo.findOneBy({ id });
     if (!org) throw new NotFoundException('Organization not found');
   

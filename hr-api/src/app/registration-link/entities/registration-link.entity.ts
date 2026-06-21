@@ -10,13 +10,13 @@ export class RegistrationLink {
   token: string;
 
   @Column()
-  adminId: number;
+  adminId: string;
 
   @Column()
-  organizationId: number;
+  organizationId: string;
 
   @Column()
-  roleId: number;
+  roleId: string;
 
   @Column({ type: 'timestamp', nullable: true })
   examStartTime: Date;

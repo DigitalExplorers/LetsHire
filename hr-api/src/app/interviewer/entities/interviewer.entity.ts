@@ -1,15 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
 import { Candidate } from '../../candidate/entities/candidate.entity';
-import { Exclude, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { Interview } from '../../interview/entities/interview.entity';
 import { AdminUser } from '../../users/entities/users.entity';
 import { Organization } from '../../organization/entities/organization.entity';
-
+import {IsUUID} from 'class-validator';
 
 @Entity()
 export class Interviewer {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @IsUUID()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;

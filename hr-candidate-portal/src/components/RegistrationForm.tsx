@@ -104,15 +104,15 @@ const qualifications = [
 ];
 
 type Role = {
-  id: number;
+  id: string;
   name: string;
 };
 
 type ResolvedRegistrationLink = {
-  adminId: number;
-  roleId: number;
+  adminId: string;
+  roleId: string;
   roleName: string | null;
-  organizationId: number;
+  organizationId: string;
   examStartTime?: string | null;
   examEndTime?: string | null;
 };
@@ -121,9 +121,9 @@ function RegistrationForm() {
   const { token } = useParams<{ token: string }>();
   const branding = useBranding();
 
-  const [adminId, setAdminId] = useState<number | null>(null);
-  const [roleId, setRoleId] = useState<number | null>(null);
-  const [organizationId, setOrgId] = useState<number | null>(null);
+  const [adminId, setAdminId] = useState<string | null>(null);
+  const [roleId, setRoleId] = useState<string | null>(null);
+  const [organizationId, setOrgId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     firstName: '',

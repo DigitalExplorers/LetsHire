@@ -9,11 +9,9 @@ export class Interview {
   @PrimaryGeneratedColumn()
   id: number;
 
-
   @ManyToOne(() => Candidate, (candidate) => candidate.interviews, { eager: true, onDelete: 'CASCADE' })
   candidate: Candidate;
   
-
   @ManyToOne(() => Interviewer, (interviewer) => interviewer.interviews, { eager: true, onDelete: 'CASCADE' })
   interviewer: Interviewer;
 

@@ -48,7 +48,7 @@ export class CandidateNotificationService {
     };
   }
 
-  private async getBrandingForOrganization(organizationId: number): Promise<Branding> {
+  private async getBrandingForOrganization(organizationId: string): Promise<Branding> {
     const foundOrg = await this.orgRepository.findOne({
       where: { id: organizationId },
     });
@@ -92,7 +92,7 @@ export class CandidateNotificationService {
     email: string,
     otp: number,
     firstName: string,
-    organizationId: number,
+    organizationId: string,
   ) {
     const branding = await this.getBrandingForOrganization(organizationId);
     await this.mailService.sendUserConfirmation(email, otp, firstName, branding);
@@ -112,7 +112,7 @@ export class CandidateNotificationService {
   async sendStatusUpdateNotification(
     user: Candidate,
     status: string,
-    adminId: number,
+    adminId: string,
   ) {
     const branding = await this.getBrandingForOrganization(user.organization.id);
 

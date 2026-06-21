@@ -37,7 +37,7 @@ export class UserRoleService {
 
   ) { }
 
-  async getAllRoles(adminId: number): Promise<UserRole[]> {
+  async getAllRoles(adminId: string): Promise<UserRole[]> {
     return this.roleRepository.find({
       where: { createdBy: { id: adminId } },
     });
@@ -53,7 +53,7 @@ export class UserRoleService {
   //   return res;
   // }
 
-  async getRoleWithQuestions(roleId: number, adminId: number): Promise<UserRole> {
+  async getRoleWithQuestions(roleId: string, adminId: string): Promise<UserRole> {
     const role = await this.roleRepository
       .createQueryBuilder('role')
       .leftJoinAndSelect('role.quizzes', 'quiz', 'quiz.status = :status', { status: 'active' })
@@ -70,8 +70,8 @@ export class UserRoleService {
     name: string,
     description: string,
     experienceRequired: number,
-    adminId: number,
-    organizationId: number,
+    adminId: string,
+    organizationId: string,
   ): Promise<UserRole> {
     const existingRole = await this.roleRepository.findOne({
       where: { name, createdBy: { id: adminId } },
@@ -111,8 +111,8 @@ export class UserRoleService {
   }
 
   async updateRole(
-    id: number,
-    adminId: number,
+    id: string,
+    adminId: string,
     updateData: Partial<{ name: string; description: string; experienceRequired: number }>,
   ): Promise<UserRole> {
     const role = await this.roleRepository.findOne({
@@ -136,7 +136,7 @@ export class UserRoleService {
   //   return { message: 'Role deleted successfully' };
   // }
 
-  async deleteRole(id: number, adminId: number): Promise<{ message: string }> {
+  async deleteRole(id: string, adminId: string): Promise<{ message: string }> {
     const role = await this.roleRepository.findOne({
       where: { id, createdBy: { id: adminId } },
       relations: ['quizzes'],
@@ -187,7 +187,7 @@ export class UserRoleService {
     return { message: 'Role deleted and all related quizzes marked as inactive' };
   }
 
-  async getRoleById(id: number, adminId: number) {
+  async getRoleById(id: string, adminId: string) {
     const role = await this.roleRepository.findOne({
       where: {
         id,

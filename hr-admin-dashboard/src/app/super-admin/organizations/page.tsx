@@ -10,7 +10,7 @@ import ConfirmAction from "@/components/ConfirmAction";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 interface Organization {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   createdAt: string;
@@ -89,7 +89,7 @@ const OrganizationsTableView = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       await ConfirmAction({
         action: async () => {

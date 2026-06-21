@@ -78,7 +78,7 @@ export const assignInterviewer = async (interviewId: any, interviewerId: any) =>
 };
 
 // Fetch Candidates assigned to an Interviewer
-export const getCandidatesByInterviewer = async (interviewerId: number) => {
+export const getCandidatesByInterviewer = async (interviewerId: string) => {
   try {
     const response = await apiClient.get(`/interviews/interviewer/${interviewerId}/candidates`);
     return response.data;
@@ -98,7 +98,11 @@ export const submitFeedback = async (interviewId: number, feedback: string, scor
   }
 };
 
-export const promoteCandidate = async (candidateId: number, interviewerId: number, date: any) => {
+export const promoteCandidate = async (
+  candidateId: string | number,
+  interviewerId: string | number,
+  date: any,
+) => {
   try {
     const response = await apiClient.post("/interviews/promote", { candidateId, interviewerId, date });
     return response.data;
@@ -109,7 +113,7 @@ export const promoteCandidate = async (candidateId: number, interviewerId: numbe
 };
 
 // Fetch Interview History for a Candidate
-export const getCandidateInterviewHistory = async (interviewerId: any) => {
+export const getCandidateInterviewHistory = async (interviewerId: string) => {
   try {
     const response = await apiClient.get(`/interviews/candidate/${interviewerId}`);
     return response.data;
