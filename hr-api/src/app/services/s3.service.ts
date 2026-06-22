@@ -13,13 +13,11 @@ export class S3Service {
   private bucketName: string;
 
   constructor(private readonly configService: ConfigService) {
+    // Credentials are intentionally omitted so the AWS SDK uses its default
+    // provider chain (IAM role in deployed environments; AWS_PROFILE locally).
     this.s3 = new S3Client({
       region: this.configService.get<string>('AWS_REGION') || 'ap-south-1',
       maxAttempts: 3,
-      // credentials: {
-      //   accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-      //   secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
-      // },
     });
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET') || '';
   }
