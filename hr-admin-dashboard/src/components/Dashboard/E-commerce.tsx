@@ -6,7 +6,7 @@ import ChartThree from "../Charts/ChartThree";
 import HiringStagesChart from "../Charts/HiringStagesChart";
 import { getCandidates } from "@/app/services/candidateService";
 import { usePathname, useRouter } from "next/navigation";
-
+import { useAuth } from "@/hooks/AuthContext";
 
 
 const ECommerce: React.FC = () => {
@@ -27,6 +27,8 @@ const ECommerce: React.FC = () => {
     rejected: 0,
     applied: 0,
   });
+
+  const { user, loading } = useAuth();
 
   const fetchCandidates = async () => {
     try {
@@ -52,19 +54,10 @@ const ECommerce: React.FC = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    const checkTokenAndFetch = () => {
-      if (token) {
-        fetchCandidates();
-      } else {
-        // Retry in 100ms
-        setTimeout(checkTokenAndFetch, 100);
-      }
-    };
-
-    checkTokenAndFetch();
-  }, []);
+    if (!loading && user) {
+      fetchCandidates();
+    }
+  }, [user, loading]);
 
 
 
@@ -236,107 +229,3 @@ const ECommerce: React.FC = () => {
 
 export default ECommerce;
 
-
-
-
-// "use client";
-
-// import React from "react";
-// import ChartTwo from "../Charts/ChartTwo";
-// import CardDataStats from "../CardDataStats";
-// import ChartOne from "../Charts/ChartOne";
-// import ChartThree from "../Charts/ChartThree";
-
-// const ECommerce: React.FC = () => {
-//   const hiringPipeline = [
-//     { role: "Snr Backend Engineer", lead: 3, applicant: 0, firstInt: 2, secondInt: 2, final: 1, offer: 1 },
-//     { role: "Frontend Engineer", lead: 4, applicant: 7, firstInt: 5, secondInt: 1, final: 0, offer: 0 },
-//     { role: "Marketing Manager", lead: 0, applicant: 23, firstInt: 9, secondInt: 0, final: 0, offer: 0 },
-//     { role: "CS Champion", lead: 2, applicant: 35, firstInt: 7, secondInt: 14, final: 3, offer: 0 }
-//   ];
-
-//   return (
-//     <>
-//       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-//         <CardDataStats title="Total Hired" total="10" />
-//         <CardDataStats title="Total In Progress" total="03" />
-//         <CardDataStats title="Total Rejected" total="20" />
-//         <CardDataStats title="Total Candidates" total="33" />
-//       </div>
-      
-//       {/* Hiring Pipeline Table
-//       <div className="mt-6 bg-gray-900 text-white p-6 rounded-lg shadow-lg">
-//         <h3 className="text-xl font-semibold mb-4">Current Hiring Pipeline</h3>
-//         <div className="overflow-x-auto">
-//           <table className="w-full border-collapse">
-//             <thead className="bg-gray-800 text-gray-300">
-//               <tr>
-//                 <th className="p-3 text-left">Role</th>
-//                 <th className="p-3 text-center">Lead</th>
-//                 <th className="p-3 text-center">Applicant</th>
-//                 <th className="p-3 text-center">1st Int.</th>
-//                 <th className="p-3 text-center">2nd Int.</th>
-//                 <th className="p-3 text-center">Final</th>
-//                 <th className="p-3 text-center">Offer</th>
-//               </tr>
-//             </thead>
-//             <tbody className="text-white">
-//               {hiringPipeline.map((item, index) => (
-//                 <tr key={index} className="border-t border-gray-700 hover:bg-gray-800 transition">
-//                   <td className="p-3 text-left">{item.role}</td>
-//                   <td className="p-3 text-center">{item.lead}</td>
-//                   <td className="p-3 text-center">{item.applicant}</td>
-//                   <td className="p-3 text-center">{item.firstInt}</td>
-//                   <td className="p-3 text-center">{item.secondInt}</td>
-//                   <td className="p-3 text-center">{item.final}</td>
-//                   <td className="p-3 text-center">{item.offer}</td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       </div> */}
-
-//       {/* Hiring Pipeline Table */}
-//       <div className="mt-6 bg-white text-black p-6 rounded-lg shadow-lg">
-//         <h3 className="text-xl font-semibold mb-4 text-gray-900">Current Hiring Pipeline</h3>
-//         <div className="overflow-x-auto">
-//           <table className="w-full border-collapse">
-//             <thead className="bg-gray-200 text-gray-900 font-bold">
-//               <tr>
-//                 <th className="p-3 text-left">Role</th>
-//                 <th className="p-3 text-center">Lead</th>
-//                 <th className="p-3 text-center">Applicant</th>
-//                 <th className="p-3 text-center">1st Int.</th>
-//                 <th className="p-3 text-center">2nd Int.</th>
-//                 <th className="p-3 text-center">Final</th>
-//                 <th className="p-3 text-center">Offer</th>
-//               </tr>
-//             </thead>
-//             <tbody className="text-gray-700">
-//               {hiringPipeline.map((item, index) => (
-//                 <tr key={index} className="border-t border-gray-300 hover:bg-gray-100 transition">
-//                   <td className="p-3 text-left">{item.role}</td>
-//                   <td className="p-3 text-center">{item.lead}</td>
-//                   <td className="p-3 text-center">{item.applicant}</td>
-//                   <td className="p-3 text-center">{item.firstInt}</td>
-//                   <td className="p-3 text-center">{item.secondInt}</td>
-//                   <td className="p-3 text-center">{item.final}</td>
-//                   <td className="p-3 text-center">{item.offer}</td>
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       </div>
-      
-//       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-//         <ChartOne />
-//         <ChartTwo />
-//         <ChartThree />
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ECommerce;

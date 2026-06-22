@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
@@ -13,7 +14,7 @@ const apiClient = axios.create({
 
 // Adds fresh token before every request
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });

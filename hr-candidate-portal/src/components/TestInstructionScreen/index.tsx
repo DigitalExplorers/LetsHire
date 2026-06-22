@@ -43,8 +43,8 @@ const TestBegin = () => {
         setUserName(userResponse.data?.firstName || "User");
 
         const roleId = Cookies.get("selectedRoleId");
-        const adminId = localStorage.getItem('urlAdminId');
-        const urlRoleId = localStorage.getItem('urlRoleId');
+        const adminId = Cookies.get('urlAdminId');
+        const urlRoleId = Cookies.get('urlRoleId');
         if (!adminId || !urlRoleId) return;
 
         const configResponse = await axios.get(`${API_URL}/quiz/app-quiz-config?roleId=${urlRoleId}&adminId=${adminId}`, {

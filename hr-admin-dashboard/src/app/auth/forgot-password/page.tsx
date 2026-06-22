@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { sendResetLink } from "../../services/authService";
 import { useBranding } from "@/contexts/BrandingContext";
-
+import Image from "next/image";
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
@@ -49,7 +49,7 @@ const ForgotPassword = () => {
                         <div className="w-full p-4 sm:p-10 xl:p-14">
                             {/* Logo */}
                             <div className="mb-6 flex justify-center">
-                                <img src={'/images/logo/THE8800-logo-final.png'} alt="Logo" className="h-12 object-contain" />
+                                <Image src={'/images/logo/THE8800-logo-final.png'} alt="Logo" width={240}  height={48} className="h-12 object-contain" />
                             </div>
 
                             <h2 className="mb-9 text-2xl font-bold text-[#464D67] text-center">

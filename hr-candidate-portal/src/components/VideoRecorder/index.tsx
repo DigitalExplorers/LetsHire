@@ -21,7 +21,7 @@ const VideoRecorder = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const navigate = useNavigate();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null); //FOR THE NODEJS :cannot find namespace 
   const streamRef = useRef<MediaStream | null>(null);
   const { token } = useParams<{ token: string }>();
 
@@ -230,12 +230,33 @@ const VideoRecorder = () => {
       return;
     }
 
+    // Validate video file size (50MB limit)
+    const maxVideoSize = 200 * 1024 * 1024; // 200MB
+    if (videoBlob.size > maxVideoSize) {
+      alert("Video file size exceeds 500MB limit. Please record a shorter video.");
+      return;
+    }
+
+    // Validate video MIME type
+    const allowedVideoTypes = [
+      'video/mp4',
+      'video/quicktime',
+      'video/x-msvideo',
+      'video/x-matroska',
+      'video/webm',
+    ];
+    if (!allowedVideoTypes.includes(videoBlob.type)) {
+      alert(`Invalid video format. Allowed formats: MP4, MOV, AVI, MKV, WebM. Detected: ${videoBlob.type}`);
+      return;
+    }
+
     try {
       setIsUploading(true); // Show loader
       const formData = new FormData();
       formData.append("video", videoBlob, "recorded-video.mp4"); // Append video with correct field name  
+      formData.append("userId",userId)
       const response = await axios.post(
-        `${API_URL}/candidates/${userId}/upload/video`,
+        `${API_URL}/candidates/upload/video`,
         formData,
         {
           headers: {

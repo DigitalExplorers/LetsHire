@@ -1,127 +1,3 @@
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import QRCode from "react-qr-code";
-// import html2canvas from "html2canvas";
-// import { toast } from "react-toastify";
-
-// interface Props {
-//   roleId: string;
-//   roleName: string;
-// }
-
-// const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-
-// const RegistrationLinkPanel = ({ roleId, roleName }: Props) => {
-//   const [generatedLink, setGeneratedLink] = useState("");
-//   const [isGenerating, setIsGenerating] = useState(false);
-//   const [showQRCode, setShowQRCode] = useState(false);
-//   const [copyStatus, setCopyStatus] = useState("Copy");
-
-//   const handleGenerate = async () => {
-//     if (!roleId) return toast.warning("Role ID missing");
-//     setIsGenerating(true);
-//     try {
-//       const res = await axios.get(`${API_URL}/registration-link`, {
-//         params: { roleId },
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("token")}`,
-//         },
-//       });
-//       setGeneratedLink(res.data.registrationUrl);
-//       setShowQRCode(true);
-//     } catch (err) {
-//       toast.error("Error generating registration link");
-//     } finally {
-//       setIsGenerating(false);
-//     }
-//   };
-
-//   const handleCopy = () => {
-//     navigator.clipboard.writeText(generatedLink);
-//     setCopyStatus("Copied!");
-//     toast.success("Link copied to clipboard!");
-//     setTimeout(() => setCopyStatus("Copy"), 3000);
-//   };
-
-//   const handleDownloadQRCode = () => {
-//     const qrContainer = document.getElementById("qrCodeWrapper");
-//     if (!qrContainer) return;
-//     html2canvas(qrContainer).then((canvas) => {
-//       const image = canvas.toDataURL("image/png");
-//       const link = document.createElement("a");
-//       link.href = image;
-//       link.download = `registration-qr-role-${roleId}.png`;
-//       document.body.appendChild(link);
-//       link.click();
-//       document.body.removeChild(link);
-//     });
-//   };
-
-//   return (
-//     <div>
-//       <h2 className="text-xl font-semibold mb-4">Generate Registration URL</h2>
-
-//       <p className="text-gray-600 mb-2">
-//         <strong>Role:</strong> {roleName}
-//       </p>
-
-//       <button
-//         className="bg-primary text-white px-4 py-2 rounded w-full hover:bg-opacity-90 disabled:opacity-50"
-//         onClick={handleGenerate}
-//         disabled={isGenerating}
-//       >
-//         {isGenerating ? "Generating..." : "Generate URL"}
-//       </button>
-
-//       {generatedLink && (
-//         <div className="mt-6">
-//           <label className="block mb-1 font-medium text-gray-700">
-//             Generated URL
-//           </label>
-//           <div className="flex items-center gap-2">
-//             <input
-//               type="text"
-//               value={generatedLink}
-//               readOnly
-//               className="flex-1 border rounded px-3 py-2"
-//             />
-//             <button
-//               className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
-//               onClick={handleCopy}
-//             >
-//               {copyStatus}
-//             </button>
-//           </div>
-//         </div>
-//       )}
-
-//       {showQRCode && (
-//         <div className="mt-6 text-center">
-//           <div
-//             id="qrCodeWrapper"
-//             className="inline-block p-4 bg-white border shadow rounded"
-//           >
-//             <h3 className="mb-2 font-medium">QR Code</h3>
-//             <QRCode value={generatedLink} size={180} />
-//           </div>
-//           <button
-//             onClick={handleDownloadQRCode}
-//             className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-//           >
-//             Download QR Code
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default RegistrationLinkPanel;
-
-
-
 "use client";
 
 import React, { useState } from "react";
@@ -129,6 +5,7 @@ import axios from "axios";
 import QRCode from "react-qr-code";
 import html2canvas from "html2canvas";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 interface Props {
   roleId: string;
@@ -163,7 +40,7 @@ const RegistrationLinkPanel = ({ roleId, roleName }: Props) => {
           examEndTime: toUtcString(examEndTime),
         },
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       });
       setGeneratedLink(res.data.registrationUrl);

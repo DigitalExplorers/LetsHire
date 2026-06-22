@@ -4,14 +4,13 @@ import React, { useEffect, useState } from "react";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import Link from "next/link";
-import { ArrowDownUp, ArrowUpDown, MoreVertical } from "lucide-react";
-import { Menu } from "@headlessui/react";
+import { ArrowUpDown, MoreVertical } from "lucide-react";
 import { useAuth } from "@/hooks/AuthContext";
 import DropdownActions from "@/components/DropdownActions";
 import ConfirmAction from "@/components/ConfirmAction";
 import AddMemberPanel from "@/components/Panels/AddMemberPanel";
 import { useRightPanel } from "@/contexts/RightPanelContext";
-
+import Cookies from "js-cookie";
 interface AdminUser {
   id: number;
   name: string;
@@ -47,7 +46,7 @@ const ManageUsersPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/users/sub-users?page=${currentPage}&limit=${itemsPerPage}`,
         {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
         },
       );
@@ -71,7 +70,7 @@ const ManageUsersPage = () => {
           await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/sub-user/${id}`, {
             method: "DELETE",
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${Cookies.get("token")}`,
             },
           });
           fetchUsers();

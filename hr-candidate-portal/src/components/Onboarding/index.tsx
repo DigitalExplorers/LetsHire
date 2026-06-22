@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useBranding } from '../../contexts/BrandingContext';
+import Cookies from 'js-cookie';
 
 const OnboardScreen = () => {
   const { token } = useParams<{ token: string }>();
@@ -9,10 +10,10 @@ const OnboardScreen = () => {
   const { logoUrl, bgImageUrl, logo2Url, isDefaultBrand } = useBranding();
 
   useEffect(() => {
-    const activeToken = token ?? localStorage.getItem("urlToken");
+    const activeToken = token ?? Cookies.get("urlToken");
 
     if (activeToken) {
-      localStorage.setItem("urlToken", activeToken);
+      Cookies.set("urlToken", activeToken);
 
       const timer = setTimeout(() => {
         navigate(`/registration/${activeToken}`);

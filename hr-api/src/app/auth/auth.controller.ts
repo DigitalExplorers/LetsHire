@@ -6,10 +6,10 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 interface AuthenticatedRequest {
   user?: {
-    userId: number;
+    userId: string;
     email: string;
     role?: string;
-    organizationId?: number | null;
+    organizationId?: string | null;
     name?: string;
   };
 }

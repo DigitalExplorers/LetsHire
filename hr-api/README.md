@@ -109,9 +109,9 @@ cp .env.example .env
 | ----------------------- | -------------------------------------------------------------------------- | ---------------------------- |
 | `DB_HOST`               | PostgreSQL host                                                            | `localhost`                  |
 | `DB_PORT`               | PostgreSQL port                                                            | `5432`                       |
-| `DB_USER`               | Database username                                                          | `hrSolutionUser`             |
-| `DB_PASS`               | Database password                                                          | `hrSolutionPWD`              |
-| `DB_NAME`               | Database name                                                              | `hrSolution`                 |
+| `POSTGRES_USER`               | Database username                                                          | `hrSolutionUser`             |
+| `POSTGRES_PASSWORD`               | Database password                                                          | `hrSolutionPWD`              |
+| `POSTGRES_DB`               | Database name                                                              | `hrSolution`                 |
 | `JWT_SECRET`            | JWT signing secret                                                         | `your_jwt_secret_key`        |
 | `MAIL_HOST`             | SMTP host                                                                  | `smtp.sendgrid.net`          |
 | `MAIL_PORT`             | SMTP port                                                                  | `465`                        |
@@ -122,10 +122,9 @@ cp .env.example .env
 | `FRONTEND_MOBILE_URL`   | Candidate Portal URL used in generated registration links                  | `http://localhost:5173`      |
 | `FRONTEND_MOBILE`       | Candidate Portal URL used by CORS/email flows                              | `http://localhost:5173`      |
 | `CORS_EXTRA_ORIGINS`    | Additional allowed CORS origins, comma-separated (production)              | `https://app.yourdomain.com` |
-| `AWS_REGION`            | AWS region                                                                 | `ap-south-1`                 |
-| `AWS_ACCOUNT_ID`        | AWS account ID                                                             | `123456789012`               |
+| `AWS_REGION`            | AWS region (must match the S3 bucket's region)                            | `ap-south-1`                 |
 | `AWS_S3_BUCKET`         | S3 bucket name for file storage                                            | `your-s3-bucket`             |
-| `BEDROCK_MODEL_ID`      | AWS Bedrock model ID                                                       | `amazon.nova-pro-v1:0`       |
+| `BEDROCK_MODEL_ID`      | Bedrock **inference-profile** ID (region-prefixed — **not** the bare model ID) | `apac.amazon.nova-pro-v1:0`  |
 | `BEDROCK_AWS_REGION`    | AWS region for Bedrock Converse calls                                      | `ap-south-1`                 |
 | `AI_URL`                | External AI analysis service URL (optional)                                | `http://localhost:5000`      |
 | `SUPER_ADMIN_EMAIL`     | Email for the seeded super admin account                                   | `superadmin@example.com`     |
@@ -136,6 +135,13 @@ cp .env.example .env
 | `DEFAULT_SUPPORT_EMAIL` | Fallback support email                                                     | _(empty)_                    |
 | `DEFAULT_PRIMARY_COLOR` | Fallback brand primary colour (hex)                                        | `#be1d2c`                    |
 | `PORT`                  | API listen port (optional; defaults to 4000)                               | `4000`                       |
+
+> **AWS credentials are not environment variables here.** There is intentionally no
+> `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` row. The SDK resolves credentials via the
+> default provider chain — your AWS CLI profile locally (`AWS_PROFILE=<name>`) and an IAM
+> role when deployed. The identity in use must own (or be granted access to) the bucket in
+> `AWS_S3_BUCKET` and have Bedrock model access enabled. Full walkthrough and the required
+> IAM policy: [AWS Setup in the root README](../README.md#aws-setup-s3--bedrock).
 
 ## Seeding
 

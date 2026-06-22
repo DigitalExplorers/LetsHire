@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { useAuth } from "@/hooks/AuthContext";
-
+import Cookies from "js-cookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 const AddSubUserForm = () => {
@@ -29,7 +29,7 @@ const AddSubUserForm = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
         body: JSON.stringify({
           name,

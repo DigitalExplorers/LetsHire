@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 interface BrandingData {
     logoUrl: string;
@@ -55,11 +56,11 @@ export const BrandingProvider: React.FC<BrandingProviderProps> = ({ token, child
                 const { organizationId } = res.data;
 
                 if (organizationId) {
-                    localStorage.setItem("urlAdminId", res.data.adminId);
-                    localStorage.setItem("urlRoleId", res.data.roleId);
-                    localStorage.setItem("urlOrgId", res.data.organizationId);
-                    localStorage.setItem("urlExamStartTime", res.data.examStartTime);
-                    localStorage.setItem("urlExamEndTime", res.data.examEndTime);
+                    Cookies.set("urlAdminId", res.data.adminId);
+                    Cookies.set("urlRoleId", res.data.roleId);
+                    Cookies.set("urlOrgId", res.data.organizationId);
+                    Cookies.set("urlExamStartTime", res.data.examStartTime);
+                    Cookies.set("urlExamEndTime", res.data.examEndTime);
 
                     const brandRes = await axios.get(`${API_URL}/organizations/${organizationId}`);
 

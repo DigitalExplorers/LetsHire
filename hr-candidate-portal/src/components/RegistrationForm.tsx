@@ -14,105 +14,29 @@ import {
   DialogTitle,
 } from '@mui/material';
 import axios from 'axios';
+import { useRef } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useBranding } from '../contexts/BrandingContext'; // Adjust this path based on your structure
-
 const generateYears = () => {
   const currentYear = new Date().getFullYear();
   return Array.from({ length: currentYear - 1949 }, (_, i) => (currentYear - i).toString()); // Convert to string
 };
 
+
 const passedOutYears = generateYears();
 
-
-const qualifications = [
-  // Undergraduate Degrees
-  'High School Diploma',
-  'Associate Degree',
-  'Bachelor of Science (B.Sc.)',
-  'Bachelor of Arts (B.A.)',
-  'Bachelor of Technology (B.Tech)',
-  'Bachelor of Engineering (B.E.)',
-  'Bachelor of Computer Applications (BCA)',
-  'Bachelor of Business Administration (BBA)',
-  'Bachelor of Commerce (B.Com)',
-  'Bachelor of Fine Arts (BFA)',
-  'Bachelor of Architecture (B.Arch)',
-  'Bachelor of Science in Information Technology (B.Sc IT)',
-  'Bachelor of Science in Computer Science (B.Sc CS)',
-  'Bachelor of Social Work (BSW)',
-  'Bachelor of Pharmacy (B.Pharm)',
-  'Bachelor of Education (B.Ed)',
-  'Bachelor of Law (LLB)',
-
-  // Postgraduate Degrees
-  'Master of Science (M.Sc.)',
-  'Master of Arts (M.A.)',
-  'Master of Technology (M.Tech)',
-  'Master of Engineering (M.E.)',
-  'Master of Computer Applications (MCA)',
-  'Master of Business Administration (MBA)',
-  'Master of Commerce (M.Com)',
-  'Master of Fine Arts (MFA)',
-  'Master of Architecture (M.Arch)',
-  'Master of Science in Information Technology (M.Sc IT)',
-  'Master of Science in Computer Science (M.Sc CS)',
-  'Master of Social Work (MSW)',
-  'Master of Pharmacy (M.Pharm)',
-  'Master of Education (M.Ed)',
-  'Master of Law (LLM)',
-  'Doctor of Philosophy (Ph.D.)',
-
-  // Diplomas & Certifications
-  'Diploma in Computer Science',
-  'Diploma in Electronics & Communication',
-  'Diploma in Information Technology',
-  'Diploma in Software Development',
-  'Diploma in Web Development',
-  'Diploma in UI/UX Design',
-  'Diploma in Data Science',
-  'Diploma in AI & ML',
-  'Diploma in Cyber Security',
-  'Diploma in DevOps',
-  'Diploma in Digital Marketing',
-  'Diploma in Networking & Cloud Computing',
-  'Diploma in Graphic Design',
-  'Diploma in Mobile App Development',
-  'Diploma in Ethical Hacking',
-  'Diploma in Financial Management',
-  'Diploma in HR Management',
-
-  // Specialized Certifications
-  'Certificate in AI & ML',
-  'Certificate in Cyber Security',
-  'Certificate in Cloud Computing',
-  'Certificate in Data Analytics',
-  'Certificate in Blockchain Technology',
-  'Certificate in Ethical Hacking',
-  'Certificate in Digital Marketing',
-  'Certificate in Web Development',
-  'Certificate in UI/UX Design',
-  'Certificate in Python Programming',
-  'Certificate in Java Development',
-  'Certificate in SQL & Database Management',
-  'Certificate in Agile & Scrum',
-  'Certificate in AWS & Cloud Security',
-  'Certificate in Software Testing (QA)',
-  'Other',
-];
-
 type Role = {
-  id: number;
+  id: string;
   name: string;
 };
 
 type ResolvedRegistrationLink = {
-  adminId: number;
-  roleId: number;
+  adminId: string;
+  roleId: string;
   roleName: string | null;
-  organizationId: number;
+  organizationId: string;
   examStartTime?: string | null;
   examEndTime?: string | null;
 };
@@ -121,9 +45,11 @@ function RegistrationForm() {
   const { token } = useParams<{ token: string }>();
   const branding = useBranding();
 
-  const [adminId, setAdminId] = useState<number | null>(null);
-  const [roleId, setRoleId] = useState<number | null>(null);
-  const [organizationId, setOrgId] = useState<number | null>(null);
+  const [adminId, setAdminId] = useState<string | null>(null);
+  const [roleId, setRoleId] = useState<string | null>(null);
+  const [organizationId, setOrgId] = useState<string | null>(null);
+  const resumeInputRef = useRef<HTMLInputElement>(null);
+  const idProofInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -157,12 +83,11 @@ function RegistrationForm() {
 
   const [cities, setCities] = useState<string[]>([]);
   const [loadingCities, setLoadingCities] = useState<boolean>(true);
-  const [loadingDropdown, setLoadingDropDown] = useState<boolean>(true);
   const [roles, setRoles] = useState<Role[]>([]);
   const [isUploading, setIsUploading] = useState(false); // Loader state
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const CITY_API_URL = 'https://api.countrystatecity.in/v1/countries/IN/cities';
   const CITY_API_KEY = 'OUVxOXBzUjI1Q3NOVDZRaVRiV002NTVUQXdYSDBiWVJDYnN4NVc3WQ==';
@@ -200,9 +125,9 @@ function RegistrationForm() {
           const resolvedData = data as ResolvedRegistrationLink;
 
           // Save to localStorage or state
-          localStorage.setItem('urlAdminId', String(resolvedData.adminId));
-          localStorage.setItem('urlRoleId', String(resolvedData.roleId));
-          localStorage.setItem('urlOrgId', String(resolvedData.organizationId));
+          Cookies.set('urlAdminId', String(resolvedData.adminId));
+          Cookies.set('urlRoleId', String(resolvedData.roleId));
+          Cookies.set('urlOrgId', String(resolvedData.organizationId));
 
           setAdminId(resolvedData.adminId);
           setRoleId(resolvedData.roleId);
@@ -217,19 +142,16 @@ function RegistrationForm() {
             setRoles([]);
           }
 
-          setLoadingDropDown(false);
         } else {
           console.error('Token not valid:', data.message);
-          setLoadingDropDown(false);
         }
       } catch (err) {
         console.error('Error resolving token:', err);
-        setLoadingDropDown(false);
       }
     };
 
     if (token) {
-      localStorage.setItem('urlToken', token);
+      Cookies.set('urlToken', token);
       resolveToken();
     }
   }, [token]);
@@ -245,21 +167,27 @@ function RegistrationForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (event: any) => {
-    const { name } = event.target; // Get the name of the input field (resume or idProof)
-    const file = event.target.files[0]; // Get the uploaded file
+const handleFileChange = ( event: React.ChangeEvent<HTMLInputElement> ) => {
+  const { name, files } = event.target;
+  const file = files?.[0];
+  if (!file) return;
 
-    if (file) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: file, // Dynamically update the correct field
-      }));
-    }
-  };
+  setFormData((prev) => ({ ...prev, [name]: file })) };
 
   const handleFileRemove = (field: string) => {
-    setFormData({ ...formData, [field]: '' });
-  };
+  setFormData((prev) => ({
+    ...prev,
+    [field]: null,
+  }));
+
+  if (field === 'resume' && resumeInputRef.current) {
+    resumeInputRef.current.value = '';
+  }
+
+  if (field === 'idProof' && idProofInputRef.current) {
+    idProofInputRef.current.value = '';
+  }
+};
 
   const checkUserExists = async (email: string) => {
     try {
@@ -355,9 +283,15 @@ function RegistrationForm() {
       if (formData.idProof) {
         data.append('idProof', formData.idProof);
       }
+      if (adminId) {
+        data.append('adminId', adminId);
+      }
+      if (organizationId) {
+        data.append('organizationId', organizationId);
+      }
 
       const response = await axios.post(
-        `${API_URL}/candidates?adminId=${adminId}&organizationId=${organizationId}`,
+        `${API_URL}/candidates`,
         data,
         {
           headers: {
@@ -400,9 +334,32 @@ function RegistrationForm() {
         setIsUploading(false);
         console.warn('Unexpected response:', response);
       }
-    } catch (error) {
+    } 
+      catch (error: any) {
       setIsUploading(false);
-      console.error(error); // Handle error
+
+      console.error('Upload error:', error);
+
+      const backendMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        'Something went wrong. Please try again.';
+
+      setApiError(
+        Array.isArray(backendMessage)
+          ? backendMessage.join(', ')
+          : backendMessage
+      );
+
+      if (
+        typeof backendMessage === 'string' &&
+        backendMessage.toLowerCase().includes('resume')
+      ) {
+        setErrors(prev => ({
+          ...prev,
+          resume: backendMessage,
+        }));
+      }
     }
   };
 
@@ -830,8 +787,9 @@ function RegistrationForm() {
                               src="/assets/close.svg"
                               alt="Remove file"
                               onClick={() => {
-                                setFormData({ ...formData, resume: null });
+                                 handleFileRemove('resume')
                               }}
+                              
                               style={{
                                 cursor: 'pointer',
                                 height: '13px',
@@ -875,7 +833,14 @@ function RegistrationForm() {
                             filter: 'brightness(0) saturate(0%)',
                           }}
                         />
-                        <input hidden type="file" name="resume" onChange={handleFileChange} />
+                        <input
+                          ref={resumeInputRef}
+                          hidden
+                          type="file"
+                          name="resume"
+                          accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          onChange={handleFileChange}
+                        />
                       </Button>
                     </Box>
 
@@ -921,7 +886,7 @@ function RegistrationForm() {
                             src="/assets/close.svg"
                             alt="Remove file"
                             onClick={() => {
-                              setFormData({ ...formData, idProof: null });
+                              handleFileRemove('idProof')
                             }}
                             style={{
                               cursor: 'pointer',
@@ -965,7 +930,7 @@ function RegistrationForm() {
                           filter: 'brightness(0) saturate(0%)',
                         }}
                       />
-                      <input hidden type="file" name="idProof" onChange={handleFileChange} />
+                      <input ref={idProofInputRef} hidden type="file" name="idProof" onChange={handleFileChange} />
                     </Button>
                   </Box>
                 </Box>
@@ -994,6 +959,19 @@ function RegistrationForm() {
                 },
               }}
             >
+              {apiError && (
+                <Typography
+                  sx={{
+                    color: '#d32f2f',
+                    fontSize: '12px',
+                    mb: 1,
+                    textAlign: 'center',
+                    px: 2,
+                  }}
+                >
+                  {apiError}
+                </Typography>
+              )}
               <Button
                 fullWidth
                 variant="contained"

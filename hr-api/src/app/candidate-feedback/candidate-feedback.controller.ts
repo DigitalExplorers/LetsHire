@@ -14,15 +14,15 @@ export class CandidateFeedbackController {
 
   @Post(':candidateId')
   async addFeedback(
-    @Param('candidateId') candidateId: number,
-    @CurrentUser() currentUser: { userId: number },
+    @Param('candidateId') candidateId: string,
+    @CurrentUser() currentUser: { userId: string },
     @Body() feedbackDto: FeedbackDto,
   ) {
     return this.feedbackService.addFeedback(candidateId, currentUser.userId, feedbackDto);
   }
 
   @Get(':candidateId')
-  async getFeedbacks(@Param('candidateId') candidateId: number) {
+  async getFeedbacks(@Param('candidateId') candidateId: string) {
     return this.feedbackService.getFeedbacks(candidateId);
   }
 }

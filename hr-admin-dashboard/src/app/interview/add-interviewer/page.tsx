@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createInterviewer } from "../../services/interviewerService";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import Cookies from "js-cookie";
 
 interface Interviewer {
   id?: string;
@@ -12,7 +13,7 @@ interface Interviewer {
   skills: string[];
   department: string;
   availability: string;
-  createdBy : number
+  createdBy: string;
 }
 const AddInterviewerForm = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const AddInterviewerForm = () => {
   const [department, setDepartment] = useState("");
   const [availability, setAvailability] = useState("Available");
   const [message, setMessage] = useState({ type: "", text: "" });
-  const userId = localStorage.getItem("adminId");
+  const userId = Cookies.get("adminId");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +44,7 @@ const AddInterviewerForm = () => {
       skills: skills.split(", ").map((skill) => skill.trim()),
       department,
       availability,
-      createdBy : parseInt(userId)
+      createdBy: userId,
     };
 
     try {

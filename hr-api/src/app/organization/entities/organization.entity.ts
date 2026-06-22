@@ -7,11 +7,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { IsUUID } from "class-validator";
 
-@Entity()
+@Entity('organization')
 export class Organization {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  @IsUUID()
+  id: string;
 
   @Column({ unique: true })
   name: string;

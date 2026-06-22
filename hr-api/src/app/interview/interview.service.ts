@@ -25,13 +25,10 @@ export class InterviewService {
     @InjectRepository(Interviewer)
     private readonly interviewerRepo: Repository<Interviewer>,
 
-    @InjectRepository(AdminUser)
-    private readonly adminRepo: Repository<AdminUser>,
-
     private readonly candidateService: CandidateService
   ) {}
 
-  async scheduleInterview(candidateId: number, interviewerId: number, date: Date, adminId: number) {
+  async scheduleInterview(candidateId: string, interviewerId: string, date: Date, adminId: string) {
     // Fetch candidate entity
     const candidate = await this.candidateRepo.findOne({
       where: { id: candidateId, adminUser: { id: adminId } },
@@ -74,15 +71,8 @@ export class InterviewService {
     return interview;
 }
 
-
-  // async getAllInterviews(adminId: number) {
-  //   return await this.interviewRepo.find({
-  //     relations: ["candidate", "interviewer"], // Include candidate and interviewer details
-  //   });
-  // }
-
   async getAllInterviews(
-    adminId: number,
+    adminId: string,
     page?: number,
     limit?: number,
   ): Promise<Interview[] | PaginatedResponse<Interview>> {
@@ -113,28 +103,15 @@ export class InterviewService {
     });
   }
 
-  // async getCandidatesByInterviewer(interviewerId: number, adminId: number): Promise<User[]> {
-  //   const interviews = await this.interviewRepo.find({
-  //     where: { interviewer: { id: interviewerId } },
-  //     relations: ['candidate'], // Ensure candidate details are fetched
-  //   });
-  
-  //   if (!interviews.length) {
-  //     throw new NotFoundException(`No candidates assigned to interviewer ID ${interviewerId}`);
-  //   }
-  
-  //   return interviews.map((interview) => interview.candidate);
-  // }
-
   private async resolveInterviewerIdForCurrentUser(
-    requestedInterviewerId: number,
+    requestedInterviewerId: string,
     currentUser: {
-      userId: number;
+      userId: string;
       email: string;
       role?: string;
-      organizationId?: number | null;
+      organizationId?: string | null;
     },
-  ): Promise<number> {
+  ): Promise<string> {
     if (currentUser.role !== 'interviewer') {
       return requestedInterviewerId;
     }
@@ -158,12 +135,12 @@ export class InterviewService {
   }
 
   async getCandidatesByInterviewer(
-    interviewerId: number,
+    interviewerId: string,
     currentUser: {
-      userId: number;
+      userId: string;
       email: string;
       role?: string;
-      organizationId?: number | null;
+      organizationId?: string | null;
     },
   ): Promise<Candidate[]> {
     const effectiveInterviewerId = await this.resolveInterviewerIdForCurrentUser(
@@ -186,21 +163,21 @@ export class InterviewService {
     // Multiple interview records can exist for the same candidate (for example,
     // reschedules or additional rounds). The Assigned Interviews tab expects one
     // row per candidate, so keep only the most recent record for each candidate.
-    const latestCandidateById = new Map<number, Candidate>();
+    const latestCandidateById = new Map<string, Candidate>();
 
     for (const interview of interviews) {
       const candidate = interview.candidate;
+
       if (candidate && !latestCandidateById.has(candidate.id)) {
         latestCandidateById.set(candidate.id, candidate);
       }
     }
-
-    return Array.from(latestCandidateById.values());
-  }
+  return Array.from(latestCandidateById.values());
+}
 
 
   // Submit Feedback and Score for an Interview
-  async submitFeedback(interviewId: number, feedback: string, score: number, adminId: number) {
+  async submitFeedback(interviewId: number, feedback: string, score: number, adminId: string) {
     const interview = await this.interviewRepo.findOne({ where: { id: interviewId }, relations: ["createdBy"] });
     if (!interview || interview.createdBy.id !== adminId) throw new UnauthorizedException();
 
@@ -211,8 +188,8 @@ export class InterviewService {
 
   // Get All Interview Rounds for a Candidate (org-scoped)
   async getCandidateInterviews(
-    candidateId: number,
-    actor: { role?: string; organizationId?: number | null },
+    candidateId: string,
+    actor: { role?: string; organizationId?: string | null },
   ) {
     const isSuperAdmin = actor.role === 'superadmin';
     return this.interviewRepo.find({
@@ -225,7 +202,7 @@ export class InterviewService {
   }
 
   // Promote Candidate to the Next Round (Manager Action)
-  async promoteCandidateToNextRound(candidateId: number, interviewerId: number, date: Date, adminId: number) {
+  async promoteCandidateToNextRound(candidateId: string, interviewerId: string, date: Date, adminId: string) {
     const candidate = await this.candidateRepo.findOne({ where: { id: candidateId } });
     if (!candidate) throw new NotFoundException('Candidate not found');
 
@@ -259,11 +236,11 @@ export class InterviewService {
    * - Stores screening data in the `Interview` table.
    */
   async submitScreeningRound(data: {
-    candidateId: number;
+    candidateId: string;
     score: number;
     feedback: string;
-    createdBy: { id: number };
-    organization: { id: number };
+    createdBy: { id: string };
+    organization: { id: string };
   }) {
     const adminId = data.createdBy.id;
     const organizationId = data.organization.id;
@@ -316,7 +293,7 @@ export class InterviewService {
     };
   }
 
-  async submitInterviewFeedback(candidateId: number, round: number, feedback: string, score: number, adminId: number) {
+  async submitInterviewFeedback(candidateId: string, round: number, feedback: string, score: number, adminId: string) {
     // Find the interview record for the given candidate and round
     const interview = await this.interviewRepo.findOne({
       where: { candidate: { id: candidateId }, round, createdBy: { id: adminId } },
@@ -336,7 +313,7 @@ export class InterviewService {
     return { message: `Feedback for round ${round} submitted successfully!`, interview };
   }
 
-  async addFeedback(feedbackDto: FeedbackDto, adminId: number) {
+  async addFeedback(feedbackDto: FeedbackDto, adminId: string) {
     const { candidateId, round, score, strengths, weaknesses, comments } = feedbackDto;
 
     // Find the existing interview record

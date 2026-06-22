@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { createReadStream } from 'fs';
 import FormData from 'form-data';
 import axios from 'axios';
+import { join } from 'path';
 
 @Injectable()
 export class VideoService {
@@ -13,14 +14,14 @@ export class VideoService {
     private readonly candidateRepo: Repository<Candidate>,
   ) {}
 
-  private readonly uploadFolder = 'src/app/video/uploads';
+  private readonly uploadFolder = join(process.cwd(), 'tmp', 'video-uploads');
 
   async getVideoUrl(filename: string): Promise<string> {
-    return `src/app/video/uploads/${filename}`; // Return the path for access
+    return join(process.cwd(), 'tmp', 'video-uploads', filename); // Return the path for access
   }
 
   // Run analysis asynchronously
-  async analyzeAndSaveVideo(userId: number, videoPath: string) {
+  async analyzeAndSaveVideo(userId: string, videoPath: string) {
     try {
       const analysisResult = await this.analyzeVideo(videoPath);
       await this.saveUserVideoAnalysis(userId, videoPath, analysisResult);
@@ -48,7 +49,7 @@ export class VideoService {
   }
 
   // Save analysis results in the database
-  async saveUserVideoAnalysis(userId: number, videoPath: string, analysisResult: any) {
+  async saveUserVideoAnalysis(userId: string, videoPath: string, analysisResult: any) {
     try {
       const user = await this.candidateRepo.findOne({ where: { id: userId } });
 
@@ -67,7 +68,7 @@ export class VideoService {
   }
 
   // Get user video analysis status
-  async getUserVideoAnalysis(userId: number) {
+  async getUserVideoAnalysis(userId: string) {
     return await this.candidateRepo.findOne({ where: { id: userId }, select: ['videoAnalysis'] });
   }
 }

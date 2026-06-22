@@ -7,7 +7,7 @@ import { CandidateNotificationService } from './candidate-notification.service';
 
 type StaffActor = {
   role?: string;
-  organizationId?: number | null;
+  organizationId?: string | null;
 };
 
 @Injectable()
@@ -36,7 +36,7 @@ export class CandidateDocumentService {
   }
 
   private async getAccessibleCandidate(
-    candidateId: number,
+    candidateId: string,
     actor: StaffActor,
     relations: string[] = [],
   ) {
@@ -58,7 +58,7 @@ export class CandidateDocumentService {
     return candidate;
   }
 
-  private extractCandidateIdFromFileKey(fileKey: string): number {
+  private extractCandidateIdFromFileKey(fileKey: string): string {
     let normalized = fileKey.replace(/\\/g, '/');
 
     if (/^https?:\/\//i.test(normalized)) {
@@ -69,26 +69,28 @@ export class CandidateDocumentService {
       }
     }
 
-    const uploadsMatch = normalized.match(/\/uploads\/(\d+)\/(documents|videos)\//);
+    const uploadsMatch = normalized.match(
+      /\/uploads\/([0-9a-fA-F-]{36})\/(documents|videos)\//,
+    );
     if (uploadsMatch) {
-      return Number(uploadsMatch[1]);
+      return uploadsMatch[1];
     }
 
     const trimmed = normalized.replace(/^\/+/, '');
     const segments = trimmed.split('/');
     if (
       segments.length >= 2 &&
-      /^\d+$/.test(segments[0]) &&
+      /^[0-9a-fA-F-]{36}$/.test(segments[0]) &&
       ['documents', 'videos'].includes(segments[1])
     ) {
-      return Number(segments[0]);
+      return segments[0];
     }
 
     throw new BadRequestException('Unsupported file key');
   }
 
   async uploadUserDocuments(
-    userId: number,
+    userId: string,
     resumeFile: Express.Multer.File,
     idProofFile?: Express.Multer.File | null,
   ) {
@@ -103,7 +105,7 @@ export class CandidateDocumentService {
 
     const resumeUpload = await this.s3Service.uploadFile(
       resumeFile,
-      userId.toString(),
+      userId,
       'documents',
     );
     user.resume = resumeUpload.fileKey;
@@ -112,7 +114,7 @@ export class CandidateDocumentService {
     if (idProofFile) {
       const idProofUpload = await this.s3Service.uploadFile(
         idProofFile,
-        userId.toString(),
+        userId,
         'documents',
       );
       user.idProof = idProofUpload.fileKey;
@@ -128,7 +130,7 @@ export class CandidateDocumentService {
     };
   }
 
-  async uploadUserVideo(userId: number, videoFile: Express.Multer.File) {
+  async uploadUserVideo(userId: string, videoFile: Express.Multer.File) {
     const user = await this.candidateRepository.findOne({
       where: { id: userId },
     });
@@ -136,7 +138,7 @@ export class CandidateDocumentService {
 
     const videoUpload = await this.s3Service.uploadFile(
       videoFile,
-      userId.toString(),
+      userId,
       'videos',
     );
 
@@ -167,7 +169,7 @@ export class CandidateDocumentService {
     };
   }
 
-  async getUserDocuments(userId: number, actor: StaffActor) {
+  async getUserDocuments(userId: string, actor: StaffActor) {
     await this.getAccessibleCandidate(userId, actor);
     const files = await this.s3Service.listUserFiles(userId.toString(), 'documents');
     return files.map((file: { fileKey: string; preSignedUrl: string }) => ({
@@ -176,7 +178,7 @@ export class CandidateDocumentService {
     }));
   }
 
-  async getUserVideos(userId: number, actor: StaffActor) {
+  async getUserVideos(userId: string, actor: StaffActor) {
     await this.getAccessibleCandidate(userId, actor);
     const files = await this.s3Service.listUserFiles(userId.toString(), 'videos');
     return files.map((file: { fileKey: string; preSignedUrl: string }) => ({

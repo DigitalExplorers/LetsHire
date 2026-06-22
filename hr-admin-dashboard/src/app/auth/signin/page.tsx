@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useAuth } from "@/hooks/AuthContext";
 import { useBranding } from "@/contexts/BrandingContext";
+import Image from "next/image";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -54,10 +55,6 @@ const SignIn = () => {
         if (role) Cookies.set('role', role, cookieOptions);
         if (organizationId) Cookies.set('organizationId', String(organizationId), cookieOptions);
 
-        localStorage.setItem('token', access_token);
-        localStorage.setItem('adminId', id);
-        localStorage.setItem('organizationId', organizationId ?? '');
-        localStorage.setItem('role', role ?? '');
 
         await refetchProfile();
         refreshBranding();
@@ -93,9 +90,11 @@ const SignIn = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               {/* Logo */}
               <div className="mb-6 flex justify-center">
-                <img
+                <Image
                   src={'/images/logo/THE8800-logo-final.png'}
                   alt="Logo"
+                  width={240}
+                  height={48}
                   className="h-12 object-contain"
                 />
               </div>

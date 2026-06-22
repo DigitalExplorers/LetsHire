@@ -61,7 +61,7 @@ export class SuperAdminService {
       throw new NotFoundException('Name, email, and password are required');
     }
 
-    const org = await this.orgRepo.findOne({ where: { id: +dto.organizationId } });
+    const org = await this.orgRepo.findOne({ where: { id: dto.organizationId } });
     if (!org) throw new NotFoundException('Organization not found');
 
     const existing = await this.adminUserRepo.findOne({
@@ -112,14 +112,14 @@ export class SuperAdminService {
     return buildPaginatedResponse(admins, total, pagination.page, pagination.limit);
   }
 
-  async getAdminById(id: number) {
+  async getAdminById(id: string) {
     return this.adminUserRepo.findOne({
       where: { id },
       relations: ['role', 'organization'],
     });
   }
 
-  async updateAdmin(id: number, dto: Partial<CreateAdminUserDto>) {
+  async updateAdmin(id: string, dto: Partial<CreateAdminUserDto>) {
     const user = await this.getAdminById(id);
     if (!user) throw new NotFoundException('Admin not found');
 
@@ -129,7 +129,7 @@ export class SuperAdminService {
       user.password = await bcrypt.hash(dto.password, 10);
     }
     if (dto.organizationId) {
-      const org = await this.orgRepo.findOne({ where: { id: +dto.organizationId } });
+      const org = await this.orgRepo.findOne({ where: { id: dto.organizationId } });
       if (!org) throw new NotFoundException('Organization not found');
       user.organization = org;
     }
@@ -137,7 +137,7 @@ export class SuperAdminService {
     return this.adminUserRepo.save(user);
   }
 
-  async deleteAdmin(id: number) {
+  async deleteAdmin(id: string) {
     const admin = await this.getAdminById(id);
     if (!admin) throw new NotFoundException('Admin not found');
 

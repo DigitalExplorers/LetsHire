@@ -1,7 +1,6 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, UsePipes, ValidationPipe, NotFoundException, BadRequestException, UseInterceptors, UploadedFiles, Patch, Query, UploadedFile, UseGuards, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Get, Put, Delete, Param, Body, UsePipes, ValidationPipe, NotFoundException, ForbiddenException ,BadRequestException, UseInterceptors, UploadedFiles, Patch, Query, UploadedFile, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { CandidateService } from './candidate.service';
-import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { UpdateCandidateDto } from './dto/update-candidate.dto';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { InterviewService } from '../interview/interview.service';
@@ -11,6 +10,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { RegistrationLinkService } from '../registration-link/registration-link.service';
+import { CreateCandidateRequestDto } from './dto/Create-candidate-request.dto';
 
 
 @Controller('candidates')
@@ -24,15 +24,41 @@ export class CandidateController {
   @Post()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'resume', maxCount: 1 },
-      { name: 'idProof', maxCount: 1 },
-    ]),
+    FileFieldsInterceptor(
+      [
+        { name: 'resume', maxCount: 1 },
+        { name: 'idProof', maxCount: 1 },
+      ],
+      {
+        limits: {
+          fileSize: 5 * 1024 * 1024, // 5MB
+        },
+        fileFilter: (req, file, cb) => {
+        if (file.fieldname === 'resume') {
+          const allowedMimeTypes = [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/octet-stream',
+          ];
+
+          const validMime = allowedMimeTypes.includes(file.mimetype);
+          const validExt = /\.(pdf|docx)$/i.test(file.originalname);
+
+          if (!validMime && !validExt) {
+            return cb(
+              new BadRequestException('Resume must be PDF or DOCX only'),
+              false,
+            );
+          }
+        }
+
+        cb(null, true);
+      }
+      },
+    ),
   )
   async createUser(
-    @Body() data: CreateCandidateDto,
-    @Query('adminId') adminId: string,
-    @Query('organizationId') organizationId: string,
+    @Body() data: CreateCandidateRequestDto,
     @UploadedFiles() files: { resume?: Express.Multer.File[], idProof?: Express.Multer.File[] }
   ) {
     console.log('Received Form Data:', data);
@@ -45,21 +71,27 @@ export class CandidateController {
     if (!files.resume || files.resume.length === 0) {
       throw new BadRequestException('Resume file is required!');
     }
-
-    // Attach admin ownership from query to user data
-    if (adminId) data.adminUser = { id: parseInt(adminId) };
-
-    // Attach organizationId and role from query to user data
-    if (organizationId) data.organization = {id: parseInt(organizationId)};
-
+     // Attach admin ownership from body to user data
+    if (data.adminId) {  data.adminUser = { id: data.adminId }; }
+    // Attach organizationId from body to user data
+    if (data.organizationId) { data.organization = { id: data.organizationId, };}
+   
     // Step 1: Create User First
     const createdUser = await this.userService.createUser(data);
 
     // Step 2: Upload Resume (Mandatory) & ID Proof (Optional)
     console.log('Uploading Files...');
 
-    const resumeFile = files.resume[0];
-    const idProofFile = files.idProof?.[0] || null; // Allow `idProof` to be optional
+   const resumeFile = files.resume?.[0];
+    const idProofFile = files.idProof?.[0] || null;
+
+    if (!resumeFile) {
+      throw new BadRequestException('Resume file is required!');
+    }
+
+    if (resumeFile.size > 5 * 1024 * 1024) {
+      throw new BadRequestException('Resume must be less than 5MB');
+    }
 
     await this.userService.uploadUserDocuments(
       createdUser.id,
@@ -77,53 +109,56 @@ export class CandidateController {
     };
   }
 
-  /**
-   * Upload Resume & ID Proof separately
-   */
-  @Post(':userId/upload/documents')
-  @UseInterceptors(
-    FileFieldsInterceptor([
-      { name: 'resume', maxCount: 1 },
-      { name: 'idProof', maxCount: 1 },
-    ]),
-  )
-  async uploadDocuments(
-    @UploadedFiles()
-    files: { resume?: Express.Multer.File[]; idProof?: Express.Multer.File[] },
-    @Param('userId') userId: string,
-  ) {
-    if (!files.resume?.[0] || !files.idProof?.[0]) {
-      throw new BadRequestException(
-        'Both Resume and ID Proof must be uploaded',
-      );
-    }
-
-    return this.userService.uploadUserDocuments(
-      parseInt(userId),
-      files.resume[0],
-      files.idProof[0] || null,
-    );
-  }
 
   @UseGuards(JwtAuthGuard)
-  @Post(':userId/upload/video')
-  @UseInterceptors(FileInterceptor('video')) // Expect a SINGLE file named "video"
+  @Post('upload/video')
+ @UseInterceptors(
+    FileInterceptor('video', {
+      limits: {
+        fileSize: 150 * 1024 * 1024, // 150MB
+      },
+      fileFilter: (req, file, cb) => {
+        const allowedMimeTypes = [
+          'video/mp4',
+          'video/webm',
+          'video/quicktime',
+          'application/octet-stream',
+        ];
+
+        const validMime = allowedMimeTypes.includes(file.mimetype);
+        const validExt = /\.(mp4|webm|mov)$/i.test(file.originalname);
+
+        if (!validMime && !validExt) {
+          return cb(
+            new BadRequestException(
+              'Only MP4, WEBM, or MOV videos are allowed',
+            ),
+            false,
+          );
+        }
+
+        cb(null, true);
+      }
+    }),
+  )
   async uploadVideo(
-    @UploadedFile() file: Express.Multer.File, // Change to @UploadedFile()
-    @Param('userId') userId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('userId') userId: string,
+    @CurrentUser() currentUser: { userId: string },
   ) {
     if (!file) {
       throw new BadRequestException('No video file uploaded!');
+    }
+
+    if (currentUser.userId !== userId) {
+      throw new ForbiddenException('You can only upload your own video');
     }
 
     console.log(
       `Received video file: ${file.originalname}, Size: ${file.size} bytes`,
     );
 
-    return this.userService.uploadUserVideo(
-      parseInt(userId),
-      file,
-    );
+    return this.userService.uploadUserVideo(userId, file);
   }
 
   /**
@@ -134,10 +169,10 @@ export class CandidateController {
   @Get(':userId/files/documents')
   async getUserDocuments(
     @Param('userId') userId: string,
-    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+    @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
   ) {
     const files = await this.userService.getUserDocuments(
-      parseInt(userId),
+      userId,
       currentUser,
     );
     return { message: 'Documents retrieved successfully', files };
@@ -151,10 +186,10 @@ export class CandidateController {
   @Get(':userId/files/video')
   async getUserVideo(
     @Param('userId') userId: string,
-    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+    @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
   ) {
     const video = await this.userService.getUserVideos(
-      parseInt(userId),
+      userId,
       currentUser,
     );
     return { message: 'Video retrieved successfully', video };
@@ -175,10 +210,11 @@ export class CandidateController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async getUsers(
-    @CurrentUser() adminUser: { userId: number },
+    @CurrentUser() adminUser: { userId: string },
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
+    console.log("THIS END POINT IS INVOKED")
     return this.userService.getUsers(
       adminUser.userId,
       page !== undefined ? Number(page) : undefined,
@@ -225,8 +261,8 @@ export class CandidateController {
   @Roles('superadmin', 'admin', 'hr', 'interviewer')
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   async getUserById(
-    @Param('id') id: number,
-    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+    @Param('id') id: string,
+    @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
   ) {
     const user = await this.userService.getCandidateDetails(id, currentUser);
     if (!user) {
@@ -240,7 +276,7 @@ export class CandidateController {
    */
   @UseGuards(JwtAuthGuard)
   @Get('/candidate/:id')
-  async getUserByIdToConsole(@Param('id') id: number) {
+  async getUserByIdToConsole(@Param('id') id: string) {
     const user = await this.userService.getUserByIdToAPP(id);
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -254,7 +290,7 @@ export class CandidateController {
   @Put(':id')
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  async updateUser(@Param('id') id: number, @Body() data: UpdateCandidateDto, @CurrentUser() adminUser: { userId: number }) {
+  async updateUser(@Param('id') id: string, @Body() data: UpdateCandidateDto, @CurrentUser() adminUser: { userId: string }) {
     return this.userService.updateUser(id, data, adminUser.userId);
   }
 
@@ -263,7 +299,7 @@ export class CandidateController {
    */
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteUser(@Param('id') id: number, @CurrentUser() adminUser: { userId: number }) {
+  async deleteUser(@Param('id') id: string, @CurrentUser() adminUser: { userId: string }) {
     return this.userService.deleteUser(id, adminUser.userId);
   }
 
@@ -274,9 +310,9 @@ export class CandidateController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('superadmin', 'admin', 'hr', 'interviewer')
   async updateUserStatus(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body('status') status: string,
-    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+    @CurrentUser() currentUser: { userId :string; role?: string; organizationId?: string | null },
   ) {
     return await this.userService.updateUserStatusByActor(id, status, currentUser);
   }
@@ -287,9 +323,9 @@ export class CandidateController {
   @Patch(':id/assign-interviewer')
   @UseGuards(JwtAuthGuard)
   async assignInterviewer(
-    @Param('id') candidateId: number,
-    @Body('interviewerId') interviewerId: number,
-    @CurrentUser() adminUser: { userId: number }
+    @Param('id') candidateId: string,
+    @Body('interviewerId') interviewerId: string,
+    @CurrentUser() adminUser: { userId: string }
   ) {
     if (!candidateId || !interviewerId) {
       throw new BadRequestException(
@@ -306,10 +342,10 @@ export class CandidateController {
   @Patch(':id/schedule-interview')
   @UseGuards(JwtAuthGuard)
   async scheduleInterview(
-    @Param('id') candidateId: number,
-    @Body('interviewerId') interviewerId: number,
+    @Param('id') candidateId: string,
+    @Body('interviewerId') interviewerId: string,
     @Body('date') date: string,
-    @CurrentUser() adminUser: { userId: number }
+    @CurrentUser() adminUser: { userId: string }
   ) {
     if (!date) throw new BadRequestException('Interview date is required');
 
@@ -317,13 +353,13 @@ export class CandidateController {
   }
 
   /**
-   * Get All Candidates with Interviews
+   * Get All Candidates with Interviews.  end point is existing but we are not using it. tested with postan working fine
    */
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('superadmin', 'admin', 'hr', 'interviewer')
   @Get('/candidates/interviews')
   async getAllCandidatesWithInterviews(
-    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+    @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
@@ -342,8 +378,8 @@ export class CandidateController {
   @Get('/candidates/:id')
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   async getCandidateDetails(
-    @Param('id') candidateId: number,
-    @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+    @Param('id') candidateId: string,
+    @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
   ) {
     return await this.userService.getCandidateDetails(candidateId, currentUser);
   }
@@ -357,7 +393,7 @@ export class CandidateController {
    @Throttle({ default: { limit: 60, ttl: 60000 } })
    async getPreSignedUrl(
      @Param('fileKey') fileKey: string,
-     @CurrentUser() currentUser: { role?: string; organizationId?: number | null },
+     @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
      @Query("download") download?: boolean,
    ) {
      const decodedFileKey = decodeURIComponent(fileKey); // Decode special characters

@@ -6,11 +6,13 @@ import Link from "next/link";
 import { ArrowDownUp, ArrowUpDown, MoreVertical } from "lucide-react";
 import DropdownActions from "@/components/DropdownActions";
 import ConfirmAction from "@/components/ConfirmAction";
+import Cookies from "js-cookie";
+import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
 interface Organization {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   createdAt: string;
@@ -45,7 +47,7 @@ const OrganizationsTableView = () => {
   const fetchOrganizations = async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const res = await fetch(`${API_URL}/organizations?page=${currentPage}&limit=${itemsPerPage}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -89,14 +91,14 @@ const OrganizationsTableView = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     try {
       await ConfirmAction({
         action: async () => {
           const res = await fetch(`${API_URL}/organizations/${id}`, {
             method: "DELETE",
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${Cookies.get("token")}`,
             },
           });
 
@@ -270,10 +272,11 @@ const OrganizationsTableView = () => {
             {/* Logo */}
             {selectedOrg.logoUrl && (
               <div className="mb-4 text-center">
-                <img
+                <Image
                   src={selectedOrg.logoUrl}
                   alt="Organization Logo"
                   className="mx-auto h-16 object-contain"
+                   width={200} height={64}
                 />
               </div>
             )}
@@ -299,9 +302,10 @@ const OrganizationsTableView = () => {
               {selectedOrg.bgImageUrl && (
                 <div>
                   <p className="mt-2"><strong>Background Image:</strong></p>
-                  <img
+                  <Image
                     src={selectedOrg.bgImageUrl}
                     alt="Background"
+                    fill
                     className="w-full h-32 object-cover rounded-md mt-1"
                   />
                 </div>

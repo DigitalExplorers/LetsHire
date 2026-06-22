@@ -41,9 +41,9 @@ export function getDatabaseOptions(env: DatabaseEnvironment) {
     type: 'postgres' as const,
     host: getRequiredValue(env, 'DB_HOST'),
     port: getPort(env),
-    username: getRequiredValue(env, 'DB_USER'),
-    password: getRequiredValue(env, 'DB_PASS'),
-    database: getRequiredValue(env, 'DB_NAME'),
+    username: getRequiredValue(env, 'POSTGRES_USER'),
+    password: getRequiredValue(env, 'POSTGRES_PASSWORD'),
+    database: getRequiredValue(env, 'POSTGRES_DB'),
 
     synchronize: false,
 

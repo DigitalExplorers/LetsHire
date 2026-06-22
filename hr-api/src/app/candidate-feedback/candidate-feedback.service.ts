@@ -18,7 +18,7 @@ export class CandidateFeedbackService {
         private adminRepository: Repository<AdminUser>
       ) {}
     
-      async addFeedback(candidateId: number, adminId: number, feedbackDto: FeedbackDto) {
+      async addFeedback(candidateId: string, adminId: string, feedbackDto: FeedbackDto) {
         console.log("candidateId ",candidateId);
         console.log("adminId ",adminId);
         
@@ -37,7 +37,7 @@ export class CandidateFeedbackService {
         return await this.feedbackRepository.save(feedback);
       }
     
-      async getFeedbacks(candidateId: number) {
+      async getFeedbacks(candidateId: string) {
         return await this.feedbackRepository.find({
           where: { candidate: { id: candidateId } },
           relations: ['submittedBy'],

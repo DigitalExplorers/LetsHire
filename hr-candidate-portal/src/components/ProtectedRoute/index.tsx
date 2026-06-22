@@ -8,7 +8,7 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
 //   const isAuthenticated = localStorage.getItem("userid") !== null;
-  const isAuthenticated = Cookies.get('userId');
+  const isAuthenticated = Cookies.get('userId')!== null;
 
   return isAuthenticated ? element : <Navigate to="/" replace />;
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -6,6 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import { useBranding } from '../contexts/BrandingContext';
+import Cookies from 'js-cookie';
 
 // Enable dayjs plugins
 dayjs.extend(utc);
@@ -29,18 +30,18 @@ const ExamEntryPage = () => {
         const { examStartTime, examEndTime, roleId, adminId, organizationId } = res.data;
 
         // Store in localStorage (if needed by registration page)
-        localStorage.setItem('urlRoleId', roleId);
-        localStorage.setItem('urlAdminId', adminId);
-        localStorage.setItem('urlOrgId', organizationId);
-        localStorage.setItem('urlExamStartTime', examStartTime);
-        localStorage.setItem('urlExamEndTime', examEndTime);
+        Cookies.set('urlRoleId', roleId);
+        Cookies.set('urlAdminId', adminId);
+        Cookies.set('urlOrgId', organizationId);
+        Cookies.set('urlExamStartTime', examStartTime);
+        Cookies.set('urlExamEndTime', examEndTime);
 
         const now = dayjs().tz(istTimeZone);
         const start = dayjs.utc(examStartTime).tz(istTimeZone);
         const end = dayjs.utc(examEndTime).tz(istTimeZone);
 
-        const localStartTime = parseInt(localStorage.getItem('userExamStartTime') || '0', 10);
-        const allowedDuration = parseInt(localStorage.getItem('userExamAllowedDuration') || '0', 10);
+        const localStartTime = parseInt(Cookies.get('userExamStartTime') || '0', 10);
+        const allowedDuration = parseInt(Cookies.get('userExamAllowedDuration') || '0', 10);
         const nowTime = Date.now();
 
         if (now.isBefore(start)) {
@@ -53,8 +54,8 @@ const ExamEntryPage = () => {
               navigate(`/onboard/${token}`);
               return;
             } else {
-              localStorage.removeItem('userExamStartTime');
-              localStorage.removeItem('userExamAllowedDuration');
+              Cookies.remove('userExamStartTime');
+              Cookies.remove('userExamAllowedDuration');
             }
           }
           setStatus('closed');
@@ -95,8 +96,8 @@ const ExamEntryPage = () => {
   useEffect(() => {
     if (status === 'open') {
       const allowedDurationInSeconds = 3600; // 1 hour
-      localStorage.setItem('userExamStartTime', Date.now().toString());
-      localStorage.setItem('userExamAllowedDuration', allowedDurationInSeconds.toString());
+      Cookies.set('userExamStartTime', Date.now().toString());
+      Cookies.set('userExamAllowedDuration', allowedDurationInSeconds.toString());
       navigate(`/onboard/${token}`);
     }
   }, [status, navigate, token]);

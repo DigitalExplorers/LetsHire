@@ -1,4 +1,4 @@
-import { IsString, IsArray, IsOptional, IsInt } from "class-validator";
+import { IsString, IsArray, IsOptional, IsUUID } from "class-validator";
 
 export class UpdateInterviewerDto {
   @IsOptional()
@@ -17,6 +17,7 @@ export class UpdateInterviewerDto {
   @IsString()
   availability?: string;
 
-  @IsInt()
-  createdBy: number; // AdminUser ID (required for user-specific data isolation)
+  @IsOptional()
+  @IsUUID()
+  createdBy?: string; // AdminUser ID (required for user-specific data isolation)
 }

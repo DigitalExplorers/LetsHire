@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   NotFoundException,
+  ForbiddenException,
   UseInterceptors,
   UploadedFile,
   UseGuards,
@@ -20,6 +21,7 @@ import { Organization } from './entities/organization.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 
 @Controller('organizations')
 export class OrganizationController {
@@ -63,7 +65,20 @@ export class OrganizationController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
+  @UseGuards(JwtAuthGuard)
+  async findOne(
+    @Param('id') id: string,
+    @CurrentUser() currentUser: { role?: string; organizationId?: string | null },
+  ) {
+    if (
+      currentUser.role !== 'superadmin' &&
+      currentUser.organizationId !== id
+    ) {
+      throw new ForbiddenException(
+        'You are not allowed to access this organization',
+      );
+    }
+
     const org = await this.orgService.findById(id);
     if (!org) {
       throw new NotFoundException('Organization not found');
@@ -74,7 +89,7 @@ export class OrganizationController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('superadmin')
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id') id: string) {
     const deleted = await this.orgService.delete(id);
     if (!deleted) {
       throw new NotFoundException('Organization not found or already deleted');
@@ -86,7 +101,7 @@ export class OrganizationController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('superadmin', 'admin')
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() dto: CreateOrganizationDto
   ) {
     return this.orgService.update(id, dto);
@@ -96,7 +111,7 @@ export class OrganizationController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('superadmin')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadLogo(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
+  async uploadLogo(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
     const org = await this.orgService.findById(id);
     if (!org) throw new NotFoundException('Organization not found');
 
@@ -110,7 +125,7 @@ export class OrganizationController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('superadmin')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadBackground(@Param('id') id: number, @UploadedFile() file: Express.Multer.File) {
+  async uploadBackground(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
     const org = await this.orgService.findById(id);
     if (!org) throw new NotFoundException('Organization not found');
 

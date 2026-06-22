@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException, NotFoundException, Logger } from '@nestjs/common';
-import * as dotenv from 'dotenv';
+import { ConfigService } from '@nestjs/config';
 import { UserRole } from '../user-role/entities/user.role.entity';
 import { BedrockRuntimeClient, ConverseCommand } from '@aws-sdk/client-bedrock-runtime';
 import { ChatBedrockConverse } from '@langchain/aws';
@@ -12,10 +12,17 @@ import { Quiz } from '../quiz/entities/quiz.entity';
 import { Option } from '../quiz/entities/option.entity';
 import * as JSON5 from 'json5';
 
-dotenv.config();
+const DEFAULT_BEDROCK_MODEL_ID = 'apac.amazon.nova-pro-v1:0';
 
 @Injectable()
 export class BedrockService {
+    private readonly logger = new Logger(BedrockService.name);
+
+    private readonly modelId: string;
+    private readonly client: BedrockRuntimeClient;
+    private readonly llm: ChatBedrockConverse;
+    private readonly parser = new JsonOutputParser();
+    private readonly chain;
 
     constructor(
         @InjectRepository(Quiz)
@@ -28,24 +35,27 @@ export class BedrockService {
 
         @InjectRepository(AdminUser)
         private readonly adminUserRepo: Repository<AdminUser>,
-    ) { }
-    private readonly logger = new Logger(BedrockService.name);
 
-    private client = new BedrockRuntimeClient({
-        region: process.env.AWS_REGION,
-    });
+        private readonly configService: ConfigService,
+    ) {
+        this.modelId =
+            this.configService.get<string>('BEDROCK_MODEL_ID') ?? DEFAULT_BEDROCK_MODEL_ID;
 
-    private llm = new ChatBedrockConverse({
-        model: process.env.BEDROCK_MODEL_ID ?? 'apac.amazon.nova-pro-v1:0',
-        region: process.env.BEDROCK_AWS_REGION ?? 'ap-south-1',
-        maxTokens: 9216,
-        temperature: 0.5,
-        topP: 0.9,
-    });
+        this.client = new BedrockRuntimeClient({
+            region: this.configService.get<string>('AWS_REGION'),
+        });
 
-    private parser = new JsonOutputParser();
+        this.llm = new ChatBedrockConverse({
+            model: this.modelId,
+            region:
+                this.configService.get<string>('BEDROCK_AWS_REGION') ?? 'ap-south-1',
+            maxTokens: 9216,
+            temperature: 0.5,
+            topP: 0.9,
+        });
 
-    private chain = mcqPrompt.pipe(this.llm).pipe(this.parser);
+        this.chain = mcqPrompt.pipe(this.llm).pipe(this.parser);
+    }
 
     private getErrorMessage(err: unknown): string {
         return err instanceof Error ? err.message : String(err);
@@ -89,7 +99,7 @@ export class BedrockService {
         `.trim();
 
         const command = new ConverseCommand({
-            modelId: process.env.BEDROCK_MODEL_ID ?? 'apac.amazon.nova-pro-v1:0',
+            modelId: this.modelId,
             system: [{ text: "Extract topics from job descriptions." }],
             messages: [{ role: 'user', content: [{ text: prompt }] }],
             inferenceConfig: {
@@ -118,7 +128,7 @@ export class BedrockService {
     }
 
 
-    async generateQuestions(userRole: UserRole, numQuestions: number, adminId: number, organizationId: number) {
+    async generateQuestions(userRole: UserRole, numQuestions: number, adminId: string, organizationId: string) {
         const admin = await this.adminUserRepo.findOne({ where: { id: adminId } });
         if (!admin) {
             return { success: false, message: 'Invalid adminId' };
@@ -236,7 +246,7 @@ export class BedrockService {
     }
 
 
-    async generateMoreQuestionsForRole(roleId: number, numQuestions: number, adminId: number, organizationId: number) {
+    async generateMoreQuestionsForRole(roleId: string, numQuestions: number, adminId: string, organizationId: string) {
         const role = await this.roleRepository.findOne({
             where: { id: roleId, createdBy: { id: adminId } },
         });
@@ -264,7 +274,7 @@ export class BedrockService {
         }
     }
 
-    async regenerateQuestionsForRole(roleId: number, numQuestions: number, adminId: number, organizationId: number) {
+    async regenerateQuestionsForRole(roleId: string, numQuestions: number, adminId: string, organizationId: string) {
         const role = await this.roleRepository.findOne({
             where: { id: roleId, createdBy: { id: adminId } },
             relations: ['organization', 'quizzes'],

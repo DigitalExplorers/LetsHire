@@ -1,9 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-
+import Cookies from "js-cookie";
 interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   const fetchProfile = async () => {
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
 
     if (!token) {
       setUser(null);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (res.status === 401) {
         // Token expired or invalid
-        localStorage.removeItem("token");
+        Cookies.remove("token");
         setUser(null);
         router.replace("/auth/signin");
         return;
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error("Error fetching profile:", err);
       setUser(null);
-      localStorage.removeItem("token");
+      Cookies.remove("token");
       router.replace("/auth/signin");
     } finally {
       setLoading(false);

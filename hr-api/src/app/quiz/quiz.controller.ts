@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Delete, Res, UseInterceptors, UploadedFile, BadRequestException, NotFoundException, Query, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Delete, Res, UseInterceptors, UploadedFile, BadRequestException, Query, UseGuards, Req } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { QuizSeeder } from './quiz.seed';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
@@ -8,11 +8,10 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Request } from 'express';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-
-
+import { AddQuestionDto } from './dto/add-question.dto';
 export interface RequestWithUser extends Request {
   user: {
-    userId: number;
+    userId: string;
     email: string;
   };
 }
@@ -25,7 +24,7 @@ export class QuizController {
   @Post('submit-answer')
   async submitAnswer(
     @Body() body: { quizId: number; selectedOptionId: number | null; skipped?: boolean },
-    @CurrentUser() currentUser: { userId: number },
+    @CurrentUser() currentUser: { userId: string },
   ) {
     return this.quizService.validateUserSelectedAnswer(
       body.quizId,
@@ -43,7 +42,7 @@ export class QuizController {
 
   @UseGuards(JwtAuthGuard)
   @Get('questions-by-role-to-app')
-  async getQuestionsByRoleToAPP(@Query('roleId') roleId: number, @Query('adminId') adminId: number, @Query('userId') userId: number) {
+  async getQuestionsByRoleToAPP(@Query('roleId') roleId: string, @Query('adminId') adminId: string, @Query('userId') userId: string) {
     return this.quizService.getQuestionsByRoleToAPP(roleId, adminId, userId);
   }
 
@@ -57,7 +56,7 @@ export class QuizController {
   @Post('submit-score')
   async submitScore(
     @Body() body: { score: number },
-    @CurrentUser() currentUser: { userId: number },
+    @CurrentUser() currentUser: { userId: string },
   ) {
     return this.quizService.submitScore(currentUser.userId, body.score);
   }
@@ -73,7 +72,7 @@ export class QuizController {
   @Post('submit-quiz')
   async submitQuiz(
     @Body() body: { answers: Record<number, string> },
-    @CurrentUser() currentUser: { userId: number },
+    @CurrentUser() currentUser: { userId: string },
   ) {
     return this.quizService.submitQuiz(currentUser.userId, body.answers);
   }
@@ -82,13 +81,12 @@ export class QuizController {
   @Post('add-question')
   @UseGuards(JwtAuthGuard)
   async addQuestion(
-    @Body() body: { question: string; options: { text: string; isCorrect: boolean }[] }, @Req() req: RequestWithUser, @Query('roleId') roleId?: number
+    @Body() body: AddQuestionDto,@Req() req: RequestWithUser,
   ) {
-    if (roleId === undefined) {
+    if (body.roleId === undefined) {
       throw new BadRequestException('roleId is required');
     }
-
-    return await this.quizService.addQuestion(body.question, body.options, req.user.userId, roleId);
+    return await this.quizService.addQuestion(body.question, body.options, req.user.userId, body.roleId);
   }
 
   /** Update an Existing Question */
@@ -116,7 +114,7 @@ export class QuizController {
 
   @UseGuards(JwtAuthGuard)
   @Get('count-by-role')
-  async getQuestionCount(@Query('roleId') roleId?: number, @Query('adminId') adminId?: number, @Query('candidatedId') candidatedId?: number) {
+  async getQuestionCount(@Query('roleId') roleId?: string, @Query('adminId') adminId?: string, @Query('candidatedId') candidatedId?: string) {
     return { totalQuestions: await this.quizService.getQuestionCountByRole(roleId, adminId, candidatedId)};
   }
 
@@ -139,7 +137,7 @@ export class QuizController {
         },
     }),
   )
-  async uploadQuestions(@UploadedFile() file: Express.Multer.File, @CurrentUser() adminUser: { userId: number }) {
+  async uploadQuestions(@UploadedFile() file: Express.Multer.File, @CurrentUser() adminUser: { userId: string }) {
       if (!file) {
           throw new BadRequestException('No file uploaded!');
       }
@@ -149,13 +147,13 @@ export class QuizController {
 
   @Get("/config")
   @UseGuards(JwtAuthGuard)
-  async getQuizConfig(@Query('roleId') roleId: number, @CurrentUser() adminUser: { userId: number}) {
+  async getQuizConfig(@Query('roleId') roleId: string, @CurrentUser() adminUser: { userId: string}) {
     return await this.quizService.getQuizConfigByRole(roleId, adminUser.userId);
   }
 
   @Get("/app-quiz-config")
   @UseGuards(JwtAuthGuard)
-  async getAppQuizConfig(@Query('roleId') roleId: number, @Query('adminId') adminId?: number) {
+  async getAppQuizConfig(@Query('roleId') roleId: string, @Query('adminId') adminId?: string) {
     if (adminId === undefined) {
       throw new BadRequestException('adminId is required');
     }
@@ -165,7 +163,7 @@ export class QuizController {
 
   @Put("/config")
   @UseGuards(JwtAuthGuard)
-  async updateQuizConfig(@Query('roleId') roleId: number, @Body('numberOfQuestions') numberOfQuestions: number, @Body('timePerQuestionInSeconds') timePerQuestionInSeconds: number, @CurrentUser() adminUser: { userId: number, organizationId:number }) {
+  async updateQuizConfig(@Query('roleId') roleId: string, @Body('numberOfQuestions') numberOfQuestions: number, @Body('timePerQuestionInSeconds') timePerQuestionInSeconds: number, @CurrentUser() adminUser: { userId: string, organizationId: string }) {
     return await this.quizService.updateQuizConfigByRole(roleId, numberOfQuestions, timePerQuestionInSeconds, adminUser.userId, adminUser.organizationId);
   }
 
@@ -188,7 +186,7 @@ export class QuizController {
         },
     }),
   )
-  async uploadQuestionsByRole(@UploadedFile() file: Express.Multer.File, @Body('roleId') roleId: number, @CurrentUser() adminUser: { userId: number }) {
+  async uploadQuestionsByRole(@UploadedFile() file: Express.Multer.File, @Body('roleId') roleId: string, @CurrentUser() adminUser: { userId: string }) {
       if (!file) {
           throw new BadRequestException('No file uploaded!');
       }
@@ -196,22 +194,13 @@ export class QuizController {
       return this.quizService.processUploadedFileByRole(file, roleId, adminUser.userId);
   }
 
-  /**
-   * Get questions by role ID
-   */
-  @Get('questions-by-role/:roleId')
-  async getQuestionsByRole(@Param('roleId') roleId: number, @CurrentUser() adminUser: { userId: number }) {
-    const questions = await this.quizService.getQuestionsByRole(roleId, adminUser.userId);
-    if (!questions.length) {
-      throw new NotFoundException('No questions found for this role.');
-    }
-    return questions;
-  }
 
+
+  @UseGuards(JwtAuthGuard)
   @Get('candidates/:id/:round/attempts')
-  async getCandidateQuizAttempts(@Param('id') id: number, @Param('round') round: number) {
+  async getCandidateQuizAttempts(@Param('id') id: string, @Param('round') round: number, @CurrentUser() currentUser: { userId: string; role?: string; organizationId?: string }) {
     console.log("id,round",id,round);
-    return this.quizService.getCandidateAttempts(Number(id), Number(round));
+    return this.quizService.getCandidateAttempts(id, Number(round), currentUser);
   }
 
 }

@@ -56,7 +56,7 @@ export class QuizService {
   /**
    * Fetch all quiz questions with options
    */
-  async getQuestions(adminId: number) {
+  async getQuestions(adminId: string) {
 
     // Step 1: Fetch the quiz configuration
     const config = await this.getQuizConfig(adminId);
@@ -90,7 +90,7 @@ export class QuizService {
     }));
   }
 
-  async getQuestionsByRoleToAPP(roleId: number, adminId: number, candidateId: number) {
+  async getQuestionsByRoleToAPP(roleId: string, adminId: string, candidateId: string) {
     const admin = await this.adminRepo.findOne({ where: { id: adminId } });
     if (!admin) throw new NotFoundException('Admin not found');
 
@@ -147,7 +147,7 @@ export class QuizService {
     }));
   }
 
-  async getQuestionCountByRole(roleId?: number, adminId?: number, candidatedId?: number): Promise<number> {
+  async getQuestionCountByRole(roleId?: string, adminId?: string, candidatedId?: string): Promise<number> {
     try {
       if (roleId && adminId !== undefined && candidatedId !== undefined) {
         const totalQuestionsServed = await this.getQuestionsByRoleToAPP(roleId, adminId, candidatedId);
@@ -191,7 +191,7 @@ export class QuizService {
   /**
    * Validate user's selected answer
    */
-  async validateUserSelectedAnswer(quizId: number, selectedOptionId: number | null, userId: number, skipped: boolean = false) {
+  async validateUserSelectedAnswer(quizId: number, selectedOptionId: number | null, userId: string, skipped: boolean = false) {
     
     const user = await this.candidateRepo.findOne({ where: { id: userId } });
     if (!user) return { message: 'User not found' };
@@ -249,7 +249,7 @@ export class QuizService {
     return {};
   }
 
-  async submitScore(userId: number, score: number) {
+  async submitScore(userId: string, score: number) {
     const user = await this.candidateRepo.findOne({ where: { id: userId } });
 
     if (!user) {
@@ -262,7 +262,7 @@ export class QuizService {
     return { message: 'Score Submitted Successfully' };
   }
 
-  async submitQuiz(userId: number, answers: Record<number, string>) {
+  async submitQuiz(userId: string, answers: Record<number, string>) {
     let score = 0;
 
     for (const [quizId, optionKey] of Object.entries(answers)) {
@@ -312,8 +312,8 @@ export class QuizService {
   async addQuestion(
     questionText: string,
     optionsData: { text: string; isCorrect: boolean }[],
-    adminId: number,
-    roleId: number
+    adminId: string,
+    roleId: string
   ) {
     // Step 1: Find role
     const role = await this.roleRepository.findOne({ where: { id: roleId } });
@@ -350,7 +350,7 @@ export class QuizService {
     id: number,
     questionText: string,
     optionsData: { id: number; text: string; isCorrect: boolean }[],
-    adminId: number
+    adminId: string
   ) {
     const question = await this.quizRepository.findOne({
       where: { id },
@@ -380,7 +380,7 @@ export class QuizService {
   }
 
   /** Delete a question and its options */
-  async deleteQuestion(id: number, adminId: number) {
+  async deleteQuestion(id: number, adminId: string) {
     const question = await this.quizRepository.findOne({
       where: { id },
       relations: ['createdBy'],
@@ -403,7 +403,7 @@ export class QuizService {
   }
   
 
-  async getAllQuestions(adminId: number) {
+  async getAllQuestions(adminId: string) {
     const questions = await this.quizRepository.find({
       where: { createdBy: { id: adminId }, status: 'active' },
       relations: ['options'],
@@ -422,12 +422,12 @@ export class QuizService {
   /**
    * Get total number of questions
   */
-  async getTotalQuestionsCount(adminId: number): Promise<number> {
+  async getTotalQuestionsCount(adminId: string): Promise<number> {
     const totalQuestionsServed = await this.getQuestions(adminId);
     return totalQuestionsServed.length;
   }
 
-  async processUploadedFile(file: Express.Multer.File, adminId: number) {
+  async processUploadedFile(file: Express.Multer.File, adminId: string) {
     try {
       const workbook = xlsx.readFile(file.path);
       const sheetName = workbook.SheetNames[0];
@@ -497,8 +497,8 @@ export class QuizService {
    */
   async processUploadedFileByRole(
     file: Express.Multer.File,
-    roleId: number,
-    adminId: number
+    roleId: string,
+    adminId: string
   ) {
     try {
       const workbook = xlsx.readFile(file.path);
@@ -550,7 +550,7 @@ export class QuizService {
   }
 
   // Get current quiz configuration
-  async getQuizConfig(adminId: number): Promise<{ numberOfQuestions: number }> {
+  async getQuizConfig(adminId: string): Promise<{ numberOfQuestions: number }> {
     let config = await this.quizConfigRepository.findOne({
       where: { createdBy: { id: adminId } },
     });
@@ -570,7 +570,7 @@ export class QuizService {
     return { numberOfQuestions: config.numberOfQuestions };
   }
 
-  async getQuizConfigByRole(roleId: number, adminId: number): Promise<{ numberOfQuestions: number, timePerQuestionInSeconds:number }> {
+  async getQuizConfigByRole(roleId: string, adminId: string): Promise<{ numberOfQuestions: number, timePerQuestionInSeconds:number }> {
     let config = await this.quizConfigRepository.findOne({
       where: { createdBy: { id: adminId }, role: { id: roleId } },
     });
@@ -598,7 +598,7 @@ export class QuizService {
   }
 
   // Update the number of questions to display
-  async updateQuizConfig(newCount: number, adminId: number): Promise<{ message: string }> {
+  async updateQuizConfig(newCount: number, adminId: string): Promise<{ message: string }> {
     let config = await this.quizConfigRepository.findOne({
       where: { createdBy: { id: adminId } },
     });
@@ -616,7 +616,7 @@ export class QuizService {
   }
 
   // Update the number of questions to display by role
-  async updateQuizConfigByRole(roleId: number, newCount: number, timePerQuestionInSeconds:number, adminId: number, organizationId: number): Promise<{ message: string }> {
+  async updateQuizConfigByRole(roleId: string, newCount: number, timePerQuestionInSeconds:number, adminId: string, organizationId: string): Promise<{ message: string }> {
     const admin = await this.adminRepo.findOne({ where: { id: adminId } });
     if (!admin) throw new NotFoundException('Admin not found');
 
@@ -645,7 +645,7 @@ export class QuizService {
     return { message: `Quiz question count updated to ${newCount}`};
   }
 
-  async getQuestionsForUser(userId: number) {
+  async getQuestionsForUser(userId: string) {
     const user = await this.candidateRepo.findOne({ where: { id: userId }, relations: ['role'] });
     
     if (!user) {
@@ -660,9 +660,9 @@ export class QuizService {
    */
   async addQuestionByRole(
     questionText: string,
-    roleId: number,
+    roleId: string,
     optionsData: { text: string; isCorrect: boolean }[],
-    adminId: number,
+    adminId: string,
     round: number
   ) {
     const role = await this.roleRepository.findOne({ where: { id: roleId } });
@@ -694,11 +694,20 @@ export class QuizService {
   /**
    * Fetch all quiz questions for a specific role
    */
-  async getQuestionsByRole(roleId: number, adminId: number) {
+  async getQuestionsByRole(roleId: string, adminId: string, organizationId: string) {
     const role = await this.roleRepository.findOne({ where: { id: roleId } });
 
     if (!role) {
       throw new NotFoundException(`Role with ID ${roleId} not found`);
+    }
+
+    const admin = await this.adminRepo.findOne({ where: { id: adminId }, relations: ['organization'] });
+    if (!admin) {
+      throw new NotFoundException('Admin not found');
+    }
+
+    if (admin.organization.id !== organizationId) {
+      throw new UnauthorizedException('You can only access questions from your organization');
     }
 
     const questions = await this.quizRepository.find({
@@ -719,7 +728,28 @@ export class QuizService {
     }));
   }
 
-  async getCandidateAttempts(candidateId: number, round: number) {
+  async getCandidateAttempts(candidateId: string, round: number, currentUser: { userId: string; role?: string; organizationId?: string }) {
+    const candidate = await this.candidateRepo.findOne({ 
+      where: { id: candidateId }, 
+      relations: ['organization'] 
+    });
+
+    if (!candidate) {
+      throw new NotFoundException('Candidate not found');
+    }
+
+    if (currentUser.role === 'candidate') {
+      if (currentUser.userId !== candidateId) {
+        throw new UnauthorizedException('Candidates can only view their own attempts');
+      }
+    } else if (currentUser.role === 'admin' || currentUser.role === 'hr') {
+      if (candidate.organization.id !== currentUser.organizationId) {
+        throw new UnauthorizedException('You can only view attempts from your organization');
+      }
+    } else {
+      throw new UnauthorizedException('Unauthorized access');
+    }
+
     const attempts = await this.attemptRepo.find({
       where: { candidate: { id: candidateId }, round },
       relations: ['quiz', 'selectedOption', 'quiz.options'],

@@ -104,8 +104,8 @@ export class AuthService {
 
   async sendResetPasswordEmail(email: string) {
     const user = await this.usersService.findByEmail(email);
-    if (!user) return; // Don't reveal if user exists
-
+    if (!user) {console.log("user doesnt exist"); return} // Don't reveal if user exists
+    console.log('Found user for password reset:', user.id);
     const foundOrg = await this.organizationRepo.findOne({
       where: { id: user.organization.id },
     });
@@ -130,6 +130,7 @@ export class AuthService {
     await this.resetTokenRepo.save({ userId: user.id, token, expires });
 
     const resetLink = `${this.frontendUrl}/auth/reset-password?token=${token}`;
+    console.log('Generated password reset link:', resetLink);
 
     // Send password reset email (non-blocking)
     try {
@@ -159,9 +160,10 @@ export class AuthService {
     const user = await this.usersService.getUserById(reset.userId);
     if (!user) {
       throw new BadRequestException('User not found');
-    }
+    }   // i feel we are doing validation twice once here and ince in the updateUserPassword 
 
     await this.usersService.updateUserPassword(reset.userId, newPassword);
-    await this.resetTokenRepo.delete({ token });
+    await this.resetTokenRepo.delete({ userId: user.id });
+    //previously this only deleted single token ({token}) but multiple tokens were as is hence({userId: user.id}) fixed the concern.
   }
 }

@@ -5,7 +5,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
-
+import Cookies from "js-cookie";
 const EditMemberForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,7 +27,7 @@ const EditMemberForm = () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/sub-user/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
       });
 
@@ -55,7 +55,7 @@ const EditMemberForm = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${Cookies.get("token")}`,
         },
         body: JSON.stringify({
           name,

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
+import Cookies from "js-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
 
@@ -15,7 +16,7 @@ const UploadRoleQuestionsPanel = ({ roleId, roleName }: Props) => {
     const [file, setFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const token = typeof window !== "undefined" ? Cookies.get("token") : null;
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files?.length) {

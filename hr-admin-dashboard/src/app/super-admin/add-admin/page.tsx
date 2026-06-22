@@ -5,13 +5,14 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
 
 const AddAdminForm = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL ?? process.env.LOCALHOST_URL;
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : "";
+  const token = typeof window !== "undefined" ? Cookies.get("token") : "";
   const router = useRouter();
 
-  const [organizations, setOrganizations] = useState<{ id: number; name: string }[]>([]);
+  const [organizations, setOrganizations] = useState<{ id: string; name: string }[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
