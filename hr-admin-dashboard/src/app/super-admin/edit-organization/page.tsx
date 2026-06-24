@@ -238,6 +238,8 @@ const EditOrganizationForm = () => {
     <Image
       src={logoUrl}
       alt="Current Logo"
+      width={6}
+      height={6}
       className="mb-2 h-16 object-contain rounded"
     />
   )}
@@ -256,7 +258,9 @@ const EditOrganizationForm = () => {
   {bgImageUrl && (
     <Image
       src={bgImageUrl}
-      alt="Current Background" fill
+      alt="Current Background" 
+       width={6}
+      height={6}
       className="mb-2 h-24 w-full object-cover rounded"
     />
   )}
